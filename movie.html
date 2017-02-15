@@ -9,6 +9,7 @@
 
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/movie.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -17,27 +18,41 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+    <!-- External Scripts -->
     <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="http://www.w3schools.com/lib/w3data.js"></script>
+
+    <!-- Local Scripts -->
+    <script src="js/methods.js"></script>
+
 	<script type="text/javascript">
-		var movie = sessionStorage.getItem("currentMovie");
-		movie = movie.split("#");
-
 		$(document).ready(function() {
-			if (movie != null) {
-				$("#movieName").text(movie[2]);
-			}
-			else {
-				$("#movieName").text("Movie Not Found");
-			}
+			checkForUser();
 
+			var id = getUrlParameter("params");
+			searchById(id, function(result) {
+				movie = result;
+				if (movie != null) {
+					setDisplay(movie);
+				}
+				else {
+					$("#movieName").text("Movie Not Found");
+				}
+			})
 		});
 
-		function updateReview() {
+		function setDisplay(movie) {
+			$("#movieName").text(movie.title);
+			var imgSrc = getPosterImgSrc(movie, "w92");
+			$("#img").append("<img src='" + imgSrc + "'' alt='' height='90'></img> &nbsp;&nbsp;");
+		}
+
+		function newReview() {
 			var rating = $("#rate").val();
 			var thoughts = $("#thoughts").val();
-			$.post("php/update-review.php", {score: rating, comment: thoughts, movie: movie[0]}, function(data) {
-				$("#rating").text(rating);
+			$.post("php/new-review.php", {score: rating, comment: thoughts, movieId: movie.id}, function(data) {
 				console.log(data);
+				$("#rating").text(rating);
 			})
 		}
 	</script>
@@ -45,75 +60,53 @@
   <body>
 
   	<!--Nav Bar-->
-    <nav class="navbar navbar-inverse">
-	  <div class="container-fluid">
-	    <!-- Brand and toggle get grouped for better mobile display -->
-	    <div class="navbar-header">
-	      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-	        <span class="sr-only">Toggle navigation</span>
-	        <span class="icon-bar"></span>
-	        <span class="icon-bar"></span>
-	        <span class="icon-bar"></span>
-	      </button>
-	      <a class="navbar-brand" href="profile.html">CommunityRate</a>
-	    </div>
+    <div w3-include-html="partials/navbar.html"></div>
 
-	    <!-- Collect the nav links, forms, and other content for toggling -->
-	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-	      <ul class="nav navbar-nav">
-	        <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
-	        <li><a href="#">Link</a></li>
-	        <li class="dropdown">
-	          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-	          <ul class="dropdown-menu">
-	            <li><a href="#">Action</a></li>
-	            <li><a href="#">Another action</a></li>
-	            <li><a href="#">Something else here</a></li>
-	            <li role="separator" class="divider"></li>
-	            <li><a href="#">Separated link</a></li>
-	            <li role="separator" class="divider"></li>
-	            <li><a href="#">One more separated link</a></li>
-	          </ul>
-	        </li>
-	        <li class="active"><input type="text" class="form-control" placeholder="Search" id="movieSearch"></li>
-	        <li class="active"><button onclick="searchMovies()" class="btn btn-default">Submit</button></li>
-	      </ul>
-	      <ul class="nav navbar-nav navbar-right">
-	        <li><a href="#">Link</a></li>
-	        <li class="dropdown">
-	          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-	          <ul class="dropdown-menu">
-	            <li><a href="#">Action</a></li>
-	            <li><a href="#">Another action</a></li>
-	            <li><a href="#">Something else here</a></li>
-	            <li role="separator" class="divider"></li>
-	            <li><a href="#">Separated link</a></li>
-	          </ul>
-	        </li>
-	      </ul>
-	    </div><!-- /.navbar-collapse -->
-	  </div><!-- /.container-fluid -->
-	</nav>
+	<div class="container">
+		<!-- Header -->
+		<div class="page-header">
+		  	<h3><div id="img" style="display:inline"></div><div style="display:inline" id="movieName"></div></h3>
+		</div>
 
-	<!-- Header -->
-	<div class="page-header">
-	  	<h1 id="movieName"></h1>
-	  	<div id="rating"></div>
-	</div>
+		<!-- Left Column: General Movie info -->
+		<div class="col-md-4">
+			<p id="genre">Genre: </p>
+			<p id="followerRating">Rating: </p>
+			<p id="followerEntertainment">Entertainment Value: </p>
+			<p id="followerEducation">Education Value: </p>
+			<p id="followerMood">Average Mood: </p>
+		</div>
 
-	<!-- Inputs -->
-	<div class="form-group">
-	  <input type="text" class="form-control" id="rate" placeholder="Rating" />
+		<!-- Right Column: Your Movie info -->
+		<div class="col-md-8">
+				<button type="button" class="btn btn-primary btn-circle btn-xl" id="MyRating">8.8</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<button type="button" class="btn btn-danger btn-circle btn-lg" id="MyEntertainment"><i class="glyphicon glyphicon-fire"></i></button>&nbsp;&nbsp;
+				<button type="button" class="btn btn-success btn-circle btn-lg" id="MyEducation"><i class="glyphicon glyphicon-education"></i></button>&nbsp;&nbsp;
+				<button type="button" class="btn btn-info btn-circle btn-lg" id="MyMood"><i class="glyphicon glyphicon-fire"></i></button><br>
+
+		</div>
+
+		<!-- Inputs -->
+		<!-- <div class="form-group">
+		  <input type="text" class="form-control" id="rate" placeholder="Rating" />
+		</div>
+		<div class="form-group">
+		  <textarea class="form-control" rows="4" id="thoughts" placeholder="Thoughts..." /></textarea>
+		</div>
+		<button class="btn btn-success" onclick="newReview()">Update</button> -->
 	</div>
-	<div class="form-group">
-	  <textarea class="form-control" rows="4" id="thoughts" placeholder="Thoughts..." /></textarea>
-	</div>
-	<button class="btn btn-success" onclick="updateReview()">Update</button>
 
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="js/bootstrap.min.js"></script>
+    <script>
+		//Global variables
+		var movie = {};
+
+		//Include Partials
+      	w3IncludeHTML();
+    </script>
   </body>
 </html>

@@ -9,13 +9,13 @@
 			die ("Could not connect to db " . $db->connect_error);
 		endif;
 
-	if (isset($_POST["score"]) && isset($_POST["movie"])) {
+	if (isset($_POST["score"]) && isset($_POST["movieId"])) {
 		$rating = $_POST["score"];
 		$thoughts = "";
 		if (isset($_POST["comment"])) {
 			$thoughts = $_POST["comment"];
 		}
-		$movieID = $_POST["movie"];
+		$movieID = $_POST["movieId"];
 		if (checkForReview($db, $movieID, $userID)) {
 			updateReview($db, $rating, $thoughts, $userID, $movieID);
 		}
@@ -42,10 +42,12 @@
 	}
 
 	function updateReview($db, $rating, $thoughts, $userID, $movieID) {
+		echo "Updating...";
 		$db->query("UPDATE Reviews SET Rating = '$rating', Thoughts = '$thoughts' WHERE User_ID = $userID & Movie_ID = $movieID") or die ("Invalid update " . $db->error);
 	}
 
-	function insertReview($db, $rating, $thoughts, $user, $movie) {
-		$db->query("INSERT INTO Reviews Values ($movie, $user, $rating, '$thoughts')") or die ("Invalid insert " . $db->error);
+	function insertReview($db, $rating, $thoughts, $userId, $movieId) {
+		echo "Inserting...";
+		$db->query("INSERT INTO Reviews(`Movie_ID`, `User_ID`, `Rating`, `Thoughts`) Values ($movieId, $userId, $rating, '$thoughts')") or die ("Invalid insert " . $db->error);
 	}
 ?>

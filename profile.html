@@ -17,127 +17,202 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+    <!-- External Scripts -->
     <script src="http://code.jquery.com/jquery-latest.js"></script>
-	<script type="text/javascript">
-		$(document).ready(function() {
-			getReviewedMovies();
-		})
+    <script src="http://www.w3schools.com/lib/w3data.js"></script>
 
-		function getReviewedMovies() {
-			$.post("php/get-reviews.php", function(data) {
-				var data = data.split("#");
-				//var reviews = jQuery.parseJSON(data[0]);
-				var reviews = jQuery.parseJSON(data[1]);
-				var sortedReviews = [];
-				for (var review in reviews) {
-				    sortedReviews.push([review, reviews[review]])
-				}
-				sortedReviews.sort(function(a,b) {
-					return a[1] - b[1];
-				});
-				for (var i = 0; i < sortedReviews.length, i < maxGroupDisplay; i++) {
-					var img = sortedReviews[i][0].replace(/\s+/g, '');
-					img = "images/" + img + ".jpg";
-					displayMovieThumbnail("favorites", img);
-				}
-			})
-		}
+    <!-- Local Scripts -->
+    <script src="js/methods.js"></script>
+    <!-- <script src="js/profile.js"></script> -->
 
-		function searchMovies() {
-			var search = $("#movieSearch").val();
-			console.log(search);
-			$.post("php/search-movies.php", {search: search}, function(data) {
-				sessionStorage.setItem("currentMovie", data);
-				window.location.href = "movie.html";
-			})
-		}
+  	<script type="text/javascript">
+  		$(document).ready(function() {
+  			setUpPage();
+  		})
 
-		function displayMovieThumbnail(divID, movieImg) {
-			var html = "<div class='col-xs-6 col-md-2'><a href='#' class='thumbnail'><img src='" + movieImg +  "'alt='...''></a></div>";
-			var id = "#" + divID;
-			$(id).append(html);
-		}
-	</script>
+      function setUpPage() {
+        $.post("php/get-reviews.php", function(data) {
+          if (data.trim() !== "none") {
+            reviews = jQuery.parseJSON(data);
+            listFavorites();
+            listRecents();
+            //showLists();
+            getFriendships();
+            $('#numSeen').append(reviews.length);
+          }
+        });
+      }
+
+      function listFavorites() {
+        var favoriteList = reviews;
+        favoriteList.sort(function(a,b) {
+          return b.Rating - a.Rating;
+        });
+        listReviews(favoriteList, "favoritesList");
+        findFavorite(favoriteList);
+      }
+
+      function listRecents() {
+        var recentList = reviews;
+        recentList.sort(function(a,b) {
+          if (a.DateReviewed > b.DateReviewed) {
+            return -1;
+          }
+          else if (a.DateReviewed < b.DateReviewed) {
+            return 1;
+          }
+          return 0;
+        })
+        listReviews2(recentList, "recentsList");
+      }
+
+      // function showLists() {
+        
+      // }
+
+      function listReviews(list, divId) {
+        var count = 0;
+        var rating = Array();
+        for (var i = 0; i < list.length; i++) {
+          var id = list[i].Movie_ID;
+          rating.push(list[i].Rating);
+          console.log(id);
+          searchById(id, function(rsp) {
+            console.log(rsp);
+            var img = getPosterImgSrc(rsp, "w92");
+            var innerHTML = "<div class='col-md-1'><img src="+ img + " alt='' height='50' width='50'></div>"
+              + "<div class='col-md-11'><h4 class='list-group-item-heading'>" + rsp.title + "</h4>"
+              + "<p class='list-group-item-text'>Rating: " + rating[count] + "</p></div>";
+            addToListGroup(innerHTML, divId, "onclick='goToMovie(" + rsp.id + ")'");
+            //var img = getPosterImgSrc(rsp, "w92");
+            count++;
+          })
+        }
+      }
+
+      function listReviews2(list, divId) {
+        var count = 0;
+        var rating = Array();
+        for (var i = 0; i < list.length; i++) {
+          var id = list[i].Movie_ID;
+          rating.push(list[i].Rating);
+          console.log(id);
+          searchById(id, function(rsp) {
+            console.log(rsp);
+            var img = getPosterImgSrc(rsp, "w92");
+            var innerHTML = "<div class='col-md-1'><img src="+ img + " alt='' height='50' width='50'></div>"
+              + "<div class='col-md-11'><h4 class='list-group-item-heading'>" + rsp.title + "</h4>"
+              + "<p class='list-group-item-text'>Rating: " + rating[count] + "</p></div>";
+            addToListGroup(innerHTML, divId, "onclick='goToMovie(" + rsp.id + ")'");
+            //var img = getPosterImgSrc(rsp, "w92");
+            count++;
+          })
+        }
+      }
+
+      function findFavorite(sortedReviews) {
+        var id = sortedReviews[0].Movie_ID;
+        searchById(id, function(rsp) {
+          $('#favMovie').append(rsp.title);
+        })
+      }
+
+      function getFriendships() {
+        console.log("Here");
+        $.post("php/get-friendships.php", function (rsp) {
+          rsp = JSON.parse(rsp);
+          console.log(rsp);
+          var followers = rsp[0];
+          var following = rsp[1];
+          $('#followersBadge').text(followers.length);
+          $('#followingBadge').text(following.length);
+          for (var i = 0; i < followers.length; i++) {
+            addToListGroup(followers[i].Name, "followersList");
+          }
+          for (var i = 0; i < following.length; i++) {
+            addToListGroup(following[i].Name, "followingList");
+          }
+          $('#followersList').hide();
+          $('#followingList').hide();
+        })
+      }
+
+      function showFollowers() {
+        $('#followersList').show();
+      }
+
+      function showFollowing() {
+        $('#followingList').show();
+      }
+  	</script>
   </head>
   <body>
+    <script type="text/javascript">
+      checkForUser();
+    </script>
 
-  	<!--Nav Bar-->
-    <nav class="navbar navbar-inverse">
-	  <div class="container-fluid">
-	    <!-- Brand and toggle get grouped for better mobile display -->
-	    <div class="navbar-header">
-	      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-	        <span class="sr-only">Toggle navigation</span>
-	        <span class="icon-bar"></span>
-	        <span class="icon-bar"></span>
-	        <span class="icon-bar"></span>
-	      </button>
-	      <a class="navbar-brand" href="profile.html">CommunityRate</a>
-	    </div>
+  	<!-- Navbar -->
+    <div w3-include-html="partials/navbar.html"></div>
 
-	    <!-- Collect the nav links, forms, and other content for toggling -->
-	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-	      <ul class="nav navbar-nav">
-	        <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
-	        <li><a href="#">Link</a></li>
-	        <li class="dropdown">
-	          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-	          <ul class="dropdown-menu">
-	            <li><a href="#">Action</a></li>
-	            <li><a href="#">Another action</a></li>
-	            <li><a href="#">Something else here</a></li>
-	            <li role="separator" class="divider"></li>
-	            <li><a href="#">Separated link</a></li>
-	            <li role="separator" class="divider"></li>
-	            <li><a href="#">One more separated link</a></li>
-	          </ul>
-	        </li>
-	        <li class="active"><input type="text" class="form-control" placeholder="Search" id="movieSearch"></li>
-	        <li class="active"><button onclick="searchMovies()" class="btn btn-default">Submit</button></li>
-	      </ul>
-	      <ul class="nav navbar-nav navbar-right">
-	        <li><a href="#">Link</a></li>
-	        <li class="dropdown">
-	          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-	          <ul class="dropdown-menu">
-	            <li><a href="#">Action</a></li>
-	            <li><a href="#">Another action</a></li>
-	            <li><a href="#">Something else here</a></li>
-	            <li role="separator" class="divider"></li>
-	            <li><a href="#">Separated link</a></li>
-	          </ul>
-	        </li>
-	      </ul>
-	    </div><!-- /.navbar-collapse -->
-	  </div><!-- /.container-fluid -->
-	</nav>
+    <div class="container">
+    	<!-- Left column -->
+      <div class="col-md-4">
+      	<div class="page-header">
+    	  	<h3>Ryan Rosenfeld</h3>
+      	</div>
+        <p id="numSeen">Movie Reactions: </p>
+        <p id="favMovie">Favorite Movie: </p>
+        <p id="favGenre">Favorite Genre: </p>
+        <div class="col-md-10">
+          <ul class="nav nav-tabs">
+            <li><a data-toggle="tab" href="#followers" onclick="showFollowers()">Followers <span class="badge" id="followersBadge"></span></a></li>
+            <li><a data-toggle="tab" href="#following" onclick="showFollowing()">Following <span class="badge" id="followingBadge"></span></a></li>
+          </ul>
 
-	<!-- Header -->
-	<div class="page-header">
-	  	<h1>Ryan Rosenfeld</h1>
-	</div>
+          <div class="tab-content">
+            <!-- Followers -->
+            <div id="followers" class="tab-pane fade in active">
+              <div class="list-group" id="followersList"></div>
+            </div>
 
-	<!-- Favorite Movies -->
-	<div class="panel panel-info">
-	  <div class="panel-heading">
-	    <h3 class="panel-title">Favorite Movies</h3>
-	  </div>
-	  <div class="panel-body">
-	    <div class="row" id="favorites">
-	    </div>
-	  </div>
-	</div>
+            <!-- Following -->
+            <div id="following" class="tab-pane fade in active">
+              <div class="list-group" id="followingList"></div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-	<!-- Recent Movies -->
-	<div class="panel panel-info">
-	  <div class="panel-heading">
-	    <h3 class="panel-title">Recent Movies</h3>
-	  </div>
-	  <div class="panel-body">
-	    <div class="row" id="recent">
-	    </div>
-	  </div>
-	</div>
+      <!-- Right column -->
+      <div class="col-md-8">
+
+        <!-- Tabs -->
+        <ul class="nav nav-tabs">
+          <li class="active"><a data-toggle="tab" href="#favorites">Favorites</a></li>
+          <li><a data-toggle="tab" href="#recents">Recently Watched</a></li>
+          <li><a data-toggle="tab" href="#lists">Lists</a></li>
+        </ul>
+
+        <div class="tab-content">
+          <!-- Favorite Movies -->
+          <div id="favorites" class="tab-pane fade in active">
+              <br>
+              <div class="list-group" id="favoritesList"></div>
+          </div>
+
+          <!-- Recent Movies -->
+          <div id="recents" class="tab-pane fade">
+            <br>
+            <div class="list-group" id="recentsList"></div>
+          </div>
+
+          <!-- Lists -->
+          <div id="lists" class="tab-pane fade">
+            <div class="list-group" id="listDisplay"></div>
+          </div>
+        </div>
+      </div>
+    </div>      
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
@@ -146,6 +221,11 @@
     <script type="text/javascript">
     	//Global variables
     	var maxGroupDisplay = 10;
+      var reviews;
+      var movieInfo;
+
+      //Include Partials
+      w3IncludeHTML();
     </script>
   </body>
 </html>
