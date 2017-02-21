@@ -7,7 +7,6 @@
 		$email = $_POST["email"];
 		$pw = password_hash($_POST["password"], PASSWORD_DEFAULT);
 		$display = $_POST["display"];
-		echo "<grr>$name</grr>";
 
 		# Connect to database
 		$db = new mysqli('localhost', 'root', '', 'CommunityRate');
