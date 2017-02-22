@@ -31,12 +31,12 @@
   		})
 
       function setUpPage() {
+        getLists();
         $.post("php/get-reviews.php", function(data) {
           if (data.trim() !== "none") {
             reviews = jQuery.parseJSON(data);
             listFavorites();
             listRecents();
-            //showLists();
             getFriendships();
             $('#numSeen').append(reviews.length);
           }
@@ -66,9 +66,20 @@
         listReviews2(recentList, "recentsList");
       }
 
-      // function showLists() {
+      function getLists() {
+          $.post("php/get-lists.php", 
+              function (data) {  
+
+                var result = JSON.parse(data);
+                for(var i = 1; i < result.length; i++) {
+                  var list_name = result[i].Name;
+                  //var creator = result[i].Creator;
+                  //var description = result[i].Description;
+                  $("#listDisplay").append("<li class=\"list-group-item\">" + list_name +"</li>");
+                }
+          });
         
-      // }
+      }
 
       function listReviews(list, divId) {
         var count = 0;
@@ -207,7 +218,7 @@
 
           <!-- Lists -->
           <div id="lists" class="tab-pane fade">
-            <div class="list-group" id="listDisplay"></div>
+            <ul class="list-group" id="listDisplay"></ul>
           </div>
         </div>
       </div>

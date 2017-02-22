@@ -52,6 +52,7 @@
 		#check password
 		if(password_verify($password, $row["Password"])) {
 			$_SESSION["user"] = $row;
+			$_SESSION["DisplayName"] = $row["DisplayName"];
 			header("Location: ../profile.html");
 		}
 		else {
