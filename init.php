@@ -22,12 +22,10 @@
 	// creator = display name of person who created the list
 	$db->query("CREATE TABLE Lists (ID bigint primary key NOT NULL AUTO_INCREMENT, Name char(50), Creator char(35), Description char(140))") or die ("Invalid create Lists " . $db->error);
 
-	$db->query("CREATE TABLE Movies (Movie_ID bigint(20) primary key NOT NULL AUTO_INCREMENT, Name char(50), ImageName char(50))") or die ("Invalid create Movies " . $db->error);
-
-
-	// $db->query("CREATE TABLE UserListLines (List_ID bigint NOT NULL, User_DisplayName char(35) NOT NULL)") or die ("Invalid create UserListLines " . $db->error);
+	$db->query("CREATE TABLE Movies (Movie_ID bigint(20) primary key NOT NULL AUTO_INCREMENT, Name char(50), AvgReview float, ImageName char(50))") or die ("Invalid create Movies " . $db->error);
 
 	$db->query("CREATE TABLE MovieListLines (Movie_ID bigint(20) NOT NULL, List_ID bigint NOT NULL)") or die ("Invalid create MovieListLines " . $db->error);
 
+	# Success!
 	echo "Setup 6 tables in CommunityRate DB";
 ?>

@@ -26,13 +26,13 @@
 	    <script type="text/javascript">
 		    	function createList() {
 
-		    		name = $("#name").val();
-		    		description = $("#description").val();
+		    		var name = $("#name").val();
+		    		var description = $("#description").val();
 
 		    		$.post("php/create-list.php", 
 		    			{name: name, description: description}, 
 		    			function (data) {
-		    			response = $(data).find("response").text();
+		    			var response = $(data).find("response").text();
 		    			$("#response").html(response);
 		    		});
 

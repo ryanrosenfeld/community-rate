@@ -73,9 +73,10 @@
                 var result = JSON.parse(data);
                 for(var i = 1; i < result.length; i++) {
                   var list_name = result[i].Name;
+                  var ID = result[i].ID;
                   //var creator = result[i].Creator;
                   //var description = result[i].Description;
-                  $("#listDisplay").append("<li class=\"list-group-item\">" + list_name +"</li>");
+                  $("#listDisplay").append("<li class=\"list-group-item\"><a href='list.html#" + ID + "'>" + list_name +"</a></li>");
                 }
           });
         

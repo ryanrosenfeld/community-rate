@@ -10,7 +10,7 @@
 		die ("Could not connect to db: " . $db->connect_error);
 	endif;
 
-	# 1. Find the lists belonging to this user
+	# Find the lists belonging to this user
 	$find_lists = "SELECT * FROM Lists where Lists.Creator = '$user'";
 	$result = $db->query($find_lists);
 	$rows = $result->num_rows;

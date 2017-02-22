@@ -1,4 +1,5 @@
 <?php
+// This is outdated -- we could probably delete it, but I'll keep it for now.
 	session_start();
 
 	$db = new mysqli('localhost','root','','CommunityRate');
