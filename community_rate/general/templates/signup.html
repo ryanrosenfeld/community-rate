@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'general/signup.css' %}" />
+</head>
+<body>
+    <div class="login-page">
+        <div class="form">
+            <h2>Sign up for CommunityRate!</h2>
+            <form action="/signup/" method="post">
+                {% csrf_token %}
+
+                {{ form.as_p }}
+
+                <input id="submitButton" type="submit" value="Sign Up!" class="button btn-success"/>
+            </form>
+            <p class="message">Already registered? <a href="/login/">Sign In</a></p>
+        </div>
+    </div>
+</body>
+</html>
