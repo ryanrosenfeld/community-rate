@@ -1,35 +1,46 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>FinTech Login</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js">
+<!-- All the files that are required -->
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+<link href='http://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.13.1/jquery.validate.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
-    {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'general/login.css' %}" />
-</head>
-<body>
-    <div class="container text-center">
-        <h2>Welcome to CommunityRate!</h2>
-        <form action="/login/" method="post">
-            {% csrf_token %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js">
 
-            {{ form.non_field_errors }}
-            <div class="form-group row fieldWrapper">
-                {{ form.username.errors }}
-                <label for="{{ form.username.id_for_label }}">Username: </label>
-                {{ form.username }}
-            </div>
-            <div class="form-group row fieldWrapper">
-                {{ form.password.errors }}
-                <label for="{{ form.password.id_for_label }}">Password: </label>
-                {{ form.password }}
-            </div>
-            <input type="submit" value="Login" class="btn btn-success" />
-        </form>
-        <br>
-        <a href="/signup/">New User?</a>
+{%  load static %}
+<link rel="stylesheet" href="{% static 'general/css/login.css' %}">
+<script src="{% static 'general/js/login.js' %}"></script>
+
+<div class="container text-center" style="padding:50px 0">
+    <div class="row border-between">
+        <h1>Welcome to CommunityRate!</h1>
+        <p><i>the site where your <strong>friends'</strong> opinions matter, not the whole world's</i></p>
+        <div class="logo">login here</div>
+        <!-- Login Form -->
+        <div class="login-form-1">
+            <form id="login-form" class="text-left" action="/login/" method="POST">
+                {% csrf_token %}
+                <div class="login-form-main-message"></div>
+                <div class="main-login-form">
+                    <div class="login-group">
+                        <div class="form-group">
+                            {{ form.username }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.password }}
+                        </div>
+                        <div class="form-group login-group-checkbox">
+                            {{ form.remember }}
+                            <label for="lg_remember">remember me</label>
+                        </div>
+                    </div>
+                    <button type="submit" class="login-button"><i class="fa fa-chevron-right"></i></button>
+                </div>
+                <div class="etc-login-form">
+                    <p>forgot your password? <a href="/forgot_password/">click here</a></p>
+                    <p>new user? <a href="/signup/">create new account</a></p>
+                </div>
+            </form>
+        </div>
     </div>
-</body>
-</html>
+</div>

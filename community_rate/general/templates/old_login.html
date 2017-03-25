@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FinTech Login</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js">
+
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'general/css/signup.css' %}" />
+</head>
+<body>
+    <div class="login-page">
+        <div class="form">
+            <h1>Welcome to CommunityRate!</h1>
+            <p><i>The website where your <strong>friends</strong> ratings matter, not the whole world's. Please sign in below or create a new account.</i></p>
+            <form action="/login/" method="post">
+                {% csrf_token %}
+
+                {{ form.as_p }}
+                <input id="submitButton" type="submit" value="Login!" />
+            </form>
+            <p class="message">New user? <a href="/signup/">Create an account</a></p>
+
+            <!--{{ form.non_field_errors }}-->
+            <!--<div class="form-group row fieldWrapper">-->
+                <!--{{ form.username.errors }}-->
+                <!--<label for="{{ form.username.id_for_label }}">Username: </label>-->
+                <!--{{ form.username }}-->
+            <!--</div>-->
+            <!--<div class="form-group row fieldWrapper">-->
+                <!--{{ form.password.errors }}-->
+                <!--<label for="{{ form.password.id_for_label }}">Password: </label>-->
+                <!--{{ form.password }}-->
+            <!--</div>-->
+        </div>
+    </div>
+</body>
+</html>

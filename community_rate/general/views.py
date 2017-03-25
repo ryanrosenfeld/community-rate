@@ -9,14 +9,20 @@ from .forms import LoginForm
 
 # Create your views here.
 def login_view(request):
-    if request.method == 'POST':
+    if request.user.is_authenticated():
+        return HttpResponseRedirect('/')
+    elif request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
+            print("form valid")
             u = request.POST['username']
             p = request.POST['password']
             user = authenticate(username=u, password=p)
+            print("HERE")
             if user is not None:
+                print("Logging in")
                 login(request, user)
+                request.user.remember = request.POST.get('remember', False)
                 return HttpResponseRedirect('/')
     else:
         form = LoginForm()
