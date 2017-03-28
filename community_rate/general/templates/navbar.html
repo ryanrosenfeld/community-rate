@@ -1,32 +1,40 @@
-<nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="index.html">CommunityRate</a>
-    </div>
+<!-- Navigation -->
+    <nav id="mainNav" class="navbar navbar-default navbar-fixed-top navbar-custom">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
+                </button>
+                <a class="navbar-brand" href="#page-top">CommunityRate</a>
+            </div>
 
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav">
-        <li><a href="#">Discover <span class="sr-only">(current)</span></a></li>
-        <div class="navbar-form navbar-left">
-          <div class="form-group">
-            <input type="text" class="form-control" size="40" placeholder="Search" id="movieSearch">
-          </div>
-          <button id="searchSubmit" class="btn btn-default" onclick="postToURL('search-results.html', $('#movieSearch').val())">Submit</button>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="page-scroll">
+                        <form class="navbar-form" role="search">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search" name="q">
+                            <div class="input-group-btn">
+                                <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                            </div>
+                        </div>
+                    </form>
+                    </li>
+                    <li class="page-scroll">
+                        <a href="#page-top">Discover</a>
+                    </li>
+                    <li class="dropdown page-scroll">
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="glyphicon glyphicon-user"></i><span class="caret"></span></a>
+                      <ul class="dropdown-menu">
+                        <li><a href="#">Profile</a></li>
+                        <li><a href="#">Settings</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#">Sign Out</a></li>
+                      </ul>
+                    </li>
+                </ul>
+            <!-- /.navbar-collapse -->
         </div>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="find-friends.html">Find Friends</a></li>
-        <li><a href="profile.html">Profile</a></li>
-        <li><a href="/logout/">Sign Out</a></li>
-      </ul>
-    </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
-</nav>
+        <!-- /.container-fluid -->
+    </nav>
