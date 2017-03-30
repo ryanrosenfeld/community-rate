@@ -3,8 +3,7 @@ from django.http import HttpResponseRedirect
 from .models import SiteUser
 from django.contrib.auth import authenticate, login, logout
 
-from .forms import SignupForm
-from .forms import LoginForm
+from .forms import *
 from .services import *
 
 
@@ -69,4 +68,9 @@ def search(request):
 
 def movie_page(request, id):
     movie = get_movie_by_id(id)
-    return render(request, 'movie.html', {'movie': movie})
+    form = ReviewForm()
+    return render(request, 'movie.html', {'movie': movie, 'form': form})
+
+
+def profile(request):
+    return render(request, 'profile.html')

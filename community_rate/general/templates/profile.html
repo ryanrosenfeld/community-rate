@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container" style="padding: 150px 0">
+    	<!-- Left column -->
+      <div class="col-md-4">
+      	<div class="page-header">
+    	  	<h3>Ryan Rosenfeld</h3>
+      	</div>
+        <p id="numSeen">Movie Reactions: </p>
+        <p id="favMovie">Favorite Movie: </p>
+        <p id="favGenre">Favorite Genre: </p>
+        <div class="col-md-10">
+          <ul class="nav nav-tabs">
+            <li><a data-toggle="tab" href="#followers" onclick="showFollowers()">Followers <span class="badge" id="followersBadge"></span></a></li>
+            <li><a data-toggle="tab" href="#following" onclick="showFollowing()">Following <span class="badge" id="followingBadge"></span></a></li>
+          </ul>
+
+          <div class="tab-content">
+              <!-- Followers -->
+              <div class="list-group" id="followersList">
+                  <div id="followers" class="tab-pane fade in active"></div>
+              </div>
+
+            <!-- Following -->
+            <div id="following" class="tab-pane fade in active">
+              <div class="list-group" id="followingList"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right column -->
+      <div class="col-md-8">
+
+        <!-- Tabs -->
+        <ul class="nav nav-tabs">
+          <li class="active"><a data-toggle="tab" href="#favorites">Favorites</a></li>
+          <li><a data-toggle="tab" href="#recents">Recently Watched</a></li>
+          <li><a data-toggle="tab" href="#lists">Lists</a></li>
+        </ul>
+
+        <div class="tab-content">
+          <!-- Favorite Movies -->
+          <div id="favorites" class="tab-pane fade in active">
+              <br>
+              <div class="list-group">
+                  {% for favorite in favorites %}
+
+                  {% endfor %}
+              </div>
+          </div>
+
+          <!-- Recent Movies -->
+          <div id="recents" class="tab-pane fade">
+            <br>
+            <div class="list-group" id="recentsList"></div>
+          </div>
+
+          <!-- Lists -->
+          <div id="lists" class="tab-pane fade">
+            <ul class="list-group" id="listDisplay"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}

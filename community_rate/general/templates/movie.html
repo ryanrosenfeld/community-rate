@@ -18,11 +18,9 @@
 
 		<!-- Right Column: Your Movie info -->
 		<div class="col-md-8">
-				<button type="button" class="btn btn-primary btn-circle btn-xl" id="MyRating">8.8</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				<button type="button" class="btn btn-danger btn-circle btn-lg" id="MyEntertainment"><i class="glyphicon glyphicon-fire"></i></button>&nbsp;&nbsp;
-				<button type="button" class="btn btn-success btn-circle btn-lg" id="MyEducation"><i class="glyphicon glyphicon-education"></i></button>&nbsp;&nbsp;
-				<button type="button" class="btn btn-info btn-circle btn-lg" id="MyMood"><i class="glyphicon glyphicon-fire"></i></button><br>
-
+            <form action="/movie/{{ movie.id }}/addreview/" method="POST">
+                {{ form }}
+            </form>
 		</div>
     </div>
 {% endblock %}
