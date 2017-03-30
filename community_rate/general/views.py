@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 
 from .forms import SignupForm
 from .forms import LoginForm
+from .services import *
 
 
 # Create your views here.
@@ -54,3 +55,18 @@ def home(request):
         return render(request, 'index.html')
     else:
         return HttpResponseRedirect('/login/')
+
+
+def search(request):
+    if request.method == 'GET':
+        s = request.GET.get('search', None)
+        if s is not None:
+            movies = search_movies(s)
+            return render(request, 'search-results.html', {'movies': movies})
+    else:
+        return HttpResponseRedirect('/')
+
+
+def movie_page(request, id):
+    movie = get_movie_by_id(id)
+    return render(request, 'movie.html', {'movie': movie})

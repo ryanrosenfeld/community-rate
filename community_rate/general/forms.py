@@ -53,3 +53,11 @@ class SignupForm(forms.Form):
         widget=forms.PasswordInput(attrs={'placeholder': 'confirm password', 'class': 'form-control'}),
         label='',
     )
+
+
+class SearchForm(forms.Form):
+    search = forms.CharField(
+        label='',
+        max_length=100,
+        widget=forms.TextInput(attrs={'placeholder': 'Search', 'class': 'form-control'})
+    )
