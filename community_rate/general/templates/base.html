@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
     {% load static %}
@@ -20,6 +19,9 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+
+    {% block header %}
+    {% endblock %}
 </head>
 <body>
     <!-- Navigation -->
@@ -81,5 +83,8 @@
 
     <!-- Theme JavaScript -->
     <script src="{% static 'general/freelancer-theme/js/freelancer.min.js' %}"></script>
+
+    {% block scripts %}
+    {% endblock %}
 </body>
 </html>

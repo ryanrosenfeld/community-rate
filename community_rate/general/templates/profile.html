@@ -1,5 +1,11 @@
 {% extends 'base.html' %}
 
+{% block header %}
+    <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
+    {% load static %}
+    <link href="{% static 'general/css/profile.css' %}" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
     <div class="container" style="padding: 150px 0">
     	<!-- Left column -->
@@ -46,7 +52,16 @@
               <br>
               <div class="list-group">
                   {% for favorite in favorites %}
-
+                      <a class="list-group-item row" href="/movie/{{ favorite.movie.id }}/">
+                        <div class='col-md-1'>
+                            <img src="http://image.tmdb.org/t/p/w92{{ favorite.movie.poster_path }}" alt=''>
+                        </div>
+                        <div class='col-md-11'>
+                            <h4 class='list-group-item-heading'>{{ favorite.movie.title }}</h4>
+                            <p class='list-group-item-text'>Rating: {{ favorite.rating }}</p>
+                            <p class='list-group-item-text'>Reaction: <i class="{{ favorite.reaction }}"></i></p>
+                        </div>
+                      </a>
                   {% endfor %}
               </div>
           </div>
@@ -54,7 +69,20 @@
           <!-- Recent Movies -->
           <div id="recents" class="tab-pane fade">
             <br>
-            <div class="list-group" id="recentsList"></div>
+            <div class="list-group" id="recentsList">
+                {% for recent in recents %}
+                    <a class="list-group-item row" href="/movie/{{ favorite.movie.id }}/">
+                        <div class='col-md-1'>
+                            <img src="http://image.tmdb.org/t/p/w92{{ recent.movie.poster_path }}" alt=''>
+                        </div>
+                        <div class='col-md-11'>
+                            <h4 class='list-group-item-heading'>{{ recent.movie.title }}</h4>
+                            <p class='list-group-item-text'>Rating: {{ recent.rating }}</p>
+                            <p class='list-group-item-text'>Reaction: <i class="{{ recent.reaction }}"></i></p>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
           </div>
 
           <!-- Lists -->
