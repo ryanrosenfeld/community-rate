@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'general',
-    'crispy_forms',
+    'movies',
+    'users',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -56,7 +57,12 @@ ROOT_URLCONF = 'community_rate.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            BASE_DIR + '/templates/general/',
+            BASE_DIR + '/templates/movies/',
+            BASE_DIR + '/templates/users/',
+            BASE_DIR + '/templates/'
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
