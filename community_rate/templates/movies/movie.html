@@ -1,92 +1,94 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block header %}
-    {% load static %}
     <title>{{ movie.title }}</title>
     <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
     <link href="{% static 'general/css/movie.css' %}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
-    <div class="container" style="padding: 90px 0">
-		<!-- Header -->
-		<div class="page-header row">
-            <div class="col-md-1">
-                <img src="http://image.tmdb.org/t/p/w92{{ movie.poster_path }}" id="header-img">
+    {# Left column #}
+    <div class="col-md-5">
+        {# Movie info #}
+        <div class="card card-stats">
+            <div class="card-image">
+                <img src="http://image.tmdb.org/t/p/w92{{ movie.poster_path }}" alt="{% static 'general/img/no_poster.jpg' %}" style="height: 130px; width: 100px;">
             </div>
-            <div class="col-md-5">
-                <h3 id="movie-title">{{ movie.title }}</h3>
-                <div class="row" id="header-rating">
-                    <div class="header-div">
-                        <div class="circleBase circle1" id="MyRating"><p>{{ review.rating }}</p></div><br>
-                        <p class="rating-label">Rating</p>
-                    </div>
-                    <div class="header-div">
-                        <i class="{{ review.reaction }}" id="reaction"></i><br>
-                        <p class="rating-label">Reaction</p>
-                    </div>
-                    <div class="header-div">
-                        <button class="btn btn-success pull-" onclick="showForm()" id="updateButton">Update Rating</button>
+            <div class="card-content">
+                <h3 class="card-title">{{ movie.title }}</h3>
+                <p class="card-description">
+                    Genre(s): {% for g in movie.genres %}{{ g.name }}{% if not forloop.last %}, {% endif %}{% endfor %}
+                </p>
+                <p class="card-description">Release year: {{ movie.release_date|slice:"0:4" }}</p>
+                <p class="card-description"><i>{{ movie.overview }}</i></p>
+            </div>
+        </div>
+    </div>
+
+    {# Right column #}
+    <div class="col-md-7">
+        {# My Review #}
+        <div class="card">
+            <div class="card-header" data-background-color="orange">
+                <h4 class="title">My Review</h4>
+            </div>
+            <div class="card-content">
+                <div class="col-lg-6 col-md-6 col-sm-6 text-center">
+                    <p class="category">Rating</p>
+                    <h2 class="title">{{ review.rating }}</h2>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 text-center">
+                    <p class="category">Reaction</p>
+                    <p class="title"><i class="{{ review.reaction }}" id="reaction" style="font-size: 30px"></i></p>
+                </div>
+                <br>
+                <div class="col-md-12">
+                    <p class="category">Thoughts</p><br>
+                    <blockquote class="blockquote">
+                        <p><i>{{ review.thoughts }}</i></p>
+                    </blockquote>
+                    <hr>
+                    <div class="text-center">
+                        <button class="btn btn-info">Update Review</button>
                     </div>
                 </div>
             </div>
-{#            <div class="col-md-2">#}
-{#                <div class="header-div pull-right" id="thoughts-div">#}
-{#                    <blockquote class="blockquote-reverse">#}
-{#                    <i>{{ review.thoughts }}</i><br>#}
-{#                </div>#}
-{#            </div>#}
-		</div>
+        </div>
 
-		<!-- Left Column: General Movie info -->
-		<div class="col-md-4">
-			<p id="genre">Genre: </p>
-			<p id="followerRating">Rating: </p>
-			<p id="followerEntertainment">Entertainment Value: </p>
-			<p id="followerEducation">Education Value: </p>
-			<p id="followerMood">Average Mood: </p>
-		</div>
-
-		<!-- Right Column: Your Movie info -->
-		<div class="col-md-8">
-            <div id="rating-form" style="display:none">
-                <form action="/movie/{{ movie.id }}/" method="POST">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <label for="rating-field">Rating</label>
-                        {{ form.rating }}
-                    </div>
-                    <div class="form-group">
-                        <label>Reaction</label><br>
-                        <div style="display:none">{{ form.reaction }}</div>
-                        <div id="emoji-selection">
-                            <div class="row">
-                                <i class="em em-grinning" onclick="setReaction('grinning')"></i>
-                                <i class="em em-joy" onclick="setReaction('joy')"></i>
-                                <i class="em em-blush" onclick="setReaction('blush')"></i>
-                                <i class="em em-heart_eyes" onclick="setReaction('heart_eyes')"></i>
-                                <i class="em em-neutral_face" onclick="setReaction('neutral_face')"></i>
-                                <i class="em em-confused" onclick="setReaction('confused')"></i>
-                            </div>
-                            <div class="row">
-                                <i class="em em-unamused" onclick="setReaction('unamused')"></i>
-                                <i class="em em-disappointed" onclick="setReaction('disappointed')"></i>
-                                <i class="em em-angry" onclick="setReaction('angry')"></i>
-                                <i class="em em-anguished" onclick="setReaction('anguished')"></i>
-                                <i class="em em-sob" onclick="setReaction('sob')"></i>
-                                <i class="em em-sleeping" onclick="setReaction('sleeping')"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Thoughts</label>
-                        {{ form.thoughts }}
-                    </div>
-                    <button id="cancel-btn" type="button" onclick="hideForm()" class="btn btn-danger">Cancel</button>
-                    <input type="submit" class="btn btn-info" value="Update!" />
-                </form>
+        {# Friends' Reviews #}
+        <div class="card">
+            <div class="card-header" data-background-color="red">
+                <h4 class="title">Friend Reviews</h4>
             </div>
-		</div>
+            <div class="card-content">
+                <div class="col-lg-6 col-md-6 col-sm-6 text-center">
+                    <p class="category">Average Rating</p>
+                    <h2 class="title">{{ review.rating }}</h2>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 text-center">
+                    <p class="category">Most Common Reaction</p>
+                    <p class="title"><i class="{{ review.reaction }}" id="reaction" style="font-size: 30px"></i></p>
+                </div>
+                <div class="col-md-12">
+                    <table class="table" id="friend-reviews">
+                        <thead class="text-danger">
+                            <th>Friend</th>
+                            <th class="text-center">Rating</th>
+                            <th class="text-center">Reaction</th>
+                            <th>Thoughts</th>
+                        </thead>
+                        <tbody>
+                            <td>Sean</td>
+                            <td class="text-center">8</td>
+                            <td class="text-center"></td>
+                            <td>Pretty sweet movie imo</td>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}
 
