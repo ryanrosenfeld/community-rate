@@ -11,7 +11,6 @@ def movie_page(request, id):
     except Review.DoesNotExist:
         r = None
     movie = get_movie_by_id(id)
-    print(movie)
     if request.method == 'POST':
         form = ReviewForm(request.POST)
         if form.is_valid():
