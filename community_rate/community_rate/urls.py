@@ -13,5 +13,10 @@ urlpatterns = [
     url(r'^search/', movie_views.search),
     url(r'^movie/(.*)/', movie_views.movie_page),
     url(r'^profile/', user_views.profile),
+    url(r'^movies/', movie_views.movie_db),
     # url(r'^users/', user_views.users),
+
+    # AJAX Requests
+    url(r'^ajax/filter-movies/', movie_views.filter_movies),
+    url(r'^ajax/get-movie-rating/', movie_views.get_movie_rating),
 ]

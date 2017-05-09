@@ -1,95 +1,230 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block header %}
+    <title>{{ request.user }}</title>
     <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
     {% load static %}
     <link href="{% static 'general/css/profile.css' %}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
-    <div class="container" style="padding: 150px 0">
-    	<!-- Left column -->
-      <div class="col-md-4">
-      	<div class="page-header">
-    	  	<h3>Ryan Rosenfeld</h3>
-      	</div>
-        <p id="numSeen">Movie Reactions: </p>
-        <p id="favMovie">Favorite Movie: </p>
-        <p id="favGenre">Favorite Genre: </p>
-        <div class="col-md-10">
-          <ul class="nav nav-tabs">
-            <li><a data-toggle="tab" href="#followers" onclick="showFollowers()">Followers <span class="badge" id="followersBadge"></span></a></li>
-            <li><a data-toggle="tab" href="#following" onclick="showFollowing()">Following <span class="badge" id="followingBadge"></span></a></li>
-          </ul>
-
-          <div class="tab-content">
-              <!-- Followers -->
-              <div class="list-group" id="followersList">
-                  <div id="followers" class="tab-pane fade in active"></div>
-              </div>
-
-            <!-- Following -->
-            <div id="following" class="tab-pane fade in active">
-              <div class="list-group" id="followingList"></div>
+{#  LEFT COLUMN  #}
+    <div class="col-md-8">
+        {# USER STATS #}
+        {# Number of Reviews #}
+        <div class="col-lg-5 col-md-6 col-sm-6">
+            <div class="card card-stats">
+                <div class="card-header" data-background-color="blue">
+                    <i class="material-icons">theaters</i>
+                </div>
+                <div class="card-content">
+                    <p class="category">Movie Reviews</p>
+                    <h3 class="title">75</h3>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
 
-      <!-- Right column -->
-      <div class="col-md-8">
-
-        <!-- Tabs -->
-        <ul class="nav nav-tabs">
-          <li class="active"><a data-toggle="tab" href="#favorites">Favorites</a></li>
-          <li><a data-toggle="tab" href="#recents">Recently Watched</a></li>
-          <li><a data-toggle="tab" href="#lists">Lists</a></li>
-        </ul>
-
-        <div class="tab-content">
-          <!-- Favorite Movies -->
-          <div id="favorites" class="tab-pane fade in active">
-              <br>
-              <div class="list-group">
-                  {% for favorite in favorites %}
-                      <a class="list-group-item row" href="/movie/{{ favorite.movie.id }}/">
-                        <div class='col-md-1'>
-                            <img src="http://image.tmdb.org/t/p/w92{{ favorite.movie.poster_path }}" alt=''>
-                        </div>
-                        <div class='col-md-11'>
-                            <h4 class='list-group-item-heading'>{{ favorite.movie.title }}</h4>
-                            <p class='list-group-item-text'>Rating: {{ favorite.rating }}</p>
-                            <p class='list-group-item-text'>Reaction: <i class="{{ favorite.reaction }}"></i></p>
-                        </div>
-                      </a>
-                  {% endfor %}
-              </div>
-          </div>
-
-          <!-- Recent Movies -->
-          <div id="recents" class="tab-pane fade">
-            <br>
-            <div class="list-group" id="recentsList">
-                {% for recent in recents %}
-                    <a class="list-group-item row" href="/movie/{{ favorite.movie.id }}/">
-                        <div class='col-md-1'>
-                            <img src="http://image.tmdb.org/t/p/w92{{ recent.movie.poster_path }}" alt=''>
-                        </div>
-                        <div class='col-md-11'>
-                            <h4 class='list-group-item-heading'>{{ recent.movie.title }}</h4>
-                            <p class='list-group-item-text'>Rating: {{ recent.rating }}</p>
-                            <p class='list-group-item-text'>Reaction: <i class="{{ recent.reaction }}"></i></p>
-                        </div>
-                    </a>
-                {% endfor %}
+        {# Average Rating #}
+        <div class="col-lg-5 col-md-6 col-sm-6">
+            <div class="card card-stats">
+                <div class="card-header" data-background-color="orange">
+                    <i class="material-icons">thumbs_up_down</i>
+                </div>
+                <div class="card-content">
+                    <p class="category">Average Rating</p>
+                    <h3 class="title">8</h3>
+                </div>
             </div>
-          </div>
-
-          <!-- Lists -->
-          <div id="lists" class="tab-pane fade">
-            <ul class="list-group" id="listDisplay"></ul>
-          </div>
         </div>
-      </div>
+
+        {# Reviews #}
+        <div class="card card-nav-tabs">
+            <div class="card-header" data-background-color="purple">
+                <div class="nav-tabs-navigation">
+                    <div class="nav-tabs-wrapper">
+                        <span class="nav-tabs-title">Movie Reviews</span>
+                        <ul class="nav nav-tabs" data-tabs="tabs">
+                            <li class="active">
+                                <a href="#favorites" data-toggle="tab">
+                                    <i class="material-icons">whatshot</i>
+                                    Favorites
+                                <div class="ripple-container"></div></a>
+                            </li>
+                            <li class="">
+                                <a href="#recent" data-toggle="tab">
+                                    <i class="material-icons">access_time</i>
+                                    Recent
+                                <div class="ripple-container"></div></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-content">
+                <div class="tab-content">
+                    <div class="tab-pane active" id="favorites">
+                        <table class="table table-hover review-table">
+                            <thead class="text-primary">
+                                <th>Movie</th>
+                                <th>Rating</th>
+                                <th>Reaction</th>
+                            </thead>
+                            <tbody>
+                                {% for m in favorites %}
+                                    <tr onclick=window.location.href="/movie/{{ m.movie.id }}/">
+                                        <td>
+                                            <h4><img src="http://image.tmdb.org/t/p/w92{{ m.movie.poster_path }}" alt=''>     {{ m.movie.title }}</h4>
+                                        </td>
+                                        <td class="text-center">
+                                            <h4>{{ m.rating }}</h4>
+                                        </td>
+                                        <td class="text-center">
+                                            <h4><i class="{{ m.reaction }}"></i></h4>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane" id="recent">
+                        <table class="table table-hover review-table">
+                            <thead class="text-primary">
+                                <th>Movie</th>
+                                <th>Rating</th>
+                                <th>Reaction</th>
+                            </thead>
+                            <tbody>
+                                {% for m in recents %}
+                                    <tr onclick=window.location.href="/movie/{{ m.movie.id }}/">
+                                        <td>
+                                            <h4><img src="http://image.tmdb.org/t/p/w92{{ m.movie.poster_path }}" alt=''>     {{ m.movie.title }}</h4>
+                                        </td>
+                                        <td class="text-center">
+                                            <h4>{{ m.rating }}</h4>
+                                        </td>
+                                        <td class="text-center">
+                                            <h4><i class="{{ m.reaction }}"></i></h4>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="card">
+            <div class="card-header" data-background-color="purple">
+                <h4 class="title">Edit Profile</h4>
+                <p class="category">Complete your profile</p>
+            </div>
+            <div class="card-content">
+                <form>
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="form-group label-floating">
+                                <label class="control-label">Company (disabled)</label>
+                                <input type="text" class="form-control" disabled>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group label-floating">
+                                <label class="control-label">Username</label>
+                                <input type="text" class="form-control" >
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group label-floating">
+                                <label class="control-label">Email address</label>
+                                <input type="email" class="form-control" >
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group label-floating">
+                                <label class="control-label">Fist Name</label>
+                                <input type="text" class="form-control" >
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group label-floating">
+                                <label class="control-label">Last Name</label>
+                                <input type="text" class="form-control" >
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group label-floating">
+                                <label class="control-label">Adress</label>
+                                <input type="text" class="form-control" >
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group label-floating">
+                                <label class="control-label">City</label>
+                                <input type="text" class="form-control" >
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group label-floating">
+                                <label class="control-label">Country</label>
+                                <input type="text" class="form-control" >
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group label-floating">
+                                <label class="control-label">Postal Code</label>
+                                <input type="text" class="form-control" >
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>About Me</label>
+                                <div class="form-group label-floating">
+                                    <label class="control-label"> Lamborghini Mercy, Your chick she so thirsty, I'm in that two seat Lambo.</label>
+                                    <textarea class="form-control" rows="5"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary pull-right">Update Profile</button>
+                    <div class="clearfix"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card card-profile">
+            <div class="card-avatar">
+                <a href="#pablo">
+                    <img class="img" src="{% static 'material-dash/assets/img/faces/marc.jpg' %}" />
+                </a>
+            </div>
+
+            <div class="content">
+                <h6 class="category text-gray">CEO / Co-Founder</h6>
+                <h4 class="card-title">{{ request.user.get_full_name }}</h4>
+                <p class="card-content">
+                    Don't be scared of the truth because we need to restart the human foundation in truth And I love you like Kanye loves Kanye I love Rick Owens’ bed design but the back is...
+                </p>
+                <a href="#pablo" class="btn btn-primary btn-round">Follow</a>
+            </div>
+        </div>
     </div>
 {% endblock %}

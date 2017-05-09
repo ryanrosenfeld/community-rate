@@ -1,11 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="container" style="padding: 150px 0">
-        <div class="list-group">
-            {% for movie in movies.results %}
-                <a type='button' class='list-group-item list-group-item-action' href='/movie/{{ movie.id }}/'>{{ movie.title }}</a>
-            {% endfor %}
-        </div>
+    <div class="list-group">
+        {% for movie in movies.results %}
+            <a type='button' class='list-group-item list-group-item-action' href='/movie/{{ movie.id }}/'>{{ movie.title }}</a>
+        {% endfor %}
     </div>
 {% endblock %}

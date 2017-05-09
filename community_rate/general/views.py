@@ -50,6 +50,6 @@ def new_user(request):
 
 def home(request):
     if request.user.is_authenticated():
-        return render(request, 'general/index.html')
+        return render(request, 'general/index.html', {'page': 'activity_feed'})
     else:
         return HttpResponseRedirect('/login/')

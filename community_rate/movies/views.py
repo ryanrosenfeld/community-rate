@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from .forms import ReviewForm
 from .models import Review
 from .services import *
@@ -37,11 +37,49 @@ def movie_page(request, id):
     return render(request, 'movies/movie.html', {'movie': movie, 'form': form, 'review': r})
 
 
+def movie_db(request):
+    query = None
+    if request.method == 'GET':
+        query = request.GET.get('search', None)
+    print(query)
+    return render(request, 'movie-db.html', {'page': 'movies', 'query': query})
+
+
 def search(request):
     if request.method == 'GET':
-        s = request.GET.get('search', None)
+        query = request.GET.get('search', None)
+        return render(request, 'movies/search-results.html', {'query': query, 'page': 'movies'})
+    return HttpResponseRedirect('/')
+
+
+def filter_movies(request):
+    if request.method == 'GET':
+        s = request.GET.get('query', None)
         if s is not None:
             movies = search_movies(s)
-            return render(request, 'movies/search-results.html', {'movies': movies})
-    else:
-        return HttpResponseRedirect('/')
+            return JsonResponse(movies)
+    return JsonResponse({})
+
+
+def get_movie_rating(request):
+    m_id = request.GET.get('movie', None)
+
+    if m_id is not None:
+        reviews = Review.objects.filter(movie_id=m_id)
+        rating = {
+            'average_rating': 0
+        }
+        if len(reviews) > 0:
+            rating = {
+                'average_rating': sum(r.rating for r in reviews) / len(reviews)
+            }
+    return JsonResponse(rating)
+
+
+# def search_movies(request):
+#     if request.method == 'GET':
+#         s = request.GET.get('query', None)
+#         if s is not None:
+#             movies = search_movies(s)
+#             return JsonResponse(movies)
+#     return JsonResponse({})
