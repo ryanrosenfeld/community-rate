@@ -19,6 +19,7 @@ def movie_page(request, id):
                 review = Review(rating=request.POST['rating'], reaction=request.POST['reaction'], thoughts=t,
                                 movie_id=id, user_id=request.user.id)
                 review.save()
+                r = review
             else:
                 r.rating = request.POST['rating']
                 r.reaction = request.POST['reaction']
