@@ -3,4 +3,4 @@ from django.contrib.auth.models import AbstractUser
 
 
 class SiteUser(AbstractUser):
-    fb_id = models.CharField(unique=True, max_length=100)
+    fb_id = models.CharField(max_length=100, null=True)
