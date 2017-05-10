@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block header %}
+    <title>{{ request.user }}</title>
+    <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
+    {% load static %}
+    <link href="{% static 'general/css/profile.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+{#  LEFT COLUMN  #}
+    <div class="col-md-8">
+        {% block left-column-top %}{% endblock %}
+
+
+        {# Number of Reviews #}
+        <div class="col-sm-5">
+            <div class="card card-stats">
+                <div class="card-header" data-background-color="blue">
+                    <i class="material-icons">theaters</i>
+                </div>
+                <div class="card-content">
+                    <p class="category">Movie Reviews</p>
+                    <h3 class="title">75</h3>
+                </div>
+            </div>
+        </div>
+
+        {# Average Rating #}
+        <div class="col-sm-5">
+            <div class="card card-stats">
+                <div class="card-header" data-background-color="orange">
+                    <i class="material-icons">thumbs_up_down</i>
+                </div>
+                <div class="card-content">
+                    <p class="category">Average Rating</p>
+                    <h3 class="title">8</h3>
+                </div>
+            </div>
+        </div>
+
+        {# Reviews #}
+        <div class="card card-nav-tabs">
+            <div class="card-header" data-background-color="purple">
+                <div class="nav-tabs-navigation">
+                    <div class="nav-tabs-wrapper">
+                        <span class="nav-tabs-title">Movie Reviews</span>
+                        <ul class="nav nav-tabs" data-tabs="tabs">
+                            <li class="active">
+                                <a href="#favorites" data-toggle="tab">
+                                    <i class="material-icons">whatshot</i>
+                                    Favorites
+                                <div class="ripple-container"></div></a>
+                            </li>
+                            <li class="">
+                                <a href="#recent" data-toggle="tab">
+                                    <i class="material-icons">access_time</i>
+                                    Recent
+                                <div class="ripple-container"></div></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-content">
+                <div class="tab-content">
+                    <div class="tab-pane active" id="favorites">
+                        <div class="scrollable-table">
+                            <table class="table table-hover review-table table-responsive">
+                                <thead class="text-primary">
+                                    <th>Movie</th>
+                                    <th>Rating</th>
+                                    <th>Reaction</th>
+                                </thead>
+                                <tbody>
+                                    {% for m in favorites %}
+                                        <tr onclick=window.location.href="/movie/{{ m.movie.id }}/">
+                                            <td>
+                                                <h4><img src="http://image.tmdb.org/t/p/w92{{ m.movie.poster_path }}" alt=''>     {{ m.movie.title }}</h4>
+                                            </td>
+                                            <td class="text-center">
+                                                <h4>{{ m.rating }}</h4>
+                                            </td>
+                                            <td class="text-center">
+                                                <h4><i class="{{ m.reaction }}"></i></h4>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="recent">
+                        <div class="scrollable-table">
+                            <table class="table table-hover review-table">
+                                <thead class="text-primary">
+                                    <th>Movie</th>
+                                    <th>Rating</th>
+                                    <th>Reaction</th>
+                                </thead>
+                                <tbody>
+                                    {% for m in recents %}
+                                        <tr onclick=window.location.href="/movie/{{ m.movie.id }}/">
+                                            <td>
+                                                <h4><img src="http://image.tmdb.org/t/p/w92{{ m.movie.poster_path }}" alt=''>     {{ m.movie.title }}</h4>
+                                            </td>
+                                            <td class="text-center">
+                                                <h4>{{ m.rating }}</h4>
+                                            </td>
+                                            <td class="text-center">
+                                                <h4><i class="{{ m.reaction }}"></i></h4>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# Lists #}
+        <div class="card card-nav-tabs">
+            <div class="card-header" data-background-color="green">
+                <div class="nav-tabs-navigation">
+                    <div class="nav-tabs-wrapper">
+                        <span class="nav-tabs-title">Movie Lists</span>
+                        <ul class="nav nav-tabs" data-tabs="tabs">
+                            <li class="active">
+                                <a href="#public" data-toggle="tab">
+                                    <i class="material-icons">whatshot</i>
+                                    Public Lists
+                                <div class="ripple-container"></div></a>
+                            </li>
+                            <li class="">
+                                <a href="#private" data-toggle="tab">
+                                    <i class="material-icons">access_time</i>
+                                    Private Lists
+                                <div class="ripple-container"></div></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-content">
+                <div class="tab-content">
+                    <div class="tab-pane active" id="public">
+                        <p>To Do</p>
+                    </div>
+                    <div class="tab-pane" id="private">
+                        <p>To Do</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# Right column #}
+    <div class="col-md-4">
+        {# Profile summary #}
+        <div class="card card-profile">
+            <div class="card-avatar">
+                <a href="#pablo">
+                    <img class="img" src="{% static 'material-dash/assets/img/faces/marc.jpg' %}" />
+                </a>
+            </div>
+
+            <div class="content">
+                <h4 class="card-title">{{ request.user.get_full_name }}</h4>
+                <p class="card-content">
+                    Don't be scared of the truth because we need to restart the human foundation in truth And I love you like Kanye loves Kanye I love Rick Owens’ bed design but the back is...
+                </p>
+                {% block profile-card-bottom %}{% endblock %}
+            </div>
+        </div>
+
+        {# USER STATS #}
+        {# Followers/Following #}
+        <div class="col-sm-10 col-sm-offset-1">
+            <div class="card card-stats">
+                <div class="card-header" data-background-color="red">
+                    <i class="material-icons">people</i>
+                </div>
+                <div class="card-content">
+                    <p class="category">Followers</p>
+                    <h3 class="title">3</h3>
+                    <p class="category">Following</p>
+                    <h3 class="title">2</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'general/js/profile.js' %}"></script>
+{% endblock %}

@@ -2,3 +2,8 @@
     height: 65px;
     width: 50px;
 }
+
+.scrollable-table {
+    max-height: 450px;
+    overflow: auto;
+}

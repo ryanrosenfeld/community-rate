@@ -9,4 +9,4 @@ def profile(request):
         r.movie = get_movie_by_id(r.movie_id)
     favorites = sorted(reviews, key=lambda x: x.rating, reverse=True)
     recents = sorted(reviews, key=lambda x: x.date_added, reverse=True)
-    return render(request, 'users/profile.html', {'favorites': favorites, 'recents': recents, 'page': 'profile'})
+    return render(request, 'my-profile.html', {'favorites': favorites, 'recents': recents, 'page': 'profile'})
