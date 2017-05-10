@@ -14,7 +14,8 @@ urlpatterns = [
     url(r'^movie/(.*)/', movie_views.movie_page),
     url(r'^profile/', user_views.profile),
     url(r'^movies/', movie_views.movie_db),
-    # url(r'^users/', user_views.users),
+    url(r'^users/', user_views.main_view),
+    url(r'^all_users/', user_views.view_users),
 
     # AJAX Requests
     url(r'^ajax/filter-movies/', movie_views.filter_movies),
