@@ -1,8 +1,10 @@
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from movies.models import Review
-from general.models import SiteUser
 from movies.services import get_movie_by_id
-
+from general.models import SiteUser
+from .models import *
 
 def profile(request):
     reviews = Review.objects.filter(user_id=request.user.id)
@@ -16,18 +18,62 @@ def view_users(request):
 	all_users = SiteUser.objects.all()
 	return render(request, 'users/all.html', {'users': all_users})
 
-def main_view(request):
+def main_view(request, response=None):
+	"""Main view for users page"""
+
 	users = []
+
+	# Find this user's followers, following
+	following = request.user.follower_set.all()
+
+	followers = request.user.following_set.all()
+
+	# Retrieve all users
 	all_users = SiteUser.objects.all()
 
+	# Append their follower count and
+	# whether or not they are already following that person
 	for user in all_users:
-		followers_count = len(user.follower_set.all())
-		users.append((user,followers_count))
-	print(request.user.username)
-	print(len(all_users))
-	followers = request.user.follower_set.all()
-	print(followers)
-	following = request.user.following_set.all()
+		# Find follower count
+		followers_count = len(user.following_set.all())
+
+		# Determine if this user is already following them OR
+		# request user is actually this user
+		query = following.filter(following=user)
+		already_following = (len(query) > 0) | (user == request.user)
+
+		users.append((user,followers_count, already_following))
+
+	# Sort by follower count (highest first)
+	users = sorted(users, key=lambda x: x[1], reverse=True)
+
 	return render(request, 'users/main.html', {'followers': len(followers), 
 		'following': len(following), 
-		'users': users})
+		'users': users,
+		'response': response})
+
+def follow(request, username):
+	"""Creates follow connection between requester and person they wish to follow"""
+
+	# Retrieve the SiteUser account of the person they wish to follow
+	try:
+		following_user = SiteUser.objects.get(username=username)
+
+	except ObjectDoesNotExist:
+		response = "User \"{0}\" does not exist".format(username)
+		return main_view(request, response)
+
+	# Determine if this user is already following them
+	query = request.user.follower_set.filter(following=following_user)
+	already_following = len(query) > 0
+
+	if already_following:
+		response = "You are already following {0}!".format(username)
+		return main_view(request, response)
+
+	# Person exists and this user is not already following them
+	f = Follower.objects.create(follower=request.user, following=following_user)
+	f.save()
+
+	response = "You are now following {0}".format(username)
+	return main_view(request, response)
