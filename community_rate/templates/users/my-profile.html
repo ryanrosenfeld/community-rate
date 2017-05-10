@@ -3,74 +3,39 @@
 {% block left-column-top %}
     {# Edit Profile (defaults to hidden) #}
     <div class="card" id="edit-profile" style="display: none">
-        <div class="card-header" data-background-color="purple">
+        <div class="card-header" data-background-color="blue">
             <h4 class="title">Edit Profile</h4>
             <p class="category">Complete your profile</p>
         </div>
         <div class="card-content">
-            <form>
+            <form action="/profile/" method="POST">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group label-floating">
+                            <label class="control-label">Username</label>
+                            {{ form.username }}
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-group label-floating">
+                            <label class="control-label">Email address</label>
+                            {{ form.email }}
+                        </div>
+                    </div>
+                </div>
+
                 <div class="row">
                     <div class="col-md-5">
                         <div class="form-group label-floating">
-                            <label class="control-label">Company (disabled)</label>
-                            <input type="text" class="form-control" disabled>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group label-floating">
-                            <label class="control-label">Username</label>
-                            <input type="text" class="form-control" >
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group label-floating">
-                            <label class="control-label">Email address</label>
-                            <input type="email" class="form-control" >
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group label-floating">
                             <label class="control-label">Fist Name</label>
-                            <input type="text" class="form-control" >
+                            {{ form.first_name }}
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-7">
                         <div class="form-group label-floating">
                             <label class="control-label">Last Name</label>
-                            <input type="text" class="form-control" >
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group label-floating">
-                            <label class="control-label">Adress</label>
-                            <input type="text" class="form-control" >
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="form-group label-floating">
-                            <label class="control-label">City</label>
-                            <input type="text" class="form-control" >
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group label-floating">
-                            <label class="control-label">Country</label>
-                            <input type="text" class="form-control" >
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group label-floating">
-                            <label class="control-label">Postal Code</label>
-                            <input type="text" class="form-control" >
+                            {{ form.last_name }}
                         </div>
                     </div>
                 </div>
@@ -78,16 +43,27 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label>About Me</label>
                             <div class="form-group label-floating">
-                                <label class="control-label"> Lamborghini Mercy, Your chick she so thirsty, I'm in that two seat Lambo.</label>
-                                <textarea class="form-control" rows="5"></textarea>
+                                <label class="control-label">Favorite Movie Quote</label>
+                                {{ form.fav_quote }}
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-primary pull-right">Update Profile</button>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="form-group label-floating">
+                                <label class="control-label">About Me</label>
+                                {{ form.about_me }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-success pull-right">Update Profile</button>
+                <button type="button" onclick="toggleEditProfileDisplay()" class="btn btn-danger pull-right">Cancel</button>
                 <div class="clearfix"></div>
             </form>
         </div>
@@ -95,5 +71,9 @@
 {% endblock %}
 
 {% block profile-card-bottom %}
-    <button onclick="toggleEditProfileDisplay()" class="btn btn-primary btn-round">Edit Profile</button>
+    <hr>
+    <div class="row">
+        <button onclick="toggleEditProfileDisplay()" class="btn btn-info btn-round">Edit Profile</button>
+        <button class="btn btn-success btn-round">Update Picture</button>
+    </div>
 {% endblock %}

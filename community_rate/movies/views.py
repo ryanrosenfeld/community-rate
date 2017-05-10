@@ -71,7 +71,7 @@ def get_movie_rating(request):
         }
         if len(reviews) > 0:
             rating = {
-                'average_rating': sum(r.rating for r in reviews) / len(reviews)
+                'average_rating': "{0:.1f}".format(sum(r.rating for r in reviews) / len(reviews))
             }
     return JsonResponse(rating)
 

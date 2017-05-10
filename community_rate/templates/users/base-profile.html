@@ -23,7 +23,7 @@
                 </div>
                 <div class="card-content">
                     <p class="category">Movie Reviews</p>
-                    <h3 class="title">75</h3>
+                    <h3 class="title">{{ num_reviews }}</h3>
                 </div>
             </div>
         </div>
@@ -36,7 +36,7 @@
                 </div>
                 <div class="card-content">
                     <p class="category">Average Rating</p>
-                    <h3 class="title">8</h3>
+                    <h3 class="title">{{ av_rating }}</h3>
                 </div>
             </div>
         </div>
@@ -165,17 +165,25 @@
         {# Profile summary #}
         <div class="card card-profile">
             <div class="card-avatar">
-                <a href="#pablo">
+                <a id="prof-img">
                     <img class="img" src="{% static 'material-dash/assets/img/faces/marc.jpg' %}" />
                 </a>
             </div>
 
             <div class="content">
+                <h6 class="category text-gray">@{{ request.user.username }}</h6>
                 <h4 class="card-title">{{ request.user.get_full_name }}</h4>
-                <p class="card-content">
-                    Don't be scared of the truth because we need to restart the human foundation in truth And I love you like Kanye loves Kanye I love Rick Owens’ bed design but the back is...
-                </p>
-                {% block profile-card-bottom %}{% endblock %}
+                <div class="card-content">
+                    {% if request.user.fav_quote != None and request.user.fav_quote != '' %}
+                        <p class="category">Favorite Movie Quote</p>
+                        <p class="content"><i>"{{ request.user.fav_quote }}"</i></p>
+                    {% endif %}
+                    {% if request.user.about_me != None and request.user.about_me != '' %}
+                        <p class="category">About Me</p>
+                        <p class="content">{{ request.user.about_me }}</p>
+                    {% endif %}
+                    {% block profile-card-bottom %}{% endblock %}
+                </div>
             </div>
         </div>
 
