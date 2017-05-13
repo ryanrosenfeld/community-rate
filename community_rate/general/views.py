@@ -1,10 +1,11 @@
 from django.contrib.auth import authenticate, login, logout, get_user_model
+from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
 from .forms import *
-from .models import SiteUser
+from .models import *
 import re
 
 User = get_user_model()
@@ -16,13 +17,13 @@ def login_view(request):
     elif request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
-            print("form valid")
+
             u = request.POST['username']
             p = request.POST['password']
             user = authenticate(username=u, password=p)
-            print("HERE")
+            
             if user is not None:
-                print("Logging in")
+
                 login(request, user)
                 request.user.remember = request.POST.get('remember', False)
                 return HttpResponseRedirect('/')
@@ -85,6 +86,21 @@ def new_user(request):
     else:
         form = SignupForm()
     return render(request, 'general/signup.html', {'form': form})
+
+@login_required
+def mark_read(request, notification_id):
+    """If user has access to this notification, mark it as read"""
+    try:
+        notification = Notification.objects.get(id=notification_id)
+    except ObjectDoesNotExist:
+        raise Http404
+
+    if notification.user != request.user:
+        # TODO: raise security message instead
+        raise Http404
+    else:
+        notification.is_read = True
+        notification.save()
 
 
 def home(request):

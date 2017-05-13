@@ -18,7 +18,7 @@
     <div class="col-md-8">
         {# USER STATS #}
         {# Number of Followers #}
-        <div class="col-lg-5 col-md-6 col-sm-6">
+        <a class="col-lg-5 col-md-6 col-sm-6" href="/followers">
             <div class="card card-stats">
                 <div class="card-header" data-background-color="blue">
                     <i class="material-icons">supervisor_account</i>
@@ -28,10 +28,10 @@
                     <h3 class="title">{{ followers }}</h3>
                 </div>
             </div>
-        </div>
+        </a>
 
         {# Number Following #}
-        <div class="col-lg-5 col-md-6 col-sm-6">
+        <a class="col-lg-5 col-md-6 col-sm-6" href="/following">
             <div class="card card-stats">
                 <div class="card-header" data-background-color="orange">
                     <i class="material-icons">favorite</i>
@@ -41,13 +41,13 @@
                     <h3 class="title">{{ following }}</h3>
                 </div>
             </div>
-        </div>
+        </a>
     </div>
 
     <div class="card">
         <div class="card-header" data-background-color="purple">
-                <h4 class="title">Top Users</h4>
-                <p class="category">Find new favorites!</p>
+                <h4 class="title">{{ title }}</h4>
+                <p class="category">{{ comment }}</p>
         </div>
             <div class="card-content">
                 <table class="table table-hover">
@@ -58,7 +58,7 @@
                     </thead>
                     <tbody>
                         {% for u, count, already_following in users %}
-                            <tr onclick=window.location.href="/user/{{ u.username }}/">
+                            <tr onclick=window.location.href="/profile/{{ u.username }}">
                                 <td >
                                     <h4>{{u.username}}</h4>
                                 </td>

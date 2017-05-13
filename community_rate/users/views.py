@@ -1,18 +1,89 @@
+from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseRedirect
+from django.db.models import Q
 from django.shortcuts import render
 from movies.models import Review
 from movies.services import get_movie_by_id
-from general.models import SiteUser
+from general.models import SiteUser, Notification
+from movies.models import Review
 from .models import *
+from .forms import *
 
-def profile(request):
-    reviews = Review.objects.filter(user_id=request.user.id)
-    for r in reviews:
-        r.movie = get_movie_by_id(r.movie_id)
-    favorites = sorted(reviews, key=lambda x: x.rating, reverse=True)
-    recents = sorted(reviews, key=lambda x: x.date_added, reverse=True)
-    return render(request, 'users/profile.html', {'favorites': favorites, 'recents': recents, 'page': 'profile'})
+@login_required
+def profile(request, username=""):
+	"""Public or private view of a person's profile"""
+	if username == "":
+		user = request.user
+	else:
+		try:
+			user = SiteUser.objects.get(username=username)
+
+		except ObjectDoesNotExist:
+			response = "User \"{0}\" does not exist".format(username)
+			return main_view(request, response)
+
+	# Check if person requesting profile is the owner
+	owner = user == request.user
+
+	# Query reviews, length, ratings
+	reviews = Review.objects.filter(creator=request.user)
+	number = len(reviews)
+	avg = 0
+	for r in reviews:
+		movie =  get_movie_by_id(r.movie_id)
+		r.movie = movie
+		avg += movie.rating
+		
+	if avg > 0:
+		avg /= number
+
+	favorites = sorted(reviews, key=lambda x: x.rating, reverse=True)
+	recents = sorted(reviews, key=lambda x: x.date_added, reverse=True)
+
+	# Determine if this user is already following them OR
+	# request user is actually this user
+	following = request.user.follower_set.all()
+	query = following.filter(following=user)
+	already_following = (len(query) > 0) | owner
+
+	if owner: 
+
+		return render(request, 'users/profile.html', {
+			'num_reviews': number, 
+			'avg_review': avg,
+			'favorites': favorites,
+			'recents': recents,
+			'page': "profile",
+			'already_following': already_following,
+			'user': user})
+
+@login_required
+def settings(request):
+
+	if request.method == "POST":
+		form = EditProfileForm(request.POST)
+		if form.is_valid():
+			
+			# Iterate through form's fields
+			for element in form.cleaned_data:
+				val = form.cleaned_data[element]
+
+				# Only update user's fields if it was set in form
+				if val:
+					setattr(request.user, element, val)
+
+			request.user.save()
+
+			return HttpResponseRedirect('/profile/')
+
+	form = EditProfileForm()
+	return render(request, 'users/edit-profile.html', {
+		'user': request.user,
+		'settings': True,
+		'form': form,
+		})
+		
 
 def view_users(request):
 	all_users = SiteUser.objects.all()
@@ -47,11 +118,18 @@ def main_view(request, response=None):
 	# Sort by follower count (highest first)
 	users = sorted(users, key=lambda x: x[1], reverse=True)
 
+	# Set display variables for 'main' view
+	title = "Top Users"
+	comment = "Find new favorites!"
+
 	return render(request, 'users/main.html', {'followers': len(followers), 
 		'following': len(following), 
 		'users': users,
-		'response': response})
+		'response': response,
+		'title': title,
+		'comment': comment})
 
+@login_required
 def follow(request, username):
 	"""Creates follow connection between requester and person they wish to follow"""
 
@@ -75,5 +153,80 @@ def follow(request, username):
 	f = Follower.objects.create(follower=request.user, following=following_user)
 	f.save()
 
+	# Create a notification for the person who was followed
+	msg = "{0} is now following you!".format(request.user.username)
+	n = Notification.objects.create(message=msg, notification_class="Follower", user=following_user)
+	n.save()
+
+	# Provide response for requester, return
 	response = "You are now following {0}".format(username)
 	return main_view(request, response)
+
+@login_required
+def view_following(request):
+	"""View for page that displays all of the users that a particular user is following"""
+	users = []
+
+	# Query all of the users this person is following
+	following = request.user.follower_set.all()
+
+	followers = request.user.following_set.all()
+
+	# Append their follower count and
+	# whether or not they are already following that person
+	for follower_obj in following:
+		# Determine follower count of person they are FOLLOWING (this is messy)
+		followers_count = len(follower_obj.following.following_set.all())
+
+		already_following = True
+
+		users.append((follower_obj.following,followers_count, already_following))
+
+
+	# Set up the display variables for the 'following' view
+	title = "People you follow"
+
+	return render(request, 'users/main.html', {
+		'followers': len(followers),
+		'following': len(following),
+		'users': users,
+		'title': title})
+
+@login_required
+def view_followers(request):
+	"""View for page that displays all of the users that follow a particular user"""
+	users = []
+
+	# Query all of the users this person is following
+	following = request.user.follower_set.all()
+
+	followers = request.user.following_set.all()
+
+	# Append their follower count and
+	# whether or not they are already following that person
+	for follower_obj in followers:
+		# Determine follower count of person that follow them (this is messy)
+		followers_count = len(follower_obj.follower.following_set.all())
+
+		# Determine if this user is already following them OR
+		# request user is actually this user
+		query = following.filter(following=follower_obj.follower)
+		already_following = (len(query) > 0) | (follower_obj.follower == request.user)
+
+		users.append((follower_obj.follower,followers_count, already_following))
+
+	# Set up the display variables for the 'following' view
+	title = "Your Followers"
+
+	# Retrieve notifications
+	notifications = Notification.objects.filter(Q(user=request.user) & Q(is_read=False))
+
+	return render(request, 'users/main.html', {
+		'followers': len(followers),
+		'following': len(following),
+		'users': users,
+		'title': title,
+		'notifications': notifications,
+		'number_notifications': len(notifications)})
+
+
