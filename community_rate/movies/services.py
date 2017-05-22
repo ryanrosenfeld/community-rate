@@ -1,6 +1,5 @@
 import requests
 
-
 api_key = 'fd8332d364611c30a611272eb023f170'
 
 
@@ -16,7 +15,6 @@ def get_movie_by_id(movie_id):
     url = "https://api.themoviedb.org/3/movie/" + str(movie_id) + "?language=en-US&api_key=" + api_key
     r = requests.get(url)
     movie = r.json()
-    # movie.img = get_poster_img(movie, 'w92')
     return movie
 
 

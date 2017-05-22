@@ -52,6 +52,10 @@ def search(request):
     return HttpResponseRedirect('/')
 
 
+def new_list(request):
+    return render(request, 'new-list.html')
+
+# AJAX views
 def filter_movies(request):
     if request.method == 'GET':
         s = request.GET.get('query', None)
@@ -74,12 +78,3 @@ def get_movie_rating(request):
                 'average_rating': "{0:.1f}".format(sum(r.rating for r in reviews) / len(reviews))
             }
     return JsonResponse(rating)
-
-
-# def search_movies(request):
-#     if request.method == 'GET':
-#         s = request.GET.get('query', None)
-#         if s is not None:
-#             movies = search_movies(s)
-#             return JsonResponse(movies)
-#     return JsonResponse({})
