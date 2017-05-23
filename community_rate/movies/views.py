@@ -10,7 +10,7 @@ def movie_page(request, id):
         r = Review.objects.get(movie_id=id, user_id=request.user.id)
     except Review.DoesNotExist:
         r = None
-    movie = get_movie_by_id(id)
+    movie = get_movie_by_id(id, False)
     if request.method == 'POST':
         form = ReviewForm(request.POST)
         if form.is_valid():
@@ -54,6 +54,7 @@ def search(request):
 
 def new_list(request):
     return render(request, 'new-list.html')
+
 
 # AJAX views
 def filter_movies(request):

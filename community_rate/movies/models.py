@@ -6,6 +6,7 @@ class Movie(models.Model):
     movie_id = models.IntegerField()
     title = models.CharField(max_length=100)
     poster_path = models.TextField()
+    release_year = models.IntegerField()
 
 
 class Review(models.Model):

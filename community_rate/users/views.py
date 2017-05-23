@@ -7,9 +7,11 @@ from .forms import UpdateInfoForm
 def profile(request):
     reviews = Review.objects.filter(user_id=request.user.id)
     for r in reviews:
-        r.movie = get_movie_by_id(r.movie_id)
+        r.movie = get_movie_by_id(r.movie_id, True)
     num_reviews = len(reviews)
-    av_rating = "{0:.1f}".format(sum(r.rating for r in reviews) / len(reviews))
+    av_rating = 0
+    if num_reviews > 0:
+        av_rating = "{0:.1f}".format(sum(r.rating for r in reviews) / len(reviews))
     favorites = sorted(reviews, key=lambda x: x.rating, reverse=True)
     recents = sorted(reviews, key=lambda x: x.date_added, reverse=True)
     form = UpdateInfoForm(initial={'username': request.user.username, 'email': request.user.email,
