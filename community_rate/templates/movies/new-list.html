@@ -2,28 +2,49 @@
 
 {% load static %}
 
+{% block header %}
+    <link href="{% static 'general/css/list.css' %}" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
     <div class="card">
         <div class="card-header" data-background-color="green">
             <h4 class="title">[List Title]</h4>
         </div>
         <div class="card-content">
-            <div class="col-sm-10">
+            <div class="col-sm-12">
                 <div class="dropdown">
                     <div class="form-group label-floating dropdown-toggle" data-toggle="dropdown">
-                        <label class="control-label">Enter movie title</label>
+                        <label class="control-label">Add movie to list</label>
                         <input class="form-control" id="movie-input">
                     </div>
                     <ul class="dropdown-menu" id="movie-results" style="display: none"></ul>
                 </div>
-            </div>
-            <div class="col-sm-2">
-                <button class="btn btn-primary" onclick="searchMovies()">Search</button>
+                <table class="table table-hover movie-list-table">
+                    <thead class="text-primary">
+                        <th>Movie</th>
+                        <th class="text-center">Release Year</th>
+                    </thead>
+                    <tbody id="movie-table-body">
+                        {% for movie in movies %}
+                            <tr onclick="window.location.href='/movie/{{ movie.id }}/'">
+                                <td>
+                                    <h4><img src='{{ movie.img_path }}' alt='' >     {{ movie.title }}</h4>
+                                <td class='text-center'>
+                                    <h4> {{ movie.release_year }}</h4>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 {% endblock %}
 
 {% block scripts %}
+    <script>
+        var l_id = "{{ list_id }}";
+    </script>
     <script src="{% static 'general/js/list.js' %}"></script>
 {% endblock %}
