@@ -2,6 +2,12 @@ from django.db import models
 from general.models import SiteUser
 
 
+class Movie(models.Model):
+    movie_id = models.IntegerField()
+    title = models.CharField(max_length=100)
+    poster_path = models.TextField()
+
+
 class Review(models.Model):
     rating = models.IntegerField()
     reaction = models.CharField(
