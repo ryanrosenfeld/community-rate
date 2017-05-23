@@ -1,14 +1,11 @@
-var prevEm = Null;
-// $(document).ready(function() {
-//     setImg({{ movie }})
-// })
+var prevEm = null;
 
 function showForm() {
-    $("#rating-form").css("display", "block");
+    $("#update-form").css("display", "inline-block");
 }
 
 function hideForm() {
-    $("#rating-form").css("display", "none");
+    $("#update-form").css("display", "none");
 }
 
 function setReaction(em) {
@@ -20,9 +17,3 @@ function setReaction(em) {
     $(sel).css("border-radius", "5px");
     prevEm = sel;
 }
-
-// function setImg(movie) {
-//     var basePath = "http://image.tmdb.org/t/p/";
-// 	var filePath = movie.poster_path;
-// 	return basePath + 'w92' + filePath;
-// }

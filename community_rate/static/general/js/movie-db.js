@@ -18,7 +18,7 @@ function addMovieRow(index, movie) {
                 "<h4><img src='" + img_path +  "' alt=''>     " + movie.title + "</h4>" +
             "<td class='text-center' id='rating" + index + "'></td>" +
             "<td class='text-center'>" +
-                "<h4>" + movie.release_date + "</h4>" +
+                "<h4>" + movie.release_date.substring(0, 4) + "</h4>" +
             "</td>" +
         "</tr>"
     );

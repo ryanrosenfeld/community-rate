@@ -11,7 +11,6 @@ def movie_page(request, id):
     except Review.DoesNotExist:
         r = None
     movie = get_movie_by_id(id)
-    print(movie)
     if request.method == 'POST':
         form = ReviewForm(request.POST)
         if form.is_valid():
@@ -20,6 +19,7 @@ def movie_page(request, id):
                 review = Review(rating=request.POST['rating'], reaction=request.POST['reaction'], thoughts=t,
                                 movie_id=id, user_id=request.user.id)
                 review.save()
+                r = review
             else:
                 r.rating = request.POST['rating']
                 r.reaction = request.POST['reaction']
@@ -52,6 +52,10 @@ def search(request):
     return HttpResponseRedirect('/')
 
 
+def new_list(request):
+    return render(request, 'new-list.html')
+
+# AJAX views
 def filter_movies(request):
     if request.method == 'GET':
         s = request.GET.get('query', None)
@@ -71,15 +75,6 @@ def get_movie_rating(request):
         }
         if len(reviews) > 0:
             rating = {
-                'average_rating': sum(r.rating for r in reviews) / len(reviews)
+                'average_rating': "{0:.1f}".format(sum(r.rating for r in reviews) / len(reviews))
             }
     return JsonResponse(rating)
-
-
-# def search_movies(request):
-#     if request.method == 'GET':
-#         s = request.GET.get('query', None)
-#         if s is not None:
-#             movies = search_movies(s)
-#             return JsonResponse(movies)
-#     return JsonResponse({})
