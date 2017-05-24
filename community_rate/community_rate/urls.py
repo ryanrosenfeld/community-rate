@@ -23,4 +23,6 @@ urlpatterns = [
     url(r'^ajax/get-movie-rating/', movie_views.get_movie_rating),
     url(r'^ajax/get-movie-info/', movie_views.get_movie_info),
     url(r'^ajax/add-list-entry/', movie_views.add_list_entry),
+    url(r'^ajax/update-list-name/', movie_views.update_list_name),
+    url(r'^ajax/remove-list-item/', movie_views.remove_list_item),
 ]

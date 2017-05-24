@@ -88,3 +88,31 @@ function addMovieRow(movie) {
         "</tr>"
     );
 }
+
+function updateListName() {
+    console.log("here")
+    var name = $("#edit-list-name").val();
+    if (name != '') {
+        $("#list-name").html(name);
+        $.ajax({
+            url: '/ajax/update-list-name/',
+            data: {
+                'list_id': l_id,
+                'name': name
+            },
+            dataType: 'json'
+        })
+    }
+}
+
+function removeListItem(movie_id) {
+    $("#row" + movie_id).remove();
+    $.ajax({
+        url: '/ajax/remove-list-item/',
+        data: {
+            'list_id': l_id,
+            'movie_id': movie_id
+        },
+        dataType: 'json'
+    })
+}

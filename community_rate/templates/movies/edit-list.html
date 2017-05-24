@@ -9,10 +9,10 @@
 {% block content %}
     <div class="card">
         <div class="card-header" data-background-color="green">
-            <h4 class="title">[List Title]</h4>
+            <h4 class="title" id="list-name">{{ list.name }}</h4>
         </div>
         <div class="card-content">
-            <div class="col-sm-12">
+            <div class="col-sm-6">
                 <div class="dropdown">
                     <div class="form-group label-floating dropdown-toggle" data-toggle="dropdown">
                         <label class="control-label">Add movie to list</label>
@@ -20,18 +20,37 @@
                     </div>
                     <ul class="dropdown-menu" id="movie-results" style="display: none"></ul>
                 </div>
-                <table class="table table-hover movie-list-table">
+            </div>
+            <div class="col-sm-4 col-sm-offset-2 text-center">
+                <div class="form-group" id="edit-list-group">
+                    <input class="form-control" placeholder="Edit list name" id="edit-list-name">
+                    <button class="btn btn-round btn-info btn-just-icon" id="btn-edit-list-name" onclick="updateListName()">
+                        <i class="material-icons">add_circle_outline</i>
+                    </button>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <table class="table movie-list-table">
                     <thead class="text-primary">
                         <th>Movie</th>
                         <th class="text-center">Release Year</th>
+                        <th class="text-center">Actions</th>
                     </thead>
                     <tbody id="movie-table-body">
                         {% for movie in movies %}
-                            <tr onclick="window.location.href='/movie/{{ movie.id }}/'">
+                            <tr id="row{{ movie.movie_id }}">
                                 <td>
                                     <h4><img src='{{ movie.img_path }}' alt='' >     {{ movie.title }}</h4>
                                 <td class='text-center'>
                                     <h4> {{ movie.release_year }}</h4>
+                                </td>
+                                <td class="text-center">
+                                    <button type="button" rel="tooltip" title="Visit Movie Page" id="btn-visit-movie-pg" class="btn btn-primary btn-simple btn-xs" onclick="window.location.href='/movie/{{ movie.movie_id }}/'">
+                                        <i class="material-icons">launch</i>
+                                    </button>
+                                    <button type="button" rel="tooltip" title="Remove" id="btn-rmv" class="btn btn-danger btn-simple btn-xs" onclick="removeListItem({{ movie.movie_id }})">
+                                        <i class="material-icons">close</i>
+                                    </button>
                                 </td>
                             </tr>
                         {% endfor %}
@@ -44,7 +63,7 @@
 
 {% block scripts %}
     <script>
-        var l_id = "{{ list_id }}";
+        var l_id = "{{ list.id }}";
     </script>
     <script src="{% static 'general/js/list.js' %}"></script>
 {% endblock %}

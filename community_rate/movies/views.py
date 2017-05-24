@@ -62,6 +62,7 @@ def edit_list(request, list_id):
     l = List.objects.filter(id=list_id)
     if len(l) == 0:
         return HttpResponseRedirect('/profile/')
+    l = l[0]
     entries = ListEntry.objects.filter(list=l)
     movies = []
     for e in entries:
@@ -72,7 +73,7 @@ def edit_list(request, list_id):
         else:
             movie.img_path = "{% static 'general/img/no_poster.jpg'}"
         movies.append(movie)
-    return render(request, 'new-list.html', {'list_id': list_id, 'movies': movies})
+    return render(request, 'edit-list.html', {'list': l, 'movies': movies})
 
 
 # AJAX views
@@ -115,4 +116,24 @@ def add_list_entry(request):
     l = List.objects.filter(id=list_id)[0]
     le = ListEntry(list=l, movie_id=movie_id)
     le.save()
+    return JsonResponse({})
+
+
+def update_list_name(request):
+    list_id = request.GET.get('list_id', None)
+    name = request.GET.get('name', None)
+
+    l = List.objects.filter(id=list_id)[0]
+    l.name = name
+    l.save()
+    return JsonResponse({})
+
+
+def remove_list_item(request):
+    list_id = request.GET.get('list_id', None)
+    movie_id = request.GET.get('movie_id', None)
+
+    l = List.objects.filter(id=list_id)[0]
+    le = ListEntry.objects.filter(list=l, movie_id=movie_id)[0]
+    le.delete()
     return JsonResponse({})

@@ -2,3 +2,24 @@
     height: 65px;
     width: 50px;
 }
+
+#edit-list-group {
+    margin-top: 15px;
+}
+
+#edit-list-name {
+    display: inline-block;
+    width: 200px;
+}
+
+#btn-edit-list-name {
+    margin-left: 0px;
+}
+
+#btn-visit-movie-pg {
+    margin-right: -12px;
+}
+
+#btn-rmv {
+    margin-left: -12px;
+}
