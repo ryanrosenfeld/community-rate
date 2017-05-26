@@ -12,3 +12,4 @@ class EditProfileForm(forms.Form):
 	postal = forms.CharField(label='postal', max_length=6, required=False)
 
 	bio = forms.CharField(label='bio', max_length=500, required=False)
+	photo = forms.FileField(label='photo', required=False)

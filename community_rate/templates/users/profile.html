@@ -137,7 +137,7 @@
                     {{ user.bio }}
                 </p>
                 {% if not already_following %}
-                    <a href="#pablo" class="btn btn-primary btn-round">Follow</a>
+                    <a href="/follow/{{user.username}}" class="btn btn-primary btn-round">Follow</a>
                 {% endif %}
             </div>
         </div>
