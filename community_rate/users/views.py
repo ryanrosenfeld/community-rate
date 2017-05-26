@@ -3,11 +3,11 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseRedirect
 from django.db.models import Q
 from django.shortcuts import render
+from .forms import *
+from .models import *
+from general.models import SiteUser, Notification
 from movies.models import Review
 from movies.services import get_movie_by_id
-<<<<<<< HEAD
-from .forms import UpdateInfoForm
-
 
 def profile(request):
     reviews = Review.objects.filter(user_id=request.user.id)
@@ -33,11 +33,6 @@ def profile(request):
         request.user.save()
     return render(request, 'my-profile.html', {'favorites': favorites, 'recents': recents, 'page': 'profile',
                                                'form': form, 'num_reviews': num_reviews, 'av_rating': av_rating})
-=======
-from general.models import SiteUser, Notification
-from movies.models import Review
-from .models import *
-from .forms import *
 
 @login_required
 def profile(request, username=""):
@@ -257,6 +252,3 @@ def view_followers(request):
 		'title': title,
 		'notifications': notifications,
 		'number_notifications': len(notifications)})
-
-
->>>>>>> users
