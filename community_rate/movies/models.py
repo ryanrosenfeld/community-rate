@@ -1,7 +1,6 @@
 from django.db import models
 from general.models import SiteUser
 
-
 class Movie(models.Model):
     movie_id = models.IntegerField()
     title = models.CharField(max_length=100)
@@ -9,12 +8,12 @@ class Movie(models.Model):
 
 
 class Review(models.Model):
+    creator = models.ForeignKey(SiteUser)
     rating = models.IntegerField()
     reaction = models.CharField(
         max_length=100
     )
     movie_id = models.IntegerField()
-    user_id = models.IntegerField()
     thoughts = models.CharField(
         max_length=10000,
     )

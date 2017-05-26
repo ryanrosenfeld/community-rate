@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block header %}
+    <title>{{ request.user }}</title>
+    <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
+    {% load static %}
+    <link href="{% static 'general/css/profile.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+{#  LEFT COLUMN  #}
+    <div class="col-md-8">
+        {# USER STATS #}
+        {# Number of Reviews #}
+        <div class="col-lg-5 col-md-6 col-sm-6">
+            <div class="card card-stats">
+                <div class="card-header" data-background-color="blue">
+                    <i class="material-icons">theaters</i>
+                </div>
+                <div class="card-content">
+                    <p class="category">Movie Reviews</p>
+                    <h3 class="title">{{ num_reviews }}</h3>
+                </div>
+            </div>
+        </div>
+
+        {# Average Rating #}
+        <div class="col-lg-5 col-md-6 col-sm-6">
+            <div class="card card-stats">
+                <div class="card-header" data-background-color="orange">
+                    <i class="material-icons">thumbs_up_down</i>
+                </div>
+                <div class="card-content">
+                    <p class="category">Average Rating</p>
+                    <h3 class="title">{{ avg_review }}</h3>
+                </div>
+            </div>
+        </div>
+
+        {# Reviews #}
+        <div class="card card-nav-tabs">
+            <div class="card-header" data-background-color="purple">
+                <div class="nav-tabs-navigation">
+                    <div class="nav-tabs-wrapper">
+                        <span class="nav-tabs-title">Movie Reviews</span>
+                        <ul class="nav nav-tabs" data-tabs="tabs">
+                            <li class="active">
+                                <a href="#favorites" data-toggle="tab">
+                                    <i class="material-icons">whatshot</i>
+                                    Favorites
+                                <div class="ripple-container"></div></a>
+                            </li>
+                            <li class="">
+                                <a href="#recent" data-toggle="tab">
+                                    <i class="material-icons">access_time</i>
+                                    Recent
+                                <div class="ripple-container"></div></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-content">
+                <div class="tab-content">
+                    <div class="tab-pane active" id="favorites">
+                        <table class="table table-hover review-table">
+                            <thead class="text-primary">
+                                <th>Movie</th>
+                                <th>Rating</th>
+                                <th>Reaction</th>
+                            </thead>
+                            <tbody>
+                                {% for m in favorites %}
+                                    <tr onclick=window.location.href="/movie/{{ m.movie.id }}/">
+                                        <td>
+                                            <h4><img src="http://image.tmdb.org/t/p/w92{{ m.movie.poster_path }}" alt=''>     {{ m.movie.title }}</h4>
+                                        </td>
+                                        <td class="text-center">
+                                            <h4>{{ m.rating }}</h4>
+                                        </td>
+                                        <td class="text-center">
+                                            <h4><i class="{{ m.reaction }}"></i></h4>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane" id="recent">
+                        <table class="table table-hover review-table">
+                            <thead class="text-primary">
+                                <th>Movie</th>
+                                <th>Rating</th>
+                                <th>Reaction</th>
+                            </thead>
+                            <tbody>
+                                {% for m in recents %}
+                                    <tr onclick=window.location.href="/movie/{{ m.movie.id }}/">
+                                        <td>
+                                            <h4><img src="http://image.tmdb.org/t/p/w92{{ m.movie.poster_path }}" alt=''>     {{ m.movie.title }}</h4>
+                                        </td>
+                                        <td class="text-center">
+                                            <h4>{{ m.rating }}</h4>
+                                        </td>
+                                        <td class="text-center">
+                                            <h4><i class="{{ m.reaction }}"></i></h4>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    {# Profile Summary #}
+    <div class="col-md-4">
+        <div class="card card-profile">
+            <div class="card-avatar">
+                <a href="#pablo">
+                    <img class="img" src="{% static 'material-dash/assets/img/faces/marc.jpg' %}" />
+                </a>
+            </div>
+
+            <div class="content">
+                <h4 class="card-title">{{ user.get_full_name }}</h4>
+                {% if user.city and user.country %}
+                    <h6 class="category text-gray">{{ user.city }}, {{user.country}}</h6>
+                {% endif %}
+                <p class="card-content">
+                    {{ user.bio }}
+                </p>
+                {% if not already_following %}
+                    <a href="/follow/{{user.username}}" class="btn btn-primary btn-round">Follow</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

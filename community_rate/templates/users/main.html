@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block header %}
+    <title>{{ request.user }}</title>
+    <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
+    {% load static %}
+    <link href="{% static 'general/css/profile.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+{#  LEFT COLUMN  #}
+
+    {% if response %}
+    <h1>{{response}}</h1>
+    {% endif %}
+    <div class="col-md-8">
+        {# USER STATS #}
+        {# Number of Followers #}
+        <a class="col-lg-5 col-md-6 col-sm-6" href="/followers">
+            <div class="card card-stats">
+                <div class="card-header" data-background-color="blue">
+                    <i class="material-icons">supervisor_account</i>
+                </div>
+                <div class="card-content">
+                    <p class="category">Followers</p>
+                    <h3 class="title">{{ followers }}</h3>
+                </div>
+            </div>
+        </a>
+
+        {# Number Following #}
+        <a class="col-lg-5 col-md-6 col-sm-6" href="/following">
+            <div class="card card-stats">
+                <div class="card-header" data-background-color="orange">
+                    <i class="material-icons">favorite</i>
+                </div>
+                <div class="card-content">
+                    <p class="category">Following</p>
+                    <h3 class="title">{{ following }}</h3>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="card">
+        <div class="card-header" data-background-color="purple">
+                <h4 class="title">{{ title }}</h4>
+                <p class="category">{{ comment }}</p>
+        </div>
+            <div class="card-content">
+                <table class="table table-hover">
+                    <thead class="text-primary">
+                        <th>Name</th>
+                        <th>Followers</th>
+                        <th>Follow</th>
+                    </thead>
+                    <tbody>
+                        {% for u, count, already_following in users %}
+                            <tr onclick=window.location.href="/profile/{{ u.username }}">
+                                <td >
+                                    <h4>{{u.username}}</h4>
+                                </td>
+                                <td>
+                                    <h4>{{ count }}</h4>
+                                </td>
+                                <td>
+                                    {% if not already_following %}
+                                    <a class="btn btn-primary" href="/follow/{{u.username}}">Follow</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+    </div>
+{% endblock %}
