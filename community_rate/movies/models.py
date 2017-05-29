@@ -5,6 +5,7 @@ class Movie(models.Model):
     movie_id = models.IntegerField()
     title = models.CharField(max_length=100)
     poster_path = models.TextField()
+    release_year = models.IntegerField()
 
 
 class Review(models.Model):
@@ -22,7 +23,9 @@ class Review(models.Model):
 
 class List(models.Model):
     creator = models.ForeignKey(SiteUser, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100, default='Untitled')
     date_updated = models.DateTimeField(auto_now=True)
+    public = models.BooleanField(default=True)
 
 
 class ListEntry(models.Model):

@@ -21,4 +21,9 @@ class Migration(migrations.Migration):
             name='fav_quote',
             field=models.TextField(blank=True),
         ),
+        migrations.AlterField(
+            model_name='siteuser',
+            name='fb_id',
+            field=models.CharField(blank=True, max_length=100),
+        ),
     ]

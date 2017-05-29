@@ -25,6 +25,36 @@
                 <p class="card-description"><i>{{ movie.overview }}</i></p>
             </div>
         </div>
+    </div>
+
+    {# Right column #}
+    <div class="col-md-7">
+        {# My Review #}
+        <div class="card">
+            <div class="card-header" data-background-color="orange">
+                <h4 class="title">My Review</h4>
+            </div>
+            <div class="card-content">
+                <div class="col-md-3 col-sm-6 text-center">
+                    <p class="category">Rating</p>
+                    <h2 class="title">{{ review.rating }}</h2>
+                </div>
+                <div class="col-md-3 col-sm-6 text-center">
+                    <p class="category">Reaction</p>
+                    <p class="title"><i class="{{ review.reaction }}" id="reaction" style="font-size: 30px"></i></p>
+                </div>
+                <div class="col-md-6 text-center">
+                    <p class="category">Thoughts</p><br>
+                    <p class="blockquote-reverse"><i>{{ review.thoughts }}</i></p>
+                </div>
+                <div class="col-md-12">
+                    <hr>
+                    <div class="text-center">
+                        <button class="btn btn-info" onclick="showForm()">Update Review</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         {# Update Review (defaults to hidden) #}
         <div class="card" id="update-form" style="display: none">
@@ -70,36 +100,6 @@
                         <button id="cancel-btn" type="button" onclick="hideForm()" class="btn btn-danger">Cancel</button>
                         <input type="submit" class="btn btn-info" value="Update!" />
                     </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {# Right column #}
-    <div class="col-md-7">
-        {# My Review #}
-        <div class="card">
-            <div class="card-header" data-background-color="orange">
-                <h4 class="title">My Review</h4>
-            </div>
-            <div class="card-content">
-                <div class="col-md-3 col-sm-6 text-center">
-                    <p class="category">Rating</p>
-                    <h2 class="title">{{ review.rating }}</h2>
-                </div>
-                <div class="col-md-3 col-sm-6 text-center">
-                    <p class="category">Reaction</p>
-                    <p class="title"><i class="{{ review.reaction }}" id="reaction" style="font-size: 30px"></i></p>
-                </div>
-                <div class="col-md-6 text-center">
-                    <p class="category">Thoughts</p><br>
-                    <p class="blockquote-reverse"><i>{{ review.thoughts }}</i></p>
-                </div>
-                <div class="col-md-12">
-                    <hr>
-                    <div class="text-center">
-                        <button class="btn btn-info" onclick="showForm()">Update Review</button>
-                    </div>
                 </div>
             </div>
         </div>
