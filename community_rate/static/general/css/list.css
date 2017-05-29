@@ -12,6 +12,11 @@
     width: 200px;
 }
 
+#btn-show-edit-list-name {
+    margin-left: 10px;
+    margin-right: 5px;
+}
+
 #btn-edit-list-name {
     margin-left: 0px;
 }
@@ -22,4 +27,12 @@
 
 #btn-rmv {
     margin-left: -12px;
+}
+
+#btn-public_private {
+    margin-left: 50px;
+}
+
+#edit-list-name-group {
+    display: none;
 }

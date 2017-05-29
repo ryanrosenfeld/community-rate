@@ -7,6 +7,22 @@
 {% endblock %}
 
 {% block content %}
+    <div class="col-sm-12 text-left">
+        <div class="form-group">
+            <button class="btn btn-round btn-warning btn-just-icon" id="btn-public_private" rel="tooltip" title="Change public/private status" onclick="togglePublicPrivate()">
+                <i class="material-icons" id="public_private-btn-content">public</i>
+            </button>
+            <button class="btn btn-round btn-info btn-just-icon" id="btn-show-edit-list-name" rel="tooltip" title="Edit list name" onclick="toggleDisplayUpdateListName()">
+                <i class="material-icons">mode_edit</i>
+            </button>
+            <div id="edit-list-name-group">
+                <input class="form-control" placeholder="Edit list name" id="edit-list-name">
+                <button class="btn btn-round btn-info btn-just-icon" id="btn-edit-list-name" onclick="updateListName()">
+                    <i class="material-icons">add_circle_outline</i>
+                </button>
+            </div>
+        </div>
+    </div>
     <div class="card">
         <div class="card-header" data-background-color="green">
             <h4 class="title" id="list-name">{{ list.name }}</h4>
@@ -19,14 +35,6 @@
                         <input class="form-control" id="movie-input">
                     </div>
                     <ul class="dropdown-menu" id="movie-results" style="display: none"></ul>
-                </div>
-            </div>
-            <div class="col-sm-4 col-sm-offset-2 text-center">
-                <div class="form-group" id="edit-list-group">
-                    <input class="form-control" placeholder="Edit list name" id="edit-list-name">
-                    <button class="btn btn-round btn-info btn-just-icon" id="btn-edit-list-name" onclick="updateListName()">
-                        <i class="material-icons">add_circle_outline</i>
-                    </button>
                 </div>
             </div>
             <div class="col-sm-12">

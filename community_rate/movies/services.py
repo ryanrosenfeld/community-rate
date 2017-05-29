@@ -17,6 +17,7 @@ def search_movies(query):
 def get_movie_by_id(movie_id, list_req):
     movies = Movie.objects.filter(movie_id=movie_id)
     print(movie_id)
+    print(movies)
     if len(movies) == 0 or not list_req:
         url = "https://api.themoviedb.org/3/movie/" + str(movie_id) + "?language=en-US&api_key=" + api_key
         r = requests.get(url)

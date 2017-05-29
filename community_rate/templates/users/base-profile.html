@@ -77,7 +77,7 @@
                                 </thead>
                                 <tbody>
                                     {% for m in favorites %}
-                                        <tr onclick=window.location.href="/movie/{{ m.movie.id }}/">
+                                        <tr onclick=window.location.href="/movie/{{ m.movie.movie_id }}/">
                                             <td>
                                                 <h4><img src="http://image.tmdb.org/t/p/w92{{ m.movie.poster_path }}" alt=''>     {{ m.movie.title }}</h4>
                                             </td>

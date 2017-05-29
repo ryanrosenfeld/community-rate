@@ -116,3 +116,16 @@ function removeListItem(movie_id) {
         dataType: 'json'
     })
 }
+
+function toggleDisplayUpdateListName() {
+    if ($("#edit-list-name-group").css("display") == "none") {
+        $("#edit-list-name-group").css("display", "inline-block");
+    }
+    else {
+        $("#edit-list-name-group").css("display", "none");
+    }
+}
+
+function togglePublicPrivate() {
+
+}
