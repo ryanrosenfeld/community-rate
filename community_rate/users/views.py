@@ -131,6 +131,10 @@ def main_view(request, response=None):
 
     # Find this user's followers, following
     following = request.user.follower_set.all()
+    # for index, f in enumerate(following):
+    #     following[index] = f.following
+    # user = following[0].following
+    # print(user.get_full_name)
 
     followers = request.user.following_set.all()
 
@@ -157,13 +161,15 @@ def main_view(request, response=None):
     title = "Top Users"
     comment = "Find new favorites!"
 
-    return render(request, 'users/main.html', {'followers': len(followers),
-                                               'following': len(following),
+    return render(request, 'users/main.html', {'num_followers': len(followers),
+                                               'num_following': len(following),
                                                'users': users,
                                                'response': response,
                                                'title': title,
                                                'comment': comment,
-                                               'page': 'users'})
+                                               'page': 'users',
+                                               'followers': followers,
+                                               'following': following})
 
 
 @login_required

@@ -10,45 +10,17 @@
 {% endblock %}
 
 {% block content %}
-{#  LEFT COLUMN  #}
 
     {% if response %}
     <h1>{{response}}</h1>
     {% endif %}
-    <div class="col-md-8">
-        {# USER STATS #}
-        {# Number of Followers #}
-        <a class="col-lg-5 col-md-6 col-sm-6" href="/followers">
-            <div class="card card-stats">
-                <div class="card-header" data-background-color="blue">
-                    <i class="material-icons">supervisor_account</i>
-                </div>
-                <div class="card-content">
-                    <p class="category">Followers</p>
-                    <h3 class="title">{{ followers }}</h3>
-                </div>
-            </div>
-        </a>
 
-        {# Number Following #}
-        <a class="col-lg-5 col-md-6 col-sm-6" href="/following">
-            <div class="card card-stats">
-                <div class="card-header" data-background-color="orange">
-                    <i class="material-icons">favorite</i>
-                </div>
-                <div class="card-content">
-                    <p class="category">Following</p>
-                    <h3 class="title">{{ following }}</h3>
-                </div>
+    <div class="col-md-7">
+        <div class="card">
+            <div class="card-header" data-background-color="purple">
+                    <h4 class="title card-header-title">{{ title }}</h4>
+                    <p class="category">{{ comment }}</p>
             </div>
-        </a>
-    </div>
-
-    <div class="card">
-        <div class="card-header" data-background-color="purple">
-                <h4 class="title">{{ title }}</h4>
-                <p class="category">{{ comment }}</p>
-        </div>
             <div class="card-content">
                 <table class="table table-hover">
                     <thead class="text-primary">
@@ -75,6 +47,117 @@
                     </tbody>
                 </table>
             </div>
-
+        </div>
     </div>
+
+    <div class="col-md-5">
+        {# USER STATS #}
+        <div class="card">
+{#            <div class="card-header">#}
+{#                <h4 class="card-title">Current Relationships -#}
+{#                    <small class="category">Vertical Tabs</small>#}
+{#                </h4>#}
+{#            </div>#}
+            <div class="card-content">
+                <div class="row">
+                    <div class="col-md-4">
+                        <ul class="nav nav-pills nav-pills-icons nav-pills-rose nav-stacked" role="tablist">
+                            <li class="active">
+                                <a href="#followers-tab" role="tab" data-toggle="tab">
+                                    <i class="material-icons">supervisor_account</i> {{ num_followers }} Follower{% if num_followers != 1 %}s{% endif %}
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#following-tab" role="tab" data-toggle="tab">
+                                    <i class="material-icons">favorite</i> {{ num_following }} Following
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="followers-tab">
+                                <table class="table scrollable-table">
+                                    <thead class="text-rose">
+                                        <th>Username</th>
+                                        <th>Name</th>
+                                        <th class="text-right">Actions</th>
+                                    </thead>
+                                    <tbody>
+                                        {% for f in followers %}
+                                            <tr>
+                                                <td>{{ f.follower.username }}</td>
+                                                <td>{{ f.follower.first_name }} {{ f.follower.last_name }}</td>
+                                                <td class="td-actions text-right">
+                                                    <button type="button" rel="tooltip" title="Visit profile" class="btn btn-info btn-simple" onclick="window.location.href='/profile/{{ f.follower.username }}/'">
+                                                        <i class="material-icons">launch</i>
+                                                    </button>
+                                                    <button type="button" rel="tooltip" title="Block" class="btn btn-danger btn-simple">
+                                                        <i class="material-icons">block</i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="tab-pane" id="following-tab">
+                                <table class="table scrollable-table table-hover">
+                                    <thead class="text-rose">
+                                        <th>Username</th>
+                                        <th>Name</th>
+                                        <th class="text-right">Actions</th>
+                                    </thead>
+                                    <tbody>
+                                        {% for f in following %}
+                                            <tr>
+                                                <td>{{ f.following.username }}</td>
+                                                <td>{{ f.following.first_name }} {{ f.following.last_name }}</td>
+                                                <td class="td-actions text-right">
+                                                    <button type="button" rel="tooltip" title="Visit profile" class="btn btn-info btn-simple" onclick="window.location.href='/profile/{{ f.following.username }}/'">
+                                                        <i class="material-icons">launch</i>
+                                                    </button>
+                                                    <button type="button" rel="tooltip" title="Unfollow" class="btn btn-danger btn-simple">
+                                                        <i class="material-icons">clear</i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        {# USER STATS #}
+        {# Number of Followers #}
+{#        <a class="col-lg-5 col-md-6 col-sm-6" href="/followers">#}
+{#            <div class="card card-stats">#}
+{#                <div class="card-header" data-background-color="blue">#}
+{#                    <i class="material-icons">supervisor_account</i>#}
+{#                </div>#}
+{#                <div class="card-content">#}
+{#                    <p class="category">Followers</p>#}
+{#                    <h3 class="title">{{ followers }}</h3>#}
+{#                </div>#}
+{#            </div>#}
+{#        </a>#}
+{##}
+        {# Number Following #}
+{#        <a class="col-lg-5 col-md-6 col-sm-6" href="/following">#}
+{#            <div class="card card-stats">#}
+{#                <div class="card-header" data-background-color="orange">#}
+{#                    <i class="material-icons">favorite</i>#}
+{#                </div>#}
+{#                <div class="card-content">#}
+{#                    <p class="category">Following</p>#}
+{#                    <h3 class="title">{{ following }}</h3>#}
+{#                </div>#}
+{#            </div>#}
+{#        </a>#}
+{#    </div>#}
 {% endblock %}

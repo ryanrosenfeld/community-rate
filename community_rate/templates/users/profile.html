@@ -107,8 +107,8 @@
         </div>
 
         {# Reviews #}
-        <div class="card card-nav-tabs">
-            <div class="card-header" data-background-color="purple">
+        <div class="card">
+            <div class="card-header card-header-tabs" data-background-color="purple">
                 <div class="nav-tabs-navigation">
                     <div class="nav-tabs-wrapper">
                         <span class="nav-tabs-title">Movie Reviews</span>
@@ -189,8 +189,8 @@
         </div>
 
         {# Lists #}
-        <div class="card card-nav-tabs">
-            <div class="card-header" data-background-color="green">
+        <div class="card">
+            <div class="card-header card-header-tabs" data-background-color="green">
                 <div class="nav-tabs-navigation">
                     <div class="nav-tabs-wrapper">
                         <span class="nav-tabs-title">Movie Lists</span>
@@ -250,9 +250,19 @@
         {# Profile summary #}
         <div class="card card-profile">
             <div class="card-avatar">
-                <a id="prof-img">
-                    <img class="img" src="{% static 'material-dash/assets/img/faces/marc.jpg' %}" />
-                </a>
+                <div class="fileinput-new thumbnail img-circle">
+                    <img src="{% static 'material-dash/assets/img/placeholder.jpg' %}" alt="...">
+                </div>
+                <div class="fileinput-preview fileinput-exists thumbnail img-circle"></div>
+                <div>
+                    <span class="btn btn-round btn-rose btn-file">
+                        <span class="fileinput-new">Add Photo</span>
+                        <span class="fileinput-exists">Change</span>
+                        <input type="file" name="..." />
+                    </span>
+                    <br />
+                    <a href="#pablo" class="btn btn-danger btn-round fileinput-exists" data-dismiss="fileinput"><i class="fa fa-times"></i> Remove</a>
+                </div>
             </div>
 
             <div class="content">
