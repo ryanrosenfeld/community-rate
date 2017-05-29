@@ -7,10 +7,6 @@ class SiteUser(AbstractUser):
     fav_quote = models.TextField(blank=True)
     about_me = models.TextField(blank=True)
 
-    country = models.CharField(max_length=100, null=True)
-    city = models.CharField(max_length=100, null=True)
-    postal = models.CharField(max_length=6, null=True)
-    bio = models.CharField(max_length=500, null=True)
 
 class Notification(models.Model):
     message = models.CharField(max_length=300)

@@ -7,7 +7,7 @@ from .services import *
 
 def movie_page(request, id):
     try:
-        r = Review.objects.get(movie_id=id, user_id=request.user.id)
+        r = Review.objects.get(movie_id=id, creator=request.user)
     except Review.DoesNotExist:
         r = None
     movie = get_movie_by_id(id, False)
@@ -17,7 +17,7 @@ def movie_page(request, id):
             t = request.POST.get('thoughts', None)
             if r is None:
                 review = Review(rating=request.POST['rating'], reaction=request.POST['reaction'], thoughts=t,
-                                movie_id=id, user_id=request.user.id)
+                                movie_id=id, creator=request.user)
                 review.save()
                 r = review
             else:

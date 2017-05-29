@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block header %}
-    <title>{{ request.user }}</title>
+    <title>{{ user }}</title>
     <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
     {% load static %}
     <link href="{% static 'general/css/profile.css' %}" rel="stylesheet">
@@ -12,9 +12,76 @@
 {% block content %}
 {#  LEFT COLUMN  #}
     <div class="col-md-8">
-        {# USER STATS #}
+        {# Edit Profile (defaults to hidden) #}
+        <div class="card" id="edit-profile" style="display: none">
+            <div class="card-header" data-background-color="blue">
+                <h4 class="title">Edit Profile</h4>
+                <p class="category">Complete your profile</p>
+            </div>
+            <div class="card-content">
+                <form action="/profile/" method="POST">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group label-floating">
+                                <label class="control-label">Username</label>
+                                {{ form.username }}
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="form-group label-floating">
+                                <label class="control-label">Email address</label>
+                                {{ form.email }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="form-group label-floating">
+                                <label class="control-label">Fist Name</label>
+                                {{ form.first_name }}
+                            </div>
+                        </div>
+                        <div class="col-md-7">
+                            <div class="form-group label-floating">
+                                <label class="control-label">Last Name</label>
+                                {{ form.last_name }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Favorite Movie Quote</label>
+                                    {{ form.fav_quote }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">About Me</label>
+                                    {{ form.about_me }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-success pull-right">Update Profile</button>
+                    <button type="button" onclick="toggleEditProfileDisplay()" class="btn btn-danger pull-right">Cancel</button>
+                    <div class="clearfix"></div>
+                </form>
+            </div>
+        </div>
+
         {# Number of Reviews #}
-        <div class="col-lg-5 col-md-6 col-sm-6">
+        <div class="col-sm-5">
             <div class="card card-stats">
                 <div class="card-header" data-background-color="blue">
                     <i class="material-icons">theaters</i>
@@ -27,14 +94,14 @@
         </div>
 
         {# Average Rating #}
-        <div class="col-lg-5 col-md-6 col-sm-6">
+        <div class="col-sm-5">
             <div class="card card-stats">
                 <div class="card-header" data-background-color="orange">
                     <i class="material-icons">thumbs_up_down</i>
                 </div>
                 <div class="card-content">
                     <p class="category">Average Rating</p>
-                    <h3 class="title">{{ avg_review }}</h3>
+                    <h3 class="title">{{ av_rating }}</h3>
                 </div>
             </div>
         </div>
@@ -66,80 +133,175 @@
             <div class="card-content">
                 <div class="tab-content">
                     <div class="tab-pane active" id="favorites">
-                        <table class="table table-hover review-table">
-                            <thead class="text-primary">
-                                <th>Movie</th>
-                                <th>Rating</th>
-                                <th>Reaction</th>
-                            </thead>
-                            <tbody>
-                                {% for m in favorites %}
-                                    <tr onclick=window.location.href="/movie/{{ m.movie.id }}/">
-                                        <td>
-                                            <h4><img src="http://image.tmdb.org/t/p/w92{{ m.movie.poster_path }}" alt=''>     {{ m.movie.title }}</h4>
-                                        </td>
-                                        <td class="text-center">
-                                            <h4>{{ m.rating }}</h4>
-                                        </td>
-                                        <td class="text-center">
-                                            <h4><i class="{{ m.reaction }}"></i></h4>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                        <div class="scrollable-table">
+                            <table class="table table-hover review-table table-responsive">
+                                <thead class="text-primary">
+                                    <th>Movie</th>
+                                    <th>Rating</th>
+                                    <th>Reaction</th>
+                                </thead>
+                                <tbody>
+                                    {% for m in favorites %}
+                                        <tr onclick=window.location.href="/movie/{{ m.movie.movie_id }}/">
+                                            <td>
+                                                <h4><img src="http://image.tmdb.org/t/p/w92{{ m.movie.poster_path }}" alt=''>     {{ m.movie.title }}</h4>
+                                            </td>
+                                            <td class="text-center">
+                                                <h4>{{ m.rating }}</h4>
+                                            </td>
+                                            <td class="text-center">
+                                                <h4><i class="{{ m.reaction }}"></i></h4>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                     <div class="tab-pane" id="recent">
-                        <table class="table table-hover review-table">
-                            <thead class="text-primary">
-                                <th>Movie</th>
-                                <th>Rating</th>
-                                <th>Reaction</th>
-                            </thead>
-                            <tbody>
-                                {% for m in recents %}
-                                    <tr onclick=window.location.href="/movie/{{ m.movie.id }}/">
-                                        <td>
-                                            <h4><img src="http://image.tmdb.org/t/p/w92{{ m.movie.poster_path }}" alt=''>     {{ m.movie.title }}</h4>
-                                        </td>
-                                        <td class="text-center">
-                                            <h4>{{ m.rating }}</h4>
-                                        </td>
-                                        <td class="text-center">
-                                            <h4><i class="{{ m.reaction }}"></i></h4>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                        <div class="scrollable-table">
+                            <table class="table table-hover review-table">
+                                <thead class="text-primary">
+                                    <th>Movie</th>
+                                    <th>Rating</th>
+                                    <th>Reaction</th>
+                                </thead>
+                                <tbody>
+                                    {% for m in recents %}
+                                        <tr onclick=window.location.href="/movie/{{ m.movie.id }}/">
+                                            <td>
+                                                <h4><img src="http://image.tmdb.org/t/p/w92{{ m.movie.poster_path }}" alt=''>     {{ m.movie.title }}</h4>
+                                            </td>
+                                            <td class="text-center">
+                                                <h4>{{ m.rating }}</h4>
+                                            </td>
+                                            <td class="text-center">
+                                                <h4><i class="{{ m.reaction }}"></i></h4>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# Lists #}
+        <div class="card card-nav-tabs">
+            <div class="card-header" data-background-color="green">
+                <div class="nav-tabs-navigation">
+                    <div class="nav-tabs-wrapper">
+                        <span class="nav-tabs-title">Movie Lists</span>
+                        <ul class="nav nav-tabs" data-tabs="tabs">
+                            <li class="active">
+                                <a href="#public" data-toggle="tab">
+                                    <i class="material-icons">public</i>
+                                    Public Lists
+                                <div class="ripple-container"></div></a>
+                            </li>
+                            {% if owner %}
+                                <li class="">
+                                    <a href="#private" data-toggle="tab">
+                                        <i class="material-icons">lock_outline</i>
+                                        Private Lists
+                                    <div class="ripple-container"></div></a>
+                                </li>
+                            {% endif %}
+                        </ul>
                     </div>
                 </div>
             </div>
 
+            <div class="card-content">
+                <div class="tab-content">
+                    <div class="col-sm-12">
+                        <a class="btn btn-primary pull-right" href="/new-list/"><i class="material-icons">add_circle_outline</i>  New List</a>
+                    </div>
+                    <div class="tab-pane active" id="public">
+                        <table class="table table-hover review-table">
+                            <thead class="text-success">
+                                <th>List Name</th>
+                            </thead>
+                            <tbody>
+                                {% for list in lists %}
+                                    <tr onclick="window.location.href='/edit-list/{{ list.id }}/'">
+                                        <td>
+                                            <p>{{ list.name }}</p>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% if owner %}
+                        <div class="tab-pane" id="private">
+                            <p>Private To Do</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
         </div>
     </div>
 
-    {# Profile Summary #}
+    {# Right column #}
     <div class="col-md-4">
+        {# Profile summary #}
         <div class="card card-profile">
             <div class="card-avatar">
-                <a href="#pablo">
+                <a id="prof-img">
                     <img class="img" src="{% static 'material-dash/assets/img/faces/marc.jpg' %}" />
                 </a>
             </div>
 
             <div class="content">
+                <h6 class="category text-gray">@{{ user.username }}</h6>
                 <h4 class="card-title">{{ user.get_full_name }}</h4>
-                {% if user.city and user.country %}
-                    <h6 class="category text-gray">{{ user.city }}, {{user.country}}</h6>
-                {% endif %}
-                <p class="card-content">
-                    {{ user.bio }}
-                </p>
-                {% if not already_following %}
-                    <a href="/follow/{{user.username}}" class="btn btn-primary btn-round">Follow</a>
-                {% endif %}
+                <div class="card-content">
+                    {% if user.fav_quote != None and user.fav_quote != '' %}
+                        <p class="category">Favorite Movie Quote</p>
+                        <p class="content"><i>"{{ user.fav_quote }}"</i></p>
+                    {% endif %}
+                    {% if user.about_me != None and user.about_me != '' %}
+                        <p class="category">About Me</p>
+                        <p class="content">{{ user.about_me }}</p>
+                    {% endif %}
+                    <hr>
+                    {% if owner %}
+                        <div class="row">
+                            <button onclick="toggleEditProfileDisplay()" class="btn btn-info btn-round">Edit Profile</button>
+                            <button class="btn btn-success btn-round">Update Picture</button>
+                        </div>
+                    {% else %}
+                        {% if not already_following %}
+                            <a href="/follow/{{user.username}}" class="btn btn-primary">Follow</a>
+                        {% else %}
+                            <a href="/unfollow/{{user.username}}" class="btn btn-primary">Unfollow</a>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        {# USER STATS #}
+        {# Followers/Following #}
+        <div class="col-sm-10 col-sm-offset-1">
+            <div class="card card-stats">
+                <div class="card-header" data-background-color="red">
+                    <i class="material-icons">people</i>
+                </div>
+                <div class="card-content">
+                    <p class="category">Followers</p>
+                    <h3 class="title">{{ num_followers }}</h3>
+                    <p class="category">Following</p>
+                    <h3 class="title">{{ num_following }}</h3>
+                </div>
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'general/js/profile.js' %}"></script>
 {% endblock %}
