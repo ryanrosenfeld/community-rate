@@ -1,8 +1,10 @@
 from django.conf.urls import url
+from django.conf.urls.static import static
 from django.contrib import admin
 from general import views as general_views
 from movies import views as movie_views
 from users import views as user_views
+from community_rate import settings
 
 urlpatterns = [
     url(r'^$', general_views.home),
@@ -35,4 +37,10 @@ urlpatterns = [
     url(r'^ajax/add-list-entry/', movie_views.add_list_entry),
     url(r'^ajax/update-list-name/', movie_views.update_list_name),
     url(r'^ajax/remove-list-item/', movie_views.remove_list_item),
-]
+    ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
+# # Serving Media
+# if settings.DEBUG:
+#     # static files (images, css, javascript, etc.)
+#     urlpatterns += url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}))

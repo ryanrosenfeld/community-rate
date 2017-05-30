@@ -8,8 +8,7 @@ from .models import *
 from general.models import SiteUser, Notification
 from movies.models import Review, List
 from movies.services import get_movie_by_id
-from .forms import UpdateInfoForm
-
+from .functions import *
 
 @login_required
 def profile(request, username=""):
@@ -63,20 +62,29 @@ def profile(request, username=""):
                                    'first_name': request.user.first_name, 'last_name': request.user.last_name,
                                    'fav_quote': request.user.fav_quote, 'about_me': request.user.about_me})
 
+    picform = UpdateProfilePicForm()
+
     # If info updated make changes to user
     if request.method == 'POST':
-        form = UpdateInfoForm(initial={'username': request.user.username, 'email': request.POST['email'],
-                                       'first_name': request.POST['first_name'],
-                                       'last_name': request.POST['last_name'],
-                                       'fav_quote': request.POST['fav_quote'],
-                                       'about_me': request.POST['about_me']})
-        # ADD IS_VALID CHECK?
-        request.user.email = request.POST['email']
-        request.user.first_name = request.POST['first_name']
-        request.user.last_name = request.POST['last_name']
-        request.user.about_me = request.POST.get('about_me', None)
-        request.user.fav_quote = request.POST.get('fav_quote', None)
-        request.user.save()
+        if 'email' in request.POST:
+            form = UpdateInfoForm(initial={'username': request.user.username, 'email': request.POST['email'],
+                                           'first_name': request.POST['first_name'],
+                                           'last_name': request.POST['last_name'],
+                                           'fav_quote': request.POST['fav_quote'],
+                                           'about_me': request.POST['about_me']})
+            # ADD IS_VALID CHECK?
+            request.user.email = request.POST['email']
+            request.user.first_name = request.POST['first_name']
+            request.user.last_name = request.POST['last_name']
+            request.user.about_me = request.POST.get('about_me', None)
+            request.user.fav_quote = request.POST.get('fav_quote', None)
+            request.user.save()
+        elif 'file' in request.FILES:
+            picform = UpdateProfilePicForm(request.POST, request.FILES)
+            # if picform.is_valid():
+            file = request.FILES['file']
+            print(file)
+            upload_prof_pic(file, request.user)
 
     return render(request, 'users/profile.html', {
         'owner': owner,
@@ -89,6 +97,7 @@ def profile(request, username=""):
         'user': user,
         'lists': lists,
         'form': form,
+        'picform': picform,
         'num_followers': num_followers,
         'num_following': num_following})
 

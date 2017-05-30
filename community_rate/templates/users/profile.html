@@ -12,10 +12,26 @@
 {% block content %}
 {#  LEFT COLUMN  #}
     <div class="col-md-8">
+        {# Update picture (defaults to hidden) #}
+        <div class="card" id="update-pic" style="display: none">
+            <div class="card-header" data-background-color="blue">
+                <h4 class="title card-header-title">Choose a new Profile Picture</h4>
+            </div>
+            <div class="card-content">
+                <form method="POST" action="/profile/" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    {{ picform.file }}
+                    <button type="submit" class="btn btn-success">Upload</button>
+                </form>
+            </div>
+        </div>
+
+
         {# Edit Profile (defaults to hidden) #}
         <div class="card" id="edit-profile" style="display: none">
             <div class="card-header" data-background-color="blue">
-                <h4 class="title">Edit Profile</h4>
+                <h4 class="title card-header-title">Edit Profile</h4>
                 <p class="category">Complete your profile</p>
             </div>
             <div class="card-content">
@@ -81,7 +97,7 @@
         </div>
 
         {# Number of Reviews #}
-        <div class="col-sm-5">
+        <div class="col-sm-6">
             <div class="card card-stats">
                 <div class="card-header" data-background-color="blue">
                     <i class="material-icons">theaters</i>
@@ -94,7 +110,7 @@
         </div>
 
         {# Average Rating #}
-        <div class="col-sm-5">
+        <div class="col-sm-6">
             <div class="card card-stats">
                 <div class="card-header" data-background-color="orange">
                     <i class="material-icons">thumbs_up_down</i>
@@ -250,18 +266,12 @@
         {# Profile summary #}
         <div class="card card-profile">
             <div class="card-avatar">
-                <div class="fileinput-new thumbnail img-circle">
-                    <img src="{% static 'material-dash/assets/img/placeholder.jpg' %}" alt="...">
-                </div>
-                <div class="fileinput-preview fileinput-exists thumbnail img-circle"></div>
-                <div>
-                    <span class="btn btn-round btn-rose btn-file">
-                        <span class="fileinput-new">Add Photo</span>
-                        <span class="fileinput-exists">Change</span>
-                        <input type="file" name="..." />
-                    </span>
-                    <br />
-                    <a href="#pablo" class="btn btn-danger btn-round fileinput-exists" data-dismiss="fileinput"><i class="fa fa-times"></i> Remove</a>
+                <div class="thumbnail img-circle">
+                    {% if user.has_pic %}
+                        <img src="{% with 'general/img/prof_pics/'|add:user.username|add:'.jpg' as img %}{% static img %}{% endwith %}">
+                    {% else %}
+                        <img src="{% static 'material-dash/assets/img/placeholder.jpg' %}">
+                    {% endif %}
                 </div>
             </div>
 
@@ -281,7 +291,7 @@
                     {% if owner %}
                         <div class="row">
                             <button onclick="toggleEditProfileDisplay()" class="btn btn-info btn-round">Edit Profile</button>
-                            <button class="btn btn-success btn-round">Update Picture</button>
+                            <button class="btn btn-success btn-round" onclick="toggleUpdatePicDisplay()">Update Picture</button>
                         </div>
                     {% else %}
                         {% if not already_following %}

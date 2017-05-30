@@ -45,7 +45,11 @@
 	    	<div class="sidebar-wrapper">
                 <div class="user">
                     <div class="photo">
-                        <img src="{% static 'material-dash/assets/img/faces/avatar.jpg' %}" />
+                        {% if request.user.has_pic %}
+                            <img src="{% with 'general/img/prof_pics/'|add:request.user.username|add:'.jpg' as img %}{% static img %}{% endwith %}">
+                        {% else %}
+                            <img src="{% static 'material-dash/assets/img/placeholder.jpg' %}">
+                        {% endif %}
                     </div>
                     <div class="info">
                         <a data-toggle="collapse" href="#collapseExample" class="collapsed">
