@@ -9,6 +9,7 @@ from general.models import SiteUser, Notification
 from movies.models import Review, List
 from movies.services import get_movie_by_id
 from .functions import *
+from random import randint
 
 @login_required
 def profile(request, username=""):
@@ -216,47 +217,21 @@ def follow(request, username):
 
 
 @login_required
-def view_following(request):
+def relationships(request):
     """View for page that displays all of the users that a particular user is following"""
-    users = []
+    following_users = []
+    follower_users = []
 
     # Query all of the users this person is following
     following = request.user.follower_set.all()
-
     followers = request.user.following_set.all()
 
-    # Append their follower count and
-    # whether or not they are already following that person
     for follower_obj in following:
         # Determine follower count of person they are FOLLOWING (this is messy)
         followers_count = len(follower_obj.following.following_set.all())
-
         already_following = True
+        following_users.append((follower_obj.following, followers_count, already_following))
 
-        users.append((follower_obj.following, followers_count, already_following))
-
-    # Set up the display variables for the 'following' view
-    title = "People you follow"
-
-    return render(request, 'users/main.html', {
-        'followers': len(followers),
-        'following': len(following),
-        'users': users,
-        'title': title})
-
-
-@login_required
-def view_followers(request):
-    """View for page that displays all of the users that follow a particular user"""
-    users = []
-
-    # Query all of the users this person is following
-    following = request.user.follower_set.all()
-
-    followers = request.user.following_set.all()
-
-    # Append their follower count and
-    # whether or not they are already following that person
     for follower_obj in followers:
         # Determine follower count of person that follow them (this is messy)
         followers_count = len(follower_obj.follower.following_set.all())
@@ -266,18 +241,49 @@ def view_followers(request):
         query = following.filter(following=follower_obj.follower)
         already_following = (len(query) > 0) | (follower_obj.follower == request.user)
 
-        users.append((follower_obj.follower, followers_count, already_following))
+        follower_users.append((follower_obj.follower, followers_count, already_following))
 
-    # Set up the display variables for the 'following' view
-    title = "Your Followers"
+    return render(request, 'users/relationships.html', {
+        'num_followers': len(followers),
+        'num_following': len(following),
+        'following_users': following_users,
+        'follower_users': follower_users,
+        'page': 'users'})
 
-    # Retrieve notifications
-    notifications = Notification.objects.filter(Q(user=request.user) & Q(is_read=False))
 
-    return render(request, 'users/main.html', {
-        'followers': len(followers),
-        'following': len(following),
-        'users': users,
-        'title': title,
-        'notifications': notifications,
-        'number_notifications': len(notifications)})
+# @login_required
+# def view_followers(request):
+#     """View for page that displays all of the users that follow a particular user"""
+#     users = []
+#
+#     # Query all of the users this person is following
+#     following = request.user.follower_set.all()
+#
+#     followers = request.user.following_set.all()
+#
+#     # Append their follower count and
+#     # whether or not they are already following that person
+#     for follower_obj in followers:
+#         # Determine follower count of person that follow them (this is messy)
+#         followers_count = len(follower_obj.follower.following_set.all())
+#
+#         # Determine if this user is already following them OR
+#         # request user is actually this user
+#         query = following.filter(following=follower_obj.follower)
+#         already_following = (len(query) > 0) | (follower_obj.follower == request.user)
+#
+#         users.append((follower_obj.follower, followers_count, already_following))
+#
+#     # Set up the display variables for the 'following' view
+#     title = "Your Followers"
+#
+#     # Retrieve notifications
+#     notifications = Notification.objects.filter(Q(user=request.user) & Q(is_read=False))
+#
+#     return render(request, 'users/relationships.html', {
+#         'num_followers': len(followers),
+#         'num_following': len(following),
+#         'users': users,
+#         'title': title,
+#         'notifications': notifications,
+#         'number_notifications': len(notifications)})

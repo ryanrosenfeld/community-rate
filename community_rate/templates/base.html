@@ -46,7 +46,7 @@
                 <div class="user">
                     <div class="photo">
                         {% if request.user.has_pic %}
-                            <img src="{% with 'general/img/prof_pics/'|add:request.user.username|add:'.jpg' as img %}{% static img %}{% endwith %}">
+                            <img src="{% with 'general/img/prof_pics/'|add:request.user.username|add:'.jpg'|add:rand_pic_string as img %}{% static img %}{% endwith %}">
                         {% else %}
                             <img src="{% static 'material-dash/assets/img/placeholder.jpg' %}">
                         {% endif %}
@@ -59,13 +59,16 @@
                         <div class="collapse" id="collapseExample">
                             <ul class="nav">
                                 <li>
-                                    <a href="#">My Profile</a>
+                                    <a href="/profile/">My Profile</a>
                                 </li>
                                 <li>
-                                    <a href="#">Edit Profile</a>
+                                    <a href="/settings/">Settings</a>
                                 </li>
                                 <li>
-                                    <a href="#">Settings</a>
+                                    <a href="/relationships/">Relationships</a>
+                                </li>
+                                <li>
+                                    <a href="/logout/">Logout</a>
                                 </li>
                             </ul>
                         </div>

@@ -268,7 +268,7 @@
             <div class="card-avatar">
                 <div class="thumbnail img-circle">
                     {% if user.has_pic %}
-                        <img src="{% with 'general/img/prof_pics/'|add:user.username|add:'.jpg' as img %}{% static img %}{% endwith %}">
+                        <img src="{% with 'general/img/prof_pics/'|add:user.username|add:'.jpg'|add:rand_pic_string as img %}{% static img %}{% endwith %}">
                     {% else %}
                         <img src="{% static 'material-dash/assets/img/placeholder.jpg' %}">
                     {% endif %}

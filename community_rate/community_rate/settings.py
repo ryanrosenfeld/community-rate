@@ -77,6 +77,9 @@ TEMPLATES = [
     },
 ]
 
+TEMPLATES[0]['OPTIONS']['context_processors'].append("general.context_processors.rand_pic_string")
+
+
 WSGI_APPLICATION = 'community_rate.wsgi.application'
 
 # Database

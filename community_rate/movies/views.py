@@ -11,6 +11,23 @@ def movie_page(request, id):
     except Review.DoesNotExist:
         r = None
     movie = get_movie_by_id(id, False)
+
+    # Get following user reviews
+    following = request.user.follower_set.all()
+    following_users = []
+    for follower_obj in following:
+        user = follower_obj.following
+        try:
+            rev = Review.objects.get(movie_id=id, creator=user)
+        except Review.DoesNotExist:
+            rev = None
+        if rev is not None:
+            following_users.append((follower_obj.following, rev))
+
+    # Calculate average rating
+    av_rating = float(sum(r.rating for u, r in following_users)) / len(following_users)
+    av_rating = "{0:.1f}".format(av_rating)
+
     if request.method == 'POST':
         form = ReviewForm(request.POST)
         if form.is_valid():
@@ -34,7 +51,8 @@ def movie_page(request, id):
             'reaction': r.reaction,
             'thoughts': r.thoughts,
         })
-    return render(request, 'movies/movie.html', {'movie': movie, 'form': form, 'review': r})
+    return render(request, 'movies/movie.html', {'movie': movie, 'form': form, 'review': r,
+                                                 'following_users': following_users, 'av_rating': av_rating})
 
 
 def movie_db(request):

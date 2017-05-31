@@ -26,9 +26,8 @@ urlpatterns = [
     url(r'^follow/(?P<username>\w{0,50})/$', user_views.follow),
     url(r'^profile/(?P<username>\w{0,50})/$', user_views.profile),
     url(r'^profile/$', user_views.profile),
-    url(r'^following/$', user_views.view_following),
-    url(r'^followers/$', user_views.view_followers),
     url(r'^settings/$', user_views.settings),
+    url(r'^relationships/$', user_views.relationships),
 
     # AJAX Requests
     url(r'^ajax/filter-movies/', movie_views.filter_movies),
@@ -38,9 +37,3 @@ urlpatterns = [
     url(r'^ajax/update-list-name/', movie_views.update_list_name),
     url(r'^ajax/remove-list-item/', movie_views.remove_list_item),
     ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-
-# # Serving Media
-# if settings.DEBUG:
-#     # static files (images, css, javascript, etc.)
-#     urlpatterns += url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}))

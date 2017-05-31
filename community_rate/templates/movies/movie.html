@@ -13,7 +13,7 @@
     <div class="col-md-5">
         {# Movie info #}
         <div class="card card-stats">
-            <div class="card-image">
+            <div class="card-image-custom">
                 <img src="http://image.tmdb.org/t/p/w92{{ movie.poster_path }}" alt="{% static 'general/img/no_poster.jpg' %}" style="height: 130px; width: 100px;">
             </div>
             <div class="card-content">
@@ -32,7 +32,7 @@
         {# My Review #}
         <div class="card">
             <div class="card-header" data-background-color="orange">
-                <h4 class="title">My Review</h4>
+                <h4 class="title card-header-title">My Review</h4>
             </div>
             <div class="card-content">
                 <div class="col-md-3 col-sm-6 text-center">
@@ -59,7 +59,7 @@
         {# Update Review (defaults to hidden) #}
         <div class="card" id="update-form" style="display: none">
             <div class="card-header" data-background-color="blue">
-                <h4 class="title">Update Review</h4>
+                <h4 class="title card-header-title">Update Review</h4>
             </div>
             <div class="card-content">
                 <div class="col-md-12">
@@ -107,12 +107,12 @@
         {# Friends' Reviews #}
         <div class="card">
             <div class="card-header" data-background-color="red">
-                <h4 class="title">Friend Reviews</h4>
+                <h4 class="title card-header-title">Friend Reviews</h4>
             </div>
             <div class="card-content">
                 <div class="col-lg-6 col-md-6 col-sm-6 text-center">
                     <p class="category">Average Rating</p>
-                    <h2 class="title">{{ review.rating }}</h2>
+                    <h2 class="title">{{ av_rating }}</h2>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6 text-center">
                     <p class="category">Most Common Reaction</p>
@@ -127,10 +127,14 @@
                             <th>Thoughts</th>
                         </thead>
                         <tbody>
-                            <td>Sean</td>
-                            <td class="text-center">8</td>
-                            <td class="text-center"></td>
-                            <td>Pretty sweet movie imo</td>
+                            {% for user, review in following_users %}
+                                <tr>
+                                    <td>{{ user.first_name }} {{ user.last_name }}</td>
+                                    <td class="text-center">{{ review.rating }}</td>
+                                    <td class="text-center"><i class="{{ review.reaction }}"></i></td>
+                                    <td>{{ review.thoughts }}</td>
+                                </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>

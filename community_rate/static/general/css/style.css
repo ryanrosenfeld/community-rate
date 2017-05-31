@@ -2,3 +2,37 @@
     color: white;
     font-weight: bold;
 }
+
+.card .card-image-custom {
+    height: 60%;
+    position: relative;
+    overflow: hidden;
+    margin-left: 15px;
+    margin-right: 15px;
+    margin-top: -30px;
+    border-radius: 6px;
+}
+
+.card .card-image-custom img {
+    width: 100%;
+    height: 100%;
+    border-radius: 6px;
+    pointer-events: none;
+}
+
+.card .card-image-custom .card-title {
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    color: #fff;
+    font-size: 1.3em;
+    text-shadow: 0 2px 5px rgba(33, 33, 33, 0.5);
+}
+
+.card-plain .card-image-custom {
+  margin: 0;
+  border-radius: 3px;
+}
+.card-plain .card-image-custom img {
+  border-radius: 3px;
+}
