@@ -5,21 +5,15 @@ class LoginForm(forms.Form):
     username = forms.CharField(
         label='',
         max_length=100,
-        widget=forms.TextInput(attrs={'placeholder': 'username', 'class': 'form-control', 'id': 'lg_username',
+        widget=forms.TextInput(attrs={'class': 'form-control', 'id': 'lg_username',
                                       'name': 'lg_username'}),
     )
     password = forms.CharField(
         label='',
         max_length=100,
-        widget=forms.PasswordInput(attrs={'placeholder': 'password', 'class': 'form-control', 'id': 'lg_password',
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'id': 'lg_password',
                                           'name': 'lg_password'})
     )
-    remember = forms.BooleanField(
-        initial=False,
-        required=False,
-        widget=forms.CheckboxInput(attrs={'id': 'lg_remember'}),
-    )
-    # def __init__(self, *args, **kwargs):
 
 
 class SignupForm(forms.Form):

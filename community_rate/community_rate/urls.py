@@ -10,7 +10,7 @@ urlpatterns = [
     url(r'^$', general_views.home),
     url(r'^admin/', admin.site.urls),
     url(r'^login/', general_views.login_view),
-    url(r'^signup/', general_views.new_user),
+    url(r'^register/$', general_views.new_user),
     url(r'^logout/', general_views.logout_view),
     url(r'^search/', movie_views.search),
     url(r'^movie/(.*)/', movie_views.movie_page),

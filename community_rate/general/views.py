@@ -10,6 +10,7 @@ import re
 
 User = get_user_model()
 
+
 # Create your views here.
 def login_view(request):
     if request.user.is_authenticated():
@@ -52,6 +53,7 @@ def passwords_match(password1, password2):
     """Checks to make sure the entered passwords agree."""
     return password1 == password2
 
+
 def new_user(request):
     """Create a new user"""
     if request.method == 'POST':
@@ -85,7 +87,8 @@ def new_user(request):
             return HttpResponseRedirect('/signup/')
     else:
         form = SignupForm()
-    return render(request, 'general/signup.html', {'form': form})
+    return render(request, 'general/register.html', {'form': form})
+
 
 @login_required
 def mark_read(request, notification_id):

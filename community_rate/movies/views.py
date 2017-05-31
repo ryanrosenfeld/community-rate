@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect, JsonResponse
 from .forms import ReviewForm
 from .models import Review, List, ListEntry
 from .services import *
+from general.common_functions import most_common
 
 
 def movie_page(request, id):
@@ -28,6 +29,12 @@ def movie_page(request, id):
     av_rating = float(sum(r.rating for u, r in following_users)) / len(following_users)
     av_rating = "{0:.1f}".format(av_rating)
 
+    # Get most common reaction
+    reactions = []
+    for u, rev in following_users:
+        reactions.append(rev.reaction)
+    most_common_react = most_common(reactions)
+
     if request.method == 'POST':
         form = ReviewForm(request.POST)
         if form.is_valid():
@@ -52,7 +59,8 @@ def movie_page(request, id):
             'thoughts': r.thoughts,
         })
     return render(request, 'movies/movie.html', {'movie': movie, 'form': form, 'review': r,
-                                                 'following_users': following_users, 'av_rating': av_rating})
+                                                 'following_users': following_users, 'av_rating': av_rating,
+                                                 'common_react': most_common_react})
 
 
 def movie_db(request):
