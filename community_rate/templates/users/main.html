@@ -16,58 +16,51 @@
     {% endif %}
 
     <div class="col-md-12">
-        {# USER STATS #}
-        {# Number of Followers #}
-        <a class="col-lg-5 col-md-6 col-sm-6" href="/relationships/">
-            <div class="card card-stats">
-                <div class="card-header" data-background-color="blue">
-                    <i class="material-icons">supervisor_account</i>
-                </div>
-                <div class="card-content">
-                    <p class="category">Followers</p>
-                    <h3 class="title">{{ num_followers }}</h3>
-                </div>
+        {# Search #}
+        <div class="col-md-5">
+            <div class="form-group label-floating">
+                <label class="control-label">Filter by name</label>
+                <input id="filter-users" class="form-control">
             </div>
-        </a>
-
-        {# Number Following #}
-        <a class="col-lg-5 col-md-6 col-sm-6" href="/relationships/">
-            <div class="card card-stats">
-                <div class="card-header" data-background-color="orange">
-                    <i class="material-icons">favorite</i>
-                </div>
-                <div class="card-content">
-                    <p class="category">Following</p>
-                    <h3 class="title">{{ num_following }}</h3>
-                </div>
-            </div>
-        </a>
+        </div>
 
         {# List of users #}
         <div class="card">
-            <div class="card-header" data-background-color="purple">
-                    <h4 class="title card-header-title">{{ title }}</h4>
-                    <p class="category">{{ comment }}</p>
+            <div class="card-header" data-background-color="blue">
+                    <h4 class="title card-header-title">All Users</h4>
             </div>
             <div class="card-content">
-                <table class="table table-hover">
-                    <thead class="text-primary">
+                <table class="table">
+                    <thead class="text-info">
+                        <th>Username</th>
                         <th>Name</th>
-                        <th>Followers</th>
-                        <th>Follow</th>
+                        <th class="text-center">Followers</th>
+                        <th class="text-right">Actions</th>
                     </thead>
                     <tbody>
                         {% for u, count, already_following in users %}
-                            <tr onclick=window.location.href="/profile/{{ u.username }}">
-                                <td >
-                                    <h4>{{u.username}}</h4>
+                            <tr id="{{ u.first_name|lower }} {{ u.last_name|lower }}">
+                                <td>
+                                    <h4>{{ u.username }}</h4>
                                 </td>
                                 <td>
-                                    <h4>{{ count }}</h4>
+                                    <h4>{{ u.first_name }} {{ u.last_name }}</h4>
                                 </td>
                                 <td>
-                                    {% if not already_following %}
-                                    <a class="btn btn-primary" href="/follow/{{u.username}}">Follow</a>
+                                    <h4 class="text-center">{{ count }}</h4>
+                                </td>
+                                <td class="td-actions text-right">
+                                    <button type="button" rel="tooltip" title="Visit profile" class="btn btn-info btn-simple" onclick="window.location.href='/profile/{{ u.username }}/'">
+                                        <i class="material-icons">launch</i>
+                                    </button>
+                                    {% if already_following %}
+                                        <button type="button" rel="tooltip" title="Unfollow" class="btn btn-danger btn-simple">
+                                            <i class="material-icons">clear</i>
+                                        </button>
+                                    {% else %}
+                                        <button type="button" rel="tooltip" title="Follow" class="btn btn-primary btn-simple">
+                                            <i class="material-icons">add_circle_outline</i>
+                                        </button>
                                     {% endif %}
                                 </td>
                             </tr>
@@ -77,4 +70,21 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $(document).ready(function() {
+            $("#filter-users").keyup(function() {
+                var query = $("#filter-users").val().toLowerCase();
+                if (query.length > 0) {
+                    $('tbody tr').not('[id*="' + query + '"]').hide();
+                    $('tbody tr[id*="' + query + '"]').show();
+                }
+                else {
+                    $('tbody tr').show()
+                }
+            })
+        })
+    </script>
 {% endblock %}

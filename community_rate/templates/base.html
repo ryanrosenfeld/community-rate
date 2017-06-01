@@ -65,9 +65,6 @@
                                     <a href="/settings/">Settings</a>
                                 </li>
                                 <li>
-                                    <a href="/relationships/">Relationships</a>
-                                </li>
-                                <li>
                                     <a href="/logout/">Logout</a>
                                 </li>
                             </ul>
@@ -93,11 +90,23 @@
 {#                            <p>Discover</p>#}
 {#                        </a>#}
 {#                    </li>#}
-                    <li {% if page == 'users' %}class="active"{% endif %}>
-                        <a href="/users/">
+                    <li {% if page == 'users' or page == 'relationships' %}class="active"{% endif %}>
+                        <a data-toggle="collapse" href="#users">
                             <i class="material-icons">people</i>
-                            <p>Users</p>
+                            <p>Users
+                                <b class="caret"></b>
+                            </p>
                         </a>
+                        <div class="collapse" id="users">
+                            <ul class="nav">
+                                <li {% if page == 'users' %}class="active"{% endif %}>
+                                    <a href="/users/">All Users</a>
+                                </li>
+                                <li {% if page == 'relationships' %}class="active"{% endif %}>
+                                    <a href="/relationships/">My Relationships</a>
+                                </li>
+                            </ul>
+                        </div>
                     </li>
 {#                    <li {% if page == 'lists' %}class="active"{% endif %}>#}
 {#                        <a href="/lists/">#}
@@ -130,7 +139,7 @@
                             {% if page == 'activity_feed' %}Activity Feed
                             {% elif page == 'profile' %}Profile
                             {% elif page == 'discover' %}Discover
-                            {% elif page == 'users' %}Users
+                            {% elif page == 'users' or page == 'relationships' %}Users
                             {% elif page == 'movies' %}Movies
                             {% endif %}
                         </a>

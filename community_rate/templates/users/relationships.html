@@ -12,12 +12,12 @@
     -->
                     <li class="active">
                         <a href="#followers" role="tab" data-toggle="tab">
-                            <i class="material-icons">supervisor_account</i> Followers
+                            <i class="material-icons">supervisor_account</i>{{ num_followers }} Follower{% if num_followers != 1 %}s{% endif %}
                         </a>
                     </li>
                     <li>
                         <a href="#following" role="tab" data-toggle="tab">
-                            <i class="material-icons">favorite</i> Following
+                            <i class="material-icons">favorite</i>{{ num_following }} Following
                         </a>
                     </li>
                 </ul>

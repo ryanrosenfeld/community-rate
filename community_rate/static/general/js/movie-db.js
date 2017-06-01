@@ -1,8 +1,10 @@
 $(document).ready(function() {
-    $("#filter-btn").click(function() {
+    $("#filter-movies").keyup(function() {
         $("#movie-table-body").html('');
         var query = $("#filter-movies").val();
-        filterMovies(query)
+        if (query.length > 2) {
+            filterMovies(query);
+        }
     });
 });
 

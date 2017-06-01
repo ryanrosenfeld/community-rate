@@ -30,7 +30,7 @@ def login_view(request):
                 return HttpResponseRedirect('/')
     else:
         form = LoginForm()
-    return render(request, 'general/login.html', {'form': form})
+    return render(request, 'general/login.html', {'form': form, 'page': 'login'})
 
 
 def logout_view(request):
@@ -84,10 +84,10 @@ def new_user(request):
 
                 return HttpResponseRedirect('/')
 
-            return HttpResponseRedirect('/signup/')
+            return HttpResponseRedirect('/register/')
     else:
         form = SignupForm()
-    return render(request, 'general/register.html', {'form': form})
+    return render(request, 'general/register.html', {'form': form, 'page': 'register'})
 
 
 @login_required

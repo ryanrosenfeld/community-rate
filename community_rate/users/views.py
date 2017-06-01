@@ -129,11 +129,6 @@ def settings(request):
     })
 
 
-def view_users(request):
-    all_users = SiteUser.objects.all()
-    return render(request, 'users/all.html', {'users': all_users})
-
-
 def main_view(request, response=None):
     """Main view for users page"""
 
@@ -248,7 +243,7 @@ def relationships(request):
         'num_following': len(following),
         'following_users': following_users,
         'follower_users': follower_users,
-        'page': 'users'})
+        'page': 'relationships'})
 
 
 # @login_required
