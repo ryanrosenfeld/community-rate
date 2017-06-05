@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.db.models import Q
 from django.shortcuts import render
 from .forms import *
@@ -178,40 +178,6 @@ def main_view(request, response=None):
 
 
 @login_required
-def follow(request, username):
-    """Creates follow connection between requester and person they wish to follow"""
-
-    # Retrieve the SiteUser account of the person they wish to follow
-    try:
-        following_user = SiteUser.objects.get(username=username)
-
-    except ObjectDoesNotExist:
-        response = "User \"{0}\" does not exist".format(username)
-        return main_view(request, response)
-
-    # Determine if this user is already following them
-    query = request.user.follower_set.filter(following=following_user)
-    already_following = len(query) > 0
-
-    if already_following:
-        response = "You are already following {0}!".format(username)
-        return main_view(request, response)
-
-    # Person exists and this user is not already following them
-    f = Follower.objects.create(follower=request.user, following=following_user)
-    f.save()
-
-    # Create a notification for the person who was followed
-    msg = "{0} is now following you!".format(request.user.username)
-    n = Notification.objects.create(message=msg, notification_class="Follower", user=following_user)
-    n.save()
-
-    # Provide response for requester, return
-    response = "You are now following {0}".format(username)
-    return main_view(request, response)
-
-
-@login_required
 def relationships(request):
     """View for page that displays all of the users that a particular user is following"""
     following_users = []
@@ -246,39 +212,74 @@ def relationships(request):
         'page': 'relationships'})
 
 
-# @login_required
-# def view_followers(request):
-#     """View for page that displays all of the users that follow a particular user"""
-#     users = []
-#
-#     # Query all of the users this person is following
-#     following = request.user.follower_set.all()
-#
-#     followers = request.user.following_set.all()
-#
-#     # Append their follower count and
-#     # whether or not they are already following that person
-#     for follower_obj in followers:
-#         # Determine follower count of person that follow them (this is messy)
-#         followers_count = len(follower_obj.follower.following_set.all())
-#
-#         # Determine if this user is already following them OR
-#         # request user is actually this user
-#         query = following.filter(following=follower_obj.follower)
-#         already_following = (len(query) > 0) | (follower_obj.follower == request.user)
-#
-#         users.append((follower_obj.follower, followers_count, already_following))
-#
-#     # Set up the display variables for the 'following' view
-#     title = "Your Followers"
-#
-#     # Retrieve notifications
-#     notifications = Notification.objects.filter(Q(user=request.user) & Q(is_read=False))
-#
-#     return render(request, 'users/relationships.html', {
-#         'num_followers': len(followers),
-#         'num_following': len(following),
-#         'users': users,
-#         'title': title,
-#         'notifications': notifications,
-#         'number_notifications': len(notifications)})
+# AJAX Views
+@login_required
+def follow(request):
+    """Creates follow connection between requester and person they wish to follow"""
+    print("Following...")
+    # Get username
+    username = request.GET.get('username', None)
+    if username is None:
+        return JsonResponse({})
+    print(username)
+
+    # Retrieve the SiteUser account of the person they wish to follow
+    try:
+        following_user = SiteUser.objects.get(username=username)
+    except ObjectDoesNotExist:
+        return JsonResponse({})
+    print(following_user)
+
+    # Determine if this user is already following them
+    query = request.user.follower_set.filter(following=following_user)
+    already_following = len(query) > 0
+    print(already_following)
+    if already_following:
+        return JsonResponse({})
+    print(already_following)
+
+    # Person exists and this user is not already following them
+    f = Follower.objects.create(follower=request.user, following=following_user)
+    f.save()
+
+    # Create a notification for the person who was followed
+    msg = "{0} is now following you!".format(request.user.username)
+    n = Notification.objects.create(message=msg, notification_class="Follower", user=following_user)
+    n.save()
+    return JsonResponse({'success': True})
+
+
+@login_required
+def unfollow(request):
+    """Creates follow connection between requester and person they wish to follow"""
+    print("Unfollowing...")
+    # Get username
+    username = request.GET.get('username', None)
+    if username is None:
+        return JsonResponse({})
+    print(username)
+
+    # Retrieve the SiteUser account of the person they wish to follow
+    try:
+        following_user = SiteUser.objects.get(username=username)
+    except ObjectDoesNotExist:
+        return JsonResponse({})
+    print(following_user)
+
+    # Determine if this user is already following them
+    query = request.user.follower_set.filter(following=following_user)
+    already_following = len(query) > 0
+    if not already_following:
+        return JsonResponse({})
+    print(already_following)
+
+    # If person exists and this user is following them delete Follower object
+    f = ''
+    try:
+        f = Follower.objects.get(follower=request.user, following=following_user)
+    except ObjectDoesNotExist:
+        return JsonResponse({})
+    print(f)
+    f.delete()
+
+    return JsonResponse({'success': True})

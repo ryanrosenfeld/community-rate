@@ -10,6 +10,7 @@
 #edit-list-name {
     display: inline-block;
     width: 200px;
+    margin-left: 10px;
 }
 
 #btn-show-edit-list-name {
@@ -35,4 +36,15 @@
 
 #edit-list-name-group {
     display: none;
+}
+
+.edit-display,
+.edit-display-table {
+    display: none;
+}
+
+#btn-like,
+#btn-editors {
+    margin-right: 15px;
+    margin-left: 10px;
 }

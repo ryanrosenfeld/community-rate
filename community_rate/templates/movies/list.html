@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block header %}
+    <title>{{ list.name }}</title>
+    <link href="{% static 'general/css/list.css' %}" rel="stylesheet">
+    <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    <div class="col-md-10 col-md-offset-1">
+        <div class="form-group edit-display">
+            <button class="btn btn-round btn-warning btn-just-icon" id="btn-public_private" rel="tooltip" title="Change public/private status" onclick="togglePublicPrivate()">
+                <i class="material-icons" id="public_private-btn-content">{% if l.public %}public{% else %}lock_outline{% endif %}</i>
+            </button>
+            <button class="btn btn-round btn-info btn-just-icon" id="btn-show-edit-list-name" rel="tooltip" title="Edit list name" onclick="toggleDisplayUpdateListName()" style="display: inline">
+                <i class="material-icons">mode_edit</i>
+            </button>
+            <div id="edit-list-name-group">
+                <input class="form-control" placeholder="Edit list name" id="edit-list-name">
+                <button class="btn btn-round btn-primary btn-just-icon" id="btn-edit-list-name" onclick="updateListName()">
+                    <i class="material-icons">check</i>
+                </button>
+            </div>
+        </div>
+        {% if owner %}
+            <button class="btn btn-primary btn-just-icon pull-right" id="btn-editors" rel="tooltip" title="Add Editors" onclick="showAddEditors()">
+                <i class="material-icons">people</i> {{ num_editors }}
+            </button>
+        {% else %}
+            <button class="btn btn-primary btn-just-icon pull-right active" id="btn-like" onclick="like()">
+                <i class="material-icons">thumb_up</i>
+                {% if liked %}<i class="material-icons">check</i>{% endif %}
+            </button>
+        {% endif %}
+        {% if owner or editor %}
+            <button class="btn btn-info non-edit-display pull-right" id="editList" onclick="toggleEditMode()">
+                <i class="material-icons">edit</i> Edit List
+            </button>
+        {% endif %}
+        <button class="btn btn-rose edit-display pull-right" onclick="toggleEditMode()">
+            <i class="material-icons">check</i> Finish Editing
+        </button>
+        <div class="card">
+            <div class="card-header" data-background-color="green">
+                <h4 class="title card-header-title" id="list-name">{{ list.name }}</h4>
+            </div>
+            <div class="card-content">
+                <div class="col-sm-6 edit-display">
+                    <div class="dropdown">
+                        <div class="form-group label-floating dropdown-toggle" data-toggle="dropdown">
+                            <label class="control-label">Add movie to list</label>
+                            <input class="form-control" id="movie-input">
+                        </div>
+                        <ul class="dropdown-menu" id="movie-results" style="display: none"></ul>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <table class="table table-shopping table-hover">
+                        <thead class="text-success">
+                            <th class="text-center"></th>
+                            <th>Movie</th>
+                            <th class="text-center">My Rating</th>
+                            <th class="text-center">Average Rating</th>
+                            <th class="text-center">My Reaction</th>
+                            <th class="text-center">Most Common Reaction</th>
+                            <th class="text-center edit-display-table">Remove?</th>
+                        </thead>
+                        <tbody id="movie-table-body">
+                            {% for movie, rev, av_rev in movies %}
+                                <tr id="row-{{ movie.movie_id }}">
+                                    <td class="td-link" onclick="window.location.href='/movie/{{ movie.movie_id }}/'">
+                                        <div class="img-container" onclick="window.location.href='/movie/{{ movie.movie_id }}/'">
+                                            <img src="{{ movie.img_path }}" alt="...">
+                                        </div>
+                                    </td>
+                                    <td class="td-name td-link" onclick="window.location.href='/movie/{{ movie.movie_id }}/'">
+                                        <a>{{ movie.title }}</a>
+                                        <br />
+                                        <small>{{ movie.release_year }}</small>
+                                    </td>
+                                    <td class="text-center td-link" onclick="window.location.href='/movie/{{ movie.movie_id }}/'">{{ rev.rating }}</td>
+                                    <td class="text-center td-link" onclick="window.location.href='/movie/{{ movie.movie_id }}/'">{{ av_rev.0 }}</td>
+                                    <td class="text-center td-link" onclick="window.location.href='/movie/{{ movie.movie_id }}/'"><i class="{{ rev.reaction }}"></i></td>
+                                    <td class="text-center td-link" onclick="window.location.href='/movie/{{ movie.movie_id }}/'"><i class="{{ av_rev.1 }}"></i></td>
+                                    <td class="text-center edit-display-table">
+                                        <button type="button" id="btn-rmv" class="btn btn-danger btn-simple btn-xs" onclick="removeListItem({{ movie.movie_id }})">
+                                            <i class="material-icons">close</i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        var l_id = "{{ list.id }}";
+    </script>
+    <script src="{% static 'general/js/list.js' %}"></script>
+{% endblock %}

@@ -111,3 +111,7 @@ def home(request):
         return render(request, 'general/index.html', {'page': 'activity_feed'})
     else:
         return HttpResponseRedirect('/login/')
+
+
+def docs(request):
+    return render(request, 'material-dash-documentation.html')

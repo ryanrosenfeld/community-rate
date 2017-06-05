@@ -1,6 +1,7 @@
 from django.db import models
 from general.models import SiteUser
 
+
 class Movie(models.Model):
     movie_id = models.IntegerField()
     title = models.CharField(max_length=100)
@@ -26,6 +27,8 @@ class List(models.Model):
     name = models.CharField(max_length=100, default='Untitled')
     date_updated = models.DateTimeField(auto_now=True)
     public = models.BooleanField(default=True)
+    editors = models.ManyToManyField(SiteUser, related_name="editor_set")
+    likers = models.ManyToManyField(SiteUser, related_name="liker_set")
 
 
 class ListEntry(models.Model):

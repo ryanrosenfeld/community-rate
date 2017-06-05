@@ -1,9 +1,9 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect, JsonResponse
 from .forms import ReviewForm
-from .models import Review, List, ListEntry
+from .models import List, ListEntry
 from .services import *
-from general.common_functions import most_common
+from .functions import *
 
 
 def movie_page(request, id):
@@ -13,27 +13,11 @@ def movie_page(request, id):
         r = None
     movie = get_movie_by_id(id, False)
 
-    # Get following user reviews
-    following = request.user.follower_set.all()
-    following_users = []
-    for follower_obj in following:
-        user = follower_obj.following
-        try:
-            rev = Review.objects.get(movie_id=id, creator=user)
-        except Review.DoesNotExist:
-            rev = None
-        if rev is not None:
-            following_users.append((follower_obj.following, rev))
-
-    # Calculate average rating
-    av_rating = float(sum(r.rating for u, r in following_users)) / len(following_users)
-    av_rating = "{0:.1f}".format(av_rating)
-
-    # Get most common reaction
-    reactions = []
-    for u, rev in following_users:
-        reactions.append(rev.reaction)
-    most_common_react = most_common(reactions)
+    # Get following user reviews, calc average review
+    following_users = get_following_user_reviews(request.user, id)
+    av_review = calc_average_review(following_users)
+    av_rating = av_review[0]
+    most_common_react = av_review[1]
 
     if request.method == 'POST':
         form = ReviewForm(request.POST)
@@ -78,10 +62,93 @@ def search(request):
     return HttpResponseRedirect('/')
 
 
+def lists(request):
+    # Get all friend's lists
+    following = request.user.follower_set.all()
+    friend_lists = []
+    for f in following:
+        user = f.following
+        ls = List.objects.filter(creator=user)
+        for l in ls:
+            num_movies = len(ListEntry.objects.filter(list=l))
+            likes = len(l.likers.all())
+            friend_lists.append((l, num_movies, likes))
+    friend_lists = sorted(friend_lists, key=lambda x: x[0].date_updated, reverse=True)
+
+
+    # Get user's lists
+    ls = List.objects.filter(creator=request.user)
+    my_lists = []
+    for l in ls:
+        num_movies = len(ListEntry.objects.filter(list=l))
+        likes = len(l.likers.all())
+        my_lists.append((l, num_movies, likes))
+    my_lists = sorted(my_lists, key=lambda x: (x[2], x[0].date_updated), reverse=True)
+
+    # Get lists user can edit
+    ls = request.user.editor_set.all()
+    shared_lists = []
+    for l in ls:
+        num_movies = len(ListEntry.objects.filter(list=l))
+        likes = len(l.likers.all())
+        shared_lists.append((l, num_movies, likes))
+    shared_lists = sorted(shared_lists, key=lambda x: x[0].date_updated, reverse=True)
+
+    return render(request, 'movies/lists.html', {'friend_lists': friend_lists,
+                                                 'my_lists': my_lists,
+                                                 'shared_lists': shared_lists,
+                                                 'page': "lists"})
+
+
+def list_page(request, list_id):
+    # Get list
+    l = List.objects.filter(id=list_id)
+    if len(l) == 0:
+        return HttpResponseRedirect('/profile/')
+    l = l[0]
+
+    # Check if list creator
+    owner = l.creator == request.user
+
+    # Check if list liked
+    liked = False
+    if not owner:
+        if len(List.objects.filter(id=list_id, likers=request.user)) > 0:
+            liked = True
+
+    # Collect entries
+    entries = ListEntry.objects.filter(list=l)
+    movies = []
+    for e in entries:
+        # Get movie info
+        movie_id = e.movie_id
+        movie = get_movie_by_id(movie_id, True)
+        if movie.poster_path is not None:
+            movie.img_path = 'http://image.tmdb.org/t/p/w92' + movie.poster_path
+        else:
+            movie.img_path = "{% static 'general/img/no_poster.jpg'}"
+
+        # Get my review info
+        try:
+            my_review = Review.objects.get(movie_id=movie_id, creator=request.user)
+        except Review.DoesNotExist:
+            my_review = None
+
+        # Get average review info
+        following_users = get_following_user_reviews(request.user, movie_id)
+        if my_review is not None:
+            following_users.append((request.user, my_review))
+        average_review = calc_average_review(following_users)
+
+        movies.append((movie, my_review, average_review))
+
+    return render(request, 'list.html', {'list': l, 'movies': movies, 'owner': owner, 'liked': liked})
+
+
 def new_list(request):
     l = List(creator=request.user)
     l.save()
-    return HttpResponseRedirect('/edit-list/' + str(l.id) + '/')
+    return HttpResponseRedirect('/list/' + str(l.id) + '/')
 
 
 def edit_list(request, list_id):
@@ -116,7 +183,26 @@ def get_movie_info(request):
     movie_id = request.GET.get('id', None)
     if movie_id is not None:
         movie = get_movie_by_id(movie_id, False)
-        return JsonResponse(movie)
+        movie['release_year'] = movie['release_date'][:4]
+
+        # Get my review info
+        try:
+            my_review = Review.objects.get(movie_id=movie_id, creator=request.user)
+            my_rating = my_review.rating
+            my_reaction = my_review.reaction
+        except Review.DoesNotExist:
+            my_review = None
+            my_rating = ''
+            my_reaction = ''
+
+        # Get average review info
+        following_users = get_following_user_reviews(request.user, movie_id)
+        if my_review is not None:
+            following_users.append((request.user, my_review))
+        average_review = calc_average_review(following_users)
+
+        return JsonResponse({'movie': movie, 'my_rating': my_rating, 'my-reaction': my_reaction,
+                             'av_rating': average_review[0], 'av_reaction': average_review[1]})
     return JsonResponse({})
 
 
@@ -163,3 +249,21 @@ def remove_list_item(request):
     le = ListEntry.objects.filter(list=l, movie_id=movie_id)[0]
     le.delete()
     return JsonResponse({})
+
+
+def toggle_public_private(request):
+    list_id = request.GET.get('list_id', None)
+    l = List.objects.filter(id=list_id)[0]
+    l.public = False
+    l.save()
+    return JsonResponse({})
+
+
+def like_list(request):
+    list_id = request.GET.get('list_id', None)
+    l = List.objects.filter(id=list_id)[0]
+    if List.objects.filter(id=list_id, likers=request.user).count() > 0:
+        l.likers.remove(request.user)
+        return JsonResponse({'liked': False})
+    l.likers.add(request.user)
+    return JsonResponse({'liked': True})

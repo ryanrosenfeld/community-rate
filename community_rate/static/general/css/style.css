@@ -36,3 +36,7 @@
 .card-plain .card-image-custom img {
   border-radius: 3px;
 }
+
+.table-shopping .img-container {
+  width: 55px;
+}
