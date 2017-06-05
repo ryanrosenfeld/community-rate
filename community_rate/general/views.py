@@ -6,6 +6,8 @@ from django.shortcuts import render
 
 from .forms import *
 from .models import *
+from movies.models import Review
+from movies.services import get_movie_by_id
 import re
 
 User = get_user_model()
@@ -106,11 +108,22 @@ def mark_read(request, notification_id):
         notification.save()
 
 
+@login_required
 def home(request):
-    if request.user.is_authenticated():
-        return render(request, 'general/index.html', {'page': 'activity_feed'})
-    else:
-        return HttpResponseRedirect('/login/')
+    return HttpResponseRedirect('/activity-feed/')
+
+
+def activity_feed(request):
+    # Get following users
+    following = request.user.follower_set.all()
+    updates = []
+    for follower_obj in following:
+        reviews = Review.objects.filter(creator=follower_obj.following)
+        for r in reviews:
+            movie = get_movie_by_id(r.movie_id, True)
+            updates.append((follower_obj.following, movie, r))
+    updates = sorted(updates, key=lambda x: x[2].date_added, reverse=True)
+    return render(request, 'activity-feed.html', {'updates': updates, 'page': 'activity-feed'})
 
 
 def docs(request):

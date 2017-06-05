@@ -20,8 +20,27 @@
     pointer-events: none;
 }
 
+.card .card-image-circle {
+    height: 60%;
+    position: relative;
+    overflow: hidden;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: -50px;
+    border-radius: 6px;
+}
+
+.card .card-image-circle img {
+    height: 100%;
+    width: 100%;
+    max-height: 120px;
+    max-width: 120px;
+    border-radius: 50%;
+    pointer-events: none;
+}
+
 .card .card-image-custom .card-title {
-    position: absolute;
+    display: inline-block;
     bottom: 15px;
     left: 15px;
     color: #fff;
