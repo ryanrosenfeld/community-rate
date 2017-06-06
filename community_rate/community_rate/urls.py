@@ -1,10 +1,8 @@
 from django.conf.urls import url
-from django.conf.urls.static import static
 from django.contrib import admin
 from general import views as general_views
 from movies import views as movie_views
 from users import views as user_views
-from community_rate import settings
 
 urlpatterns = [
     # General views
@@ -18,13 +16,11 @@ urlpatterns = [
     url(r'^read/(?P<notification_id>\w{0,50})/$', general_views.mark_read),
 
     # Movie views
-    url(r'^search/', movie_views.search),
     url(r'^movie/(.*)/', movie_views.movie_page),
     url(r'^movies/', movie_views.movie_db),
     url(r'^lists/', movie_views.lists),
     url(r'^list/(.*)/', movie_views.list_page),
     url(r'^new-list/', movie_views.new_list),
-    url(r'^edit-list/(.*)/', movie_views.edit_list),
 
     # Users views
     url(r'^users/', user_views.main_view),
@@ -47,6 +43,4 @@ urlpatterns = [
     # User AJAX Requests
     url(r'^ajax/follow/', user_views.follow),
     url(r'^ajax/unfollow/', user_views.unfollow),
-
-    url(r'^documentation/$', general_views.docs),
 ]

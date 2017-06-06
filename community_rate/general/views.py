@@ -123,7 +123,7 @@ def activity_feed(request):
             movie = get_movie_by_id(r.movie_id, True)
             updates.append((follower_obj.following, movie, r))
     updates = sorted(updates, key=lambda x: x[2].date_added, reverse=True)
-    return render(request, 'activity-feed.html', {'updates': updates, 'page': 'activity-feed'})
+    return render(request, 'activity-feed.html', {'updates': updates, 'page': 'activity_feed'})
 
 
 def docs(request):

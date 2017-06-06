@@ -11,10 +11,13 @@
 {% block content %}
     <div class="col-md-10 col-md-offset-1">
         <div class="form-group edit-display">
-            <button class="btn btn-round btn-warning btn-just-icon" id="btn-public_private" rel="tooltip" title="Change public/private status" onclick="togglePublicPrivate()">
+            <button class="btn btn-round btn-warning btn-just-icon btn-edit-options" id="btn-public_private" rel="tooltip" title="Change public/private status" onclick="togglePublicPrivate()">
                 <i class="material-icons" id="public_private-btn-content">{% if l.public %}public{% else %}lock_outline{% endif %}</i>
             </button>
-            <button class="btn btn-round btn-info btn-just-icon" id="btn-show-edit-list-name" rel="tooltip" title="Edit list name" onclick="toggleDisplayUpdateListName()" style="display: inline">
+{#            <button class="btn btn-primary btn-round btn-just-icon btn-edit-options" id="btn-editors" rel="tooltip" title="Edit user permissions">#}
+{#                <i class="material-icons">people</i> {{ num_editors }}#}
+{#            </button>#}
+            <button class="btn btn-round btn-info btn-just-icon btn-edit-options" id="btn-show-edit-list-name" rel="tooltip" title="Update list name" onclick="toggleDisplayUpdateListName()" style="display: inline">
                 <i class="material-icons">mode_edit</i>
             </button>
             <div id="edit-list-name-group">
@@ -24,11 +27,7 @@
                 </button>
             </div>
         </div>
-        {% if owner %}
-            <button class="btn btn-primary btn-just-icon pull-right" id="btn-editors" rel="tooltip" title="Add Editors" onclick="showAddEditors()">
-                <i class="material-icons">people</i> {{ num_editors }}
-            </button>
-        {% else %}
+        {% if not owner %}
             <button class="btn btn-primary btn-just-icon pull-right active" id="btn-like" onclick="like()">
                 <i class="material-icons">thumb_up</i>
                 {% if liked %}<i class="material-icons">check</i>{% endif %}
@@ -42,20 +41,29 @@
         <button class="btn btn-rose edit-display pull-right" onclick="toggleEditMode()">
             <i class="material-icons">check</i> Finish Editing
         </button>
+        <br>
+{#        <div class="edit-display" id="edit-permissions">#}
+{#            <div class="col-md-5 col-md-offset-1 text-center" id="edit-users">#}
+{#                <h4>Users who can edit my list</h4>#}
+{#            </div>#}
+{#            <div class="col-md-5 text-center" id="view-users">#}
+{#                <h4>Users who can see my list</h4>#}
+{#            </div>#}
+{#        </div>#}
+        <div class="col-md-6 edit-display" id="add-movies">
+            <div class="dropdown">
+                <div class="form-group label-floating dropdown-toggle" data-toggle="dropdown">
+                    <label class="control-label">ADD MOVIES</label>
+                    <input class="form-control" id="movie-input">
+                </div>
+                <ul class="dropdown-menu" id="movie-results" style="display: none"></ul>
+            </div>
+        </div>
         <div class="card">
             <div class="card-header" data-background-color="green">
                 <h4 class="title card-header-title" id="list-name">{{ list.name }}</h4>
             </div>
             <div class="card-content">
-                <div class="col-sm-6 edit-display">
-                    <div class="dropdown">
-                        <div class="form-group label-floating dropdown-toggle" data-toggle="dropdown">
-                            <label class="control-label">Add movie to list</label>
-                            <input class="form-control" id="movie-input">
-                        </div>
-                        <ul class="dropdown-menu" id="movie-results" style="display: none"></ul>
-                    </div>
-                </div>
                 <div class="col-md-12">
                     <table class="table table-shopping table-hover">
                         <thead class="text-success">

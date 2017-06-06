@@ -33,7 +33,9 @@ def movie_page(request, id):
                 r.reaction = request.POST['reaction']
                 r.thoughts = request.POST['thoughts']
                 r.save()
-            return render(request, 'movies/movie.html', {'movie': movie, 'form': form, 'review': r})
+            return render(request, 'movies/movie.html', {'movie': movie, 'form': form, 'review': r,
+                                                         'following_users': following_users, 'av_rating': av_rating,
+                                                         'common_react': most_common_react})
     if r is None:
         form = ReviewForm()
     else:
@@ -55,20 +57,13 @@ def movie_db(request):
     return render(request, 'movie-db.html', {'page': 'movies', 'query': query})
 
 
-def search(request):
-    if request.method == 'GET':
-        query = request.GET.get('search', None)
-        return render(request, 'movies/search-results.html', {'query': query, 'page': 'movies'})
-    return HttpResponseRedirect('/')
-
-
 def lists(request):
     # Get all friend's lists
     following = request.user.follower_set.all()
     friend_lists = []
     for f in following:
         user = f.following
-        ls = List.objects.filter(creator=user)
+        ls = List.objects.filter(creator=user, public=True)
         for l in ls:
             num_movies = len(ListEntry.objects.filter(list=l))
             likes = len(l.likers.all())
@@ -142,31 +137,13 @@ def list_page(request, list_id):
 
         movies.append((movie, my_review, average_review))
 
-    return render(request, 'list.html', {'list': l, 'movies': movies, 'owner': owner, 'liked': liked})
+    return render(request, 'list.html', {'list': l, 'movies': movies, 'owner': owner, 'liked': liked, 'page': 'lists'})
 
 
 def new_list(request):
     l = List(creator=request.user)
     l.save()
     return HttpResponseRedirect('/list/' + str(l.id) + '/')
-
-
-def edit_list(request, list_id):
-    l = List.objects.filter(id=list_id)
-    if len(l) == 0:
-        return HttpResponseRedirect('/profile/')
-    l = l[0]
-    entries = ListEntry.objects.filter(list=l)
-    movies = []
-    for e in entries:
-        movie_id = e.movie_id
-        movie = get_movie_by_id(movie_id, True)
-        if movie.poster_path is not None:
-            movie.img_path = 'http://image.tmdb.org/t/p/w92' + movie.poster_path
-        else:
-            movie.img_path = "{% static 'general/img/no_poster.jpg'}"
-        movies.append(movie)
-    return render(request, 'edit-list.html', {'list': l, 'movies': movies})
 
 
 # AJAX views

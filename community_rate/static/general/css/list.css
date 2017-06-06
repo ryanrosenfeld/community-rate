@@ -13,11 +13,6 @@
     margin-left: 10px;
 }
 
-#btn-show-edit-list-name {
-    margin-left: 10px;
-    margin-right: 5px;
-}
-
 #btn-edit-list-name {
     margin-left: 0px;
 }
@@ -31,7 +26,11 @@
 }
 
 #btn-public_private {
-    margin-left: 50px;
+    margin-left: 40px;
+}
+
+#add-movies {
+    margin-left: 35px;
 }
 
 #edit-list-name-group {
@@ -43,8 +42,7 @@
     display: none;
 }
 
-#btn-like,
-#btn-editors {
-    margin-right: 15px;
-    margin-left: 10px;
+.btn-edit-options {
+    margin-right: 5px;
+    margin-left: 5px;
 }

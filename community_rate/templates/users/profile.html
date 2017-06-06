@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block header %}
-    <title>{{ user }}</title>
+    <title>{{ user.first_name }}'s Profile</title>
     <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
     {% load static %}
     <link href="{% static 'general/css/profile.css' %}" rel="stylesheet">
@@ -233,27 +233,46 @@
             <div class="card-content">
                 <div class="tab-content">
                     <div class="col-sm-12">
-                        <a class="btn btn-primary pull-right" href="/new-list/"><i class="material-icons">add_circle_outline</i>  New List</a>
+                        <a class="btn btn-primary pull-right" href="/new-list/" id="btn-new-list"><i class="material-icons">add_circle_outline</i>  New List</a>
                     </div>
                     <div class="tab-pane active" id="public">
                         <table class="table table-hover review-table">
                             <thead class="text-success">
                                 <th>List Name</th>
+                                <th>Movies</th>
+                                <th>Likes</th>
                             </thead>
                             <tbody>
-                                {% for list in lists %}
-                                    <tr onclick="window.location.href='/list/{{ list.id }}/'">
-                                        <td>
-                                            <p>{{ list.name }}</p>
-                                        </td>
-                                    </tr>
+                                {% for list, num, likes in lists %}
+                                    {% if list.public %}
+                                        <tr onclick="window.location.href='/list/{{ list.id }}/'">
+                                            <td>{{ list.name }}</td>
+                                            <td>{{ num }}</td>
+                                            <td>{{ likes }}</td>
+                                        </tr>
+                                    {% endif %}
                                 {% endfor %}
                             </tbody>
                         </table>
                     </div>
                     {% if owner %}
                         <div class="tab-pane" id="private">
-                            <p>Private To Do</p>
+                            <table class="table table-hover review-table">
+                                <thead class="text-success">
+                                    <th>List Name</th>
+                                    <th>Movies</th>
+                                </thead>
+                                <tbody>
+                                    {% for list, num, likes in lists %}
+                                        {% if not list.public %}
+                                            <tr onclick="window.location.href='/list/{{ list.id }}/'">
+                                                <td>{{ list.name }}</td>
+                                                <td>{{ num }}</td>
+                                            </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                </tbody>
+                            </table>
                         </div>
                     {% endif %}
                 </div>

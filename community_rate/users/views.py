@@ -6,7 +6,7 @@ from django.shortcuts import render
 from .forms import *
 from .models import *
 from general.models import SiteUser, Notification
-from movies.models import Review, List
+from movies.models import Review, List, ListEntry
 from movies.services import get_movie_by_id
 from .functions import *
 from random import randint
@@ -41,7 +41,12 @@ def profile(request, username=""):
 
     favorites = sorted(reviews, key=lambda x: x.rating, reverse=True)
     recents = sorted(reviews, key=lambda x: x.date_added, reverse=True)
-    lists = List.objects.filter(creator=user)
+    db_lists = List.objects.filter(creator=user)
+    lists = []
+    for l in db_lists:
+        num_movies = len(ListEntry.objects.filter(list=l))
+        likes = len(l.likers.all())
+        lists.append((l, num_movies, likes))
 
     # Determine if this user is already following them OR
     # request user is actually this user
