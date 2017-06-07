@@ -68,7 +68,7 @@ def lists(request):
             num_movies = len(ListEntry.objects.filter(list=l))
             likes = len(l.likers.all())
             friend_lists.append((l, num_movies, likes))
-    friend_lists = sorted(friend_lists, key=lambda x: x[0].date_updated, reverse=True)
+    friend_lists = sorted(friend_lists, key=lambda x: (x[2], x[0].date_updated), reverse=True)
 
 
     # Get user's lists
@@ -78,7 +78,7 @@ def lists(request):
         num_movies = len(ListEntry.objects.filter(list=l))
         likes = len(l.likers.all())
         my_lists.append((l, num_movies, likes))
-    my_lists = sorted(my_lists, key=lambda x: (x[2], x[0].date_updated), reverse=True)
+    my_lists = sorted(my_lists, key=lambda x: x[0].date_updated, reverse=True)
 
     # Get lists user can edit
     ls = request.user.editor_set.all()

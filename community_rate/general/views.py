@@ -126,5 +126,6 @@ def activity_feed(request):
     return render(request, 'activity-feed.html', {'updates': updates, 'page': 'activity_feed'})
 
 
-def docs(request):
-    return render(request, 'material-dash-documentation.html')
+@login_required
+def tutorial(request):
+    return render(request, 'general/tutorial.html', {'welcome': True})

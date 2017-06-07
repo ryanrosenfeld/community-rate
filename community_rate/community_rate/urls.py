@@ -13,6 +13,7 @@ urlpatterns = [
     url(r'^logout/', general_views.logout_view),
     url(r'^accounts/login/$', general_views.login_view, name='login'),
     url(r'^activity-feed/', general_views.activity_feed),
+    url(r'^tutorial/', general_views.tutorial),
     url(r'^read/(?P<notification_id>\w{0,50})/$', general_views.mark_read),
 
     # Movie views
