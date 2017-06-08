@@ -56,3 +56,14 @@
     </div>
 
 {% endblock %}
+
+{% block scripts %}
+    <script>
+        $(document).ready(function() {
+            var welcome = "{{ welcome }}";
+            if (welcome == "True") {
+                functions.sweetAlert('welcome')
+            }
+        })
+    </script>
+{% endblock %}

@@ -49,6 +49,18 @@ functions = {
                 type: "success"
             })
         }
+        else if (type == 'welcome') {
+            swal({
+                title: 'You\'re all set!',
+                html: ' You can access the tutorial again at any point ' +
+                'in the top right corner, but please reach out to me at <i class="text-warning">ryro003@gmail.com</i> if you have any further ' +
+                'questions. You\'re currently at the <strong>Activity Feed</strong>, which will be blank until you follow some friends! ' +
+                'Send out those follows, start rating movies in the <strong>Movie Database</strong>, and enjoy the site!',
+                buttonsStyling: false,
+                confirmButtonClass: 'btn btn-success',
+                type: "success"
+            })
+        }
     },
 
     follow: function (username, name, onSuccess) {
@@ -150,11 +162,12 @@ functions = {
             onTabClick : function(tab, navigation, index){
                 var $valid = $('.wizard-card form').valid();
 
-                if(!$valid){
-                    return false;
-                } else{
-                    return true;
-                }
+                // if(!$valid){
+                //     return false;
+                // } else{
+                //     return true;
+                // }
+                return true;
             },
 
             onTabShow: function(tab, navigation, index) {

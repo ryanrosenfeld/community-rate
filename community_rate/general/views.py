@@ -9,9 +9,10 @@ from .models import *
 from movies.models import Review
 from movies.services import get_movie_by_id
 import re
+from users.forms import profileSetupForm
+from users.functions import upload_prof_pic
 
 User = get_user_model()
-
 
 # Create your views here.
 def login_view(request):
@@ -84,7 +85,8 @@ def new_user(request):
 
                 login(request, user)
 
-                return HttpResponseRedirect('/')
+                request.session['new-user'] = True
+                return HttpResponseRedirect('/tutorial/')
 
             return HttpResponseRedirect('/register/')
     else:
@@ -123,9 +125,36 @@ def activity_feed(request):
             movie = get_movie_by_id(r.movie_id, True)
             updates.append((follower_obj.following, movie, r))
     updates = sorted(updates, key=lambda x: x[2].date_added, reverse=True)
-    return render(request, 'activity-feed.html', {'updates': updates, 'page': 'activity_feed'})
+
+    welcome = request.session.get('welcome', False)
+    if welcome:
+        request.session['welcome'] = None
+    return render(request, 'activity-feed.html', {'updates': updates, 'page': 'activity_feed', 'welcome': welcome})
 
 
 @login_required
 def tutorial(request):
-    return render(request, 'general/tutorial.html', {'welcome': True})
+    form = profileSetupForm()
+    new = request.session.get('new-user', False)
+    if new:
+        request.session['new-user'] = False
+    if request.method == 'POST':
+        form = profileSetupForm(request.POST, request.FILES)
+        if form.is_valid():
+            about_me = form.cleaned_data['about_me']
+            fav_quote = form.cleaned_data['fav_quote']
+            request.user.about_me = about_me
+            request.user.fav_quote = fav_quote
+            request.user.save()
+
+            prof_pic = request.FILES['prof_pic']
+            upload_prof_pic(prof_pic, request.user)
+            request.session['welcome'] = True
+            return HttpResponseRedirect('/activity-feed/')
+    return render(request, 'general/tutorial.html', {'new_user': new,
+                                                     'form': form})
+
+
+@login_required
+def welcome(request):
+    return HttpResponseRedirect('/activity-feed/')
