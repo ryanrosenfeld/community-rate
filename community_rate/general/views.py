@@ -1,6 +1,6 @@
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
@@ -141,14 +141,19 @@ def tutorial(request):
     if request.method == 'POST':
         form = profileSetupForm(request.POST, request.FILES)
         if form.is_valid():
+            # Save profile changes
             about_me = form.cleaned_data['about_me']
             fav_quote = form.cleaned_data['fav_quote']
+            timezone = form.cleaned_data['tz']
             request.user.about_me = about_me
             request.user.fav_quote = fav_quote
+            request.user.timezone = timezone
             request.user.save()
 
+            # Add profile pic
             prof_pic = request.FILES['prof_pic']
             upload_prof_pic(prof_pic, request.user)
+
             request.session['welcome'] = True
             return HttpResponseRedirect('/activity-feed/')
     return render(request, 'general/tutorial.html', {'new_user': new,

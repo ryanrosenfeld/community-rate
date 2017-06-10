@@ -1,4 +1,5 @@
 from django import forms
+import pytz
 
 
 class UpdateInfoForm(forms.Form):
@@ -46,6 +47,11 @@ class profileSetupForm(forms.Form):
         widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3})
     )
     prof_pic = forms.FileField(widget=forms.ClearableFileInput(attrs={'id': 'wizard-picture'}))
+    tz = forms.ChoiceField(
+        required=True,
+        choices=[(x, x) for x in pytz.common_timezones],
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
 
 
 class UpdateProfilePicForm(forms.Form):

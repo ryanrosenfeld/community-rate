@@ -80,6 +80,7 @@ def lists(request):
         my_lists.append((l, num_movies, likes))
     my_lists = sorted(my_lists, key=lambda x: x[0].date_updated, reverse=True)
 
+
     # Get lists user can edit
     ls = request.user.editor_set.all()
     shared_lists = []

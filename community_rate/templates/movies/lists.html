@@ -49,7 +49,8 @@
                                     {% for list, num, likes in my_lists %}
                                         <tr onclick="window.location.href='/list/{{ list.id }}/'">
                                             <td>{{ list.name }}</td>
-                                            <td>{{ list.date_updated }}</td>
+                                            {% load tz %}
+                                            <td>{{ list.date_updated|localtime }}</td>
                                             <td class="text-center"><i class="material-icons">{% if list.public %}public{% else %}lock_outline{% endif %}</i></td>
                                             <td class="text-center">{{ num }}</td>
                                             <td class="text-center">{{ likes }}</td>

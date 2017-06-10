@@ -197,14 +197,14 @@
                             </div>
                             <div class="modal-body">
                                 <div class="instruction">
-                                    <p>Ever wanted to share your thoughts with movies with friends? Keep track of
+                                    <p>Ever wanted to share your thoughts on movies with your friends? Keep track of
                                         what movies you want to watch? Figure out what movie to watch next?</p>
                                     <strong class="text-primary">If so, you've come to the right place!</strong>
                                 </div>
                                 <div class="instruction">
                                     <div class="col-md-6 text-center">
                                         <strong>Already know what's up?</strong>
-                                        <a class="btn btn-info" href="/">Skip the tutorial</a>
+                                        <button class="btn btn-info" data-dismiss="modal" onclick="tutorial(3)">Skip to profile setup</button>
                                     </div>
                                     <div class="col-md-6 text-center">
                                         <strong>Never been here before?</strong>
@@ -226,7 +226,7 @@
                     <div class="modal-dialog modal-notice">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h4 class="modal-title" id="myModalLabel"><strong>Tutorial step 1/3:</strong> It all
+                                <h4 class="modal-title" id="myModalLabel"><strong>Tutorial step 1/2:</strong> It all
                                     starts with the nav bar (side edition)</h4>
                             </div>
                             <div class="modal-body">
@@ -260,7 +260,6 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <a href="/activity-feed/" class="btn btn-danger">Exit Tutorial</a>
                                 <button class="btn btn-success" onclick="tutorial(2)" data-dismiss="modal">Next lesson
                                 </button>
                             </div>
@@ -274,7 +273,7 @@
                     <div class="modal-dialog modal-notice">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h4 class="modal-title" id="myModalLabel"><strong>Tutorial step 2/3:</strong> It all
+                                <h4 class="modal-title" id="myModalLabel"><strong>Tutorial step 2/2:</strong> It all
                                     continues with the nav bar (top edition) </h4>
                             </div>
                             <div class="modal-body">
@@ -300,7 +299,6 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <a href="/activity-feed/" class="btn btn-danger">Exit Tutorial</a>
                                 <button class="btn btn-success" onclick="tutorial(3)" data-dismiss="modal">Next lesson
                                 </button>
                             </div>
@@ -318,7 +316,7 @@
                                 <!--        You can switch " data-color="purple" "  with one of the next bright colors: "green", "orange", "red", "blue"       -->
                                 <div class="wizard-header">
                                     <h3 class="wizard-title">
-                                        <strong>Tutorial step 3/3:</strong> Time to fill out your profile!
+                                        Time to fill out your profile!
                                     </h3>
                                     <h5>Follow these steps to get all set up.</h5>
                                 </div>
@@ -336,6 +334,14 @@
                                     <div class="tab-pane" id="info">
                                         <div class="row">
                                             <h4 class="info-text">Enter in some additional info</h4>
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <div class="form-group label-floating">
+                                                        <label class="control-label">Select Timezone</label>
+                                                        {{ form.tz }}
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div class="col-md-12">
                                                 <div class="form-group">
                                                     <div class="form-group label-floating">

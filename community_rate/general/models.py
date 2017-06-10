@@ -7,6 +7,7 @@ class SiteUser(AbstractUser):
     fav_quote = models.TextField(blank=True)
     about_me = models.TextField(blank=True)
     has_pic = models.BooleanField(default=False)
+    timezone = models.CharField(max_length=100, default="US/Eastern")
 
 
 class Notification(models.Model):
