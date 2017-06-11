@@ -13,11 +13,12 @@ class Review(models.Model):
     creator = models.ForeignKey(SiteUser)
     rating = models.IntegerField()
     reaction = models.CharField(
-        max_length=100
+        max_length=100,
     )
     movie_id = models.IntegerField()
     thoughts = models.CharField(
         max_length=10000,
+        blank=True
     )
     date_added = models.DateTimeField(auto_now=True)
 

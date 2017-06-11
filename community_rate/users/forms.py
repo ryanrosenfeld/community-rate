@@ -46,11 +46,10 @@ class profileSetupForm(forms.Form):
         required=False,
         widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3})
     )
-    prof_pic = forms.FileField(widget=forms.ClearableFileInput(attrs={'id': 'wizard-picture'}))
-    tz = forms.ChoiceField(
+    timezone = forms.ChoiceField(
         required=True,
         choices=[(x, x) for x in pytz.common_timezones],
-        widget=forms.Select(attrs={'class': 'form-control'})
+        widget=forms.Select(attrs={'class': 'form-control', 'name': 'timezone'})
     )
 
 

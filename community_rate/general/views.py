@@ -1,18 +1,20 @@
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
+import re, os, json, boto3
 
 from .forms import *
 from .models import *
 from movies.models import Review
 from movies.services import get_movie_by_id
-import re
 from users.forms import profileSetupForm
 from users.functions import upload_prof_pic
 
+
 User = get_user_model()
+
 
 # Create your views here.
 def login_view(request):
@@ -115,6 +117,7 @@ def home(request):
     return HttpResponseRedirect('/activity-feed/')
 
 
+@login_required
 def activity_feed(request):
     # Get following users
     following = request.user.follower_set.all()
@@ -134,25 +137,22 @@ def activity_feed(request):
 
 @login_required
 def tutorial(request):
-    form = profileSetupForm()
+    form = profileSetupForm(initial={'timezone': 'US/Eastern'})
     new = request.session.get('new-user', False)
     if new:
         request.session['new-user'] = False
     if request.method == 'POST':
-        form = profileSetupForm(request.POST, request.FILES)
+        form = profileSetupForm(request.POST)
         if form.is_valid():
             # Save profile changes
             about_me = form.cleaned_data['about_me']
             fav_quote = form.cleaned_data['fav_quote']
-            timezone = form.cleaned_data['tz']
+            timezone = form.cleaned_data['timezone']
             request.user.about_me = about_me
             request.user.fav_quote = fav_quote
             request.user.timezone = timezone
+            request.user.has_pic = True
             request.user.save()
-
-            # Add profile pic
-            prof_pic = request.FILES['prof_pic']
-            upload_prof_pic(prof_pic, request.user)
 
             request.session['welcome'] = True
             return HttpResponseRedirect('/activity-feed/')
@@ -163,3 +163,36 @@ def tutorial(request):
 @login_required
 def welcome(request):
     return HttpResponseRedirect('/activity-feed/')
+
+
+@login_required
+def sign_s3(request):
+    file_name = request.user.username
+    file_type = request.GET.get('file_type', None)
+
+    s3 = boto3.client('s3')
+
+    presigned_post = s3.generate_presigned_post(
+        Bucket="communityrate",
+        Key=file_name,
+        Fields={"acl": "public-read", "Content-Type": file_type},
+        Conditions=[
+            {"acl": "public-read"},
+            {"Content-Type": file_type}
+        ],
+        ExpiresIn=3600
+    )
+
+    return JsonResponse({
+        'data': presigned_post,
+        'url': 'https://communityrate.s3.amazonaws.com/' + file_name
+    })
+
+
+@login_required
+def mark_notifications_read(request):
+    notes = Notification.objects.filter(user=request.user, is_read=False)
+    for n in notes:
+        n.is_read = True
+        n.save()
+    return JsonResponse({})

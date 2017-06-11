@@ -16,6 +16,7 @@ urlpatterns = [
     url(r'^tutorial/', general_views.tutorial),
     url(r'^welcome/', general_views.welcome),
     url(r'^read/(?P<notification_id>\w{0,50})/$', general_views.mark_read),
+    url(r'^sign_s3/', general_views.sign_s3),
 
     # Movie views
     url(r'^movie/(.*)/', movie_views.movie_page),
@@ -45,4 +46,5 @@ urlpatterns = [
     # User AJAX Requests
     url(r'^ajax/follow/', user_views.follow),
     url(r'^ajax/unfollow/', user_views.unfollow),
+    url(r'^ajax/mark-notifications-read/', general_views.mark_notifications_read)
 ]

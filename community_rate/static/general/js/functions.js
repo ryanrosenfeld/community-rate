@@ -1,9 +1,9 @@
 functions = {
-    sweetAlert: function (type, user) {
+    sweetAlert: function (type, message) {
 
         if (type == 'follow-success') {
             swal({
-                title: "You are now following " + user,
+                title: "You are now following " + message,
                 buttonsStyling: false,
                 confirmButtonClass: "btn btn-success",
                 type: "success"
@@ -11,7 +11,7 @@ functions = {
         }
         else if (type == 'unfollow-success') {
             swal({
-                title: "Successfully unfollowed " + user,
+                title: "Successfully unfollowed " + message,
                 buttonsStyling: false,
                 confirmButtonClass: "btn btn-success",
                 type: "success"
@@ -52,13 +52,20 @@ functions = {
         else if (type == 'welcome') {
             swal({
                 title: 'You\'re all set!',
-                html: ' You can access the tutorial again at any point ' +
-                'in the top right corner, but please reach out to <i class="text-warning">ryro003@gmail.com</i> if you have any further ' +
+                html: 'Please reach out to <i class="text-warning">ryro003@gmail.com</i> if you have any further ' +
                 'questions. You\'re currently at the <strong>Activity Feed</strong>, which will be blank until you follow some friends. ' +
                 'Send out those follows, start rating movies in the <strong>Movie Database</strong>, and enjoy the site!',
                 buttonsStyling: false,
                 confirmButtonClass: 'btn btn-success',
                 type: "success"
+            })
+        }
+        else if (type == "warning") {
+            swal({
+                title: message,
+                buttonStyling: false,
+                confirmButtonClass: 'btn btn-info',
+                type: "warning"
             })
         }
     },
@@ -101,21 +108,59 @@ functions = {
         });
     },
 
+    markNotificationsRead: function() {
+        $.ajax({
+            url: '/ajax/mark-notifications-read/'
+        });
+        $("#numRead").html('0');
+    },
+
+    uploadFile: function(file) {
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", "/sign_s3?file_name="+file.name+"&file_type="+file.type);
+      xhr.onreadystatechange = function(){
+        if(xhr.readyState === 4){
+          if(xhr.status === 200){
+            var response = JSON.parse(xhr.responseText);
+            upload(file, response.data, response.url);
+          }
+          else{
+            functions.sweetAlert("warning", "There was a problem with upload");
+          }
+        }
+      };
+      xhr.send();
+
+      function upload(file, s3Data, url) {
+          var xhr = new XMLHttpRequest();
+          xhr.open("POST", s3Data.url);
+
+          var postData = new FormData();
+          for(key in s3Data.fields){
+            postData.append(key, s3Data.fields[key]);
+          }
+          postData.append('file', file);
+
+          xhr.onreadystatechange = function() {
+            if(xhr.readyState === 4){
+              if(xhr.status === 200 || xhr.status === 204){
+                // success
+              }
+              else{
+                // failure (but this seems to always be the case and it still works ??)
+              }
+           }
+          };
+          xhr.send(postData);
+      }
+    },
+
     initMaterialWizard: function(){
         // Code for the Validator
         var $validator = $('.wizard-card form').validate({
     		  rules: {
-    		    firstname: {
-    		      required: true,
-    		      minlength: 3
-    		    },
-    		    lastname: {
-    		      required: true,
-    		      minlength: 3
-    		    },
-    		    email: {
-    		      required: true,
-    		      minlength: 3,
+    		    timezone: {
+    		      required: true
     		    }
             },
 
@@ -167,7 +212,7 @@ functions = {
                 // } else{
                 //     return true;
                 // }
-                return true;
+                // return true;
             },
 
             onTabShow: function(tab, navigation, index) {
@@ -213,6 +258,17 @@ functions = {
 
         // Prepare the preview for profile picture
         $("#wizard-picture").change(function(){
+            var files = document.getElementById("wizard-picture").files;
+            var file = files[0];
+            if(!file){
+                functions.sweetAlert("warning", "No image selected");
+                return null;
+            }
+            if (!(file.type == "image/jpeg" || file.type == "image/png")) {
+                functions.sweetAlert("warning", "Please choose a jpeg or png file");
+                return null;
+            }
+            functions.uploadFile(file);
             readURL(this);
         });
 

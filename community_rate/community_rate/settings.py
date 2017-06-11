@@ -27,6 +27,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
     'communityrate.herokuapp.com',
     '127.0.0.1',
+    '0.0.0.0',
 ]
 
 # Application definition
@@ -38,10 +39,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'widget_tweaks',
     'general',
     'movies',
     'users',
+    'boto3',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -52,7 +54,6 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
     'general.middleware.TimezoneMiddleware',
 ]
 
@@ -74,12 +75,13 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'general.context_processors.collect_notifications',
             ],
         },
     },
 ]
 
-TEMPLATES[0]['OPTIONS']['context_processors'].append("general.context_processors.rand_pic_string")
+# TEMPLATES[0]['OPTIONS']['context_processors'].append("general.context_processors.rand_pic_string")
 
 
 WSGI_APPLICATION = 'community_rate.wsgi.application'

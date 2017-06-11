@@ -248,7 +248,7 @@ def follow(request):
     f.save()
 
     # Create a notification for the person who was followed
-    msg = "{0} is now following you!".format(request.user.username)
+    msg = "{0} {1} is now following you!".format(request.user.first_name, request.user.last_name)
     n = Notification.objects.create(message=msg, notification_class="Follower", user=following_user)
     n.save()
     return JsonResponse({'success': True})

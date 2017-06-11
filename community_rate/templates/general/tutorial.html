@@ -47,9 +47,7 @@
             <div class="user">
                 <div class="photo">
                     {% if request.user.has_pic %}
-                        <img src="
-
-                                {% with 'general/img/prof_pics/'|add:request.user.username|add:'.jpg'|add:rand_pic_string as img %}{% static img %}{% endwith %}">
+                        <img src="https://s3.amazonaws.com/communityrate/{{ request.user.username }}">
                     {% else %}
                         <img src="{% static 'material-dash/assets/img/placeholder.jpg' %}">
                     {% endif %}
@@ -338,7 +336,7 @@
                                                 <div class="form-group">
                                                     <div class="form-group label-floating">
                                                         <label class="control-label">Select Timezone</label>
-                                                        {{ form.tz }}
+                                                        {{ form.timezone }}
                                                     </div>
                                                 </div>
                                             </div>
@@ -367,7 +365,7 @@
                                             <div class="picture">
                                                 <img src="{% static '/material-dash/assets/img/placeholder.jpg' %}" class="picture-src"
                                                      id="wizardPicturePreview" title=""/>
-                                                {{ form.prof_pic }}
+                                                <input type="file" id="wizard-picture">
                                             </div>
                                             <h6>Choose Picture</h6>
                                         </div>

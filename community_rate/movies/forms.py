@@ -13,6 +13,7 @@ class ReviewForm(forms.Form):
     )
     thoughts = forms.CharField(
         label="Thoughts",
+        required=False,
         widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'id': 'thoughts-field'})
     )
 
