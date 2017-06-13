@@ -1,0 +1,17 @@
+.review-table img {
+    height: 65px;
+    width: 50px;
+}
+
+.movie-col {
+    width: 70%;
+}
+
+.rating-col {
+    width: 15%;
+}
+
+.release-col {
+    width: 15%;
+}
+

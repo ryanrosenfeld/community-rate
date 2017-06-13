@@ -1,0 +1,121 @@
+{% extends 'login-base.html' %}
+
+{% load static %}
+
+{% block content %}
+    <div class="full-page register-page" filter-color="black" data-image="{% static 'material-dash/assets/img/register.jpeg' %}">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1">
+                    <div class="card card-signup">
+                        <h2 class="card-title text-center">Register</h2>
+                        <div class="row">
+                            <div class="col-md-5 col-md-offset-1">
+                                <div class="card-content">
+                                    <div class="info info-horizontal">
+                                        <div class="icon icon-rose">
+                                            <i class="material-icons">group</i>
+                                        </div>
+                                        <div class="description">
+                                            <h4 class="info-title">Connect with friends</h4>
+                                            <p class="description">
+                                                Keep up with what movies your friends are watching, and what they thought of them.
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="info info-horizontal">
+                                        <div class="icon icon-primary">
+                                            <i class="material-icons">movie</i>
+                                        </div>
+                                        <div class="description">
+                                            <h4 class="info-title">Find that next movie</h4>
+                                            <p class="description">
+                                                The more friends you follow, the more movie suggestions you can find! Personalized ratings give more meaningful information to help you decide what to watch.
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="info info-horizontal">
+                                        <div class="icon icon-success">
+                                            <i class="material-icons">playlist_add</i>
+                                        </div>
+                                        <div class="description">
+                                            <h4 class="info-title">Make movie lists</h4>
+                                            <p class="description">
+                                                Keep track of movies to watch, movies you liked, or anything else! Share and edit lists between friends and increase collaboration.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="social text-center">
+                                    <button class="btn btn-just-icon btn-round btn-twitter">
+                                        <i class="fa fa-twitter"></i>
+                                    </button>
+                                    <button class="btn btn-just-icon btn-round btn-dribbble">
+                                        <i class="fa fa-dribbble"></i>
+                                    </button>
+                                    <button class="btn btn-just-icon btn-round btn-facebook">
+                                        <i class="fa fa-facebook"> </i>
+                                    </button>
+                                </div>
+                                <form class="form" method="POST" action="/register/">
+                                    {% csrf_token %}
+                                    <div class="card-content">
+                                        <p class="category text-center">Or Be Traditional</p>
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="material-icons">keyboard_arrow_left</i>
+                                            </span>
+                                            {{ form.first_name }}
+                                        </div>
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="material-icons">keyboard_arrow_right</i>
+                                            </span>
+                                            {{ form.last_name }}
+                                        </div>
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="material-icons">email</i>
+                                            </span>
+                                            {{ form.email }}
+                                        </div>
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="material-icons">face</i>
+                                            </span>
+                                            {{ form.username }}
+                                        </div>
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="material-icons">lock</i>
+                                            </span>
+                                            {{ form.password }}
+                                        </div>
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="material-icons">lock_outline</i>
+                                            </span>
+                                            {{ form.conf_password }}
+                                        </div>
+                                    </div>
+                                    <div class="footer text-center">
+                                        <button type="submit" class="btn btn-primary btn-round">Get Started</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="footer">
+            <div class="container">
+                <p class="pull-right">
+                    Created by Ryan Rosenfeld
+                </p>
+            </div>
+        </footer>
+    </div>
+{% endblock %}

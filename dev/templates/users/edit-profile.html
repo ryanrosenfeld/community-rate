@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block header %}
+    <title>{{ request.user }}</title>
+    <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
+    {% load static %}
+    <link href="{% static 'general/css/profile.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% load widget_tweaks %}
+{% block content %}
+{#  LEFT COLUMN  #}
+    <div class="col-md-8">
+        {# Edit Profile #}
+        <div class="card">
+            <div class="card-header" data-background-color="purple">
+                <h4 class="title">Edit Profile</h4>
+                <p class="category">Complete your profile</p>
+            </div>
+            <div class="card-content">
+                <form method="POST" action="/settings/">
+                {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group label-floating">
+                                <label class="control-label">Username</label>
+                                {% render_field form.username class="form-control" type="text" name="username" %}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group label-floating">
+                                <label class="control-label">Email</label>
+                                {% render_field form.email class="form-control" type="text" name="email" %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group label-floating">
+                                <label class="control-label">First Name</label>
+                                {% render_field form.first_name class="form-control" type="text" name="first_name" %}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group label-floating">
+                                <label class="control-label">Last Name</label>
+                                {% render_field form.last_name class="form-control" type="text" name="last_name" %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group label-floating">
+                                <label class="control-label">City</label>
+                                {% render_field form.city class="form-control" type="text" name="city" %}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group label-floating">
+                                <label class="control-label">Country</label>
+                                {% render_field form.country class="form-control" type="text" name="country" %}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group label-floating">
+                                <label class="control-label">Postal Code</label>
+                                {% render_field form.postal class="form-control" type="text" name="postal" %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>About Me</label>
+                                <div class="form-group label-floating">
+                                    <label class="control-label">{{user.bio}}</label>
+                                    {% render_field form.bio class="form-control" type="textarea" maxlength="500" name="bio" %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary pull-right">Update Profile</button>
+                    <div class="clearfix"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

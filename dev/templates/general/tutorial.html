@@ -1,0 +1,455 @@
+<!doctype html>
+<html lang="en">
+
+{% load static %}
+
+<head>
+    <meta charset="utf-8"/>
+    <title>CommunityRate Tutorial</title>
+
+    <link rel="apple-touch-icon" sizes="76x76" href="{% static 'material-dash/assets/img/apple-icon.png' %}"/>
+    <link rel="icon" type="image/png" href="{% static 'general/img/favicon4.ico' %}"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport'/>
+    <meta name="viewport" content="width=device-width"/>
+
+
+    <!-- Bootstrap core CSS     -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <!--  Material Dashboard CSS    -->
+    <link href="{% static 'material-dash/assets/css/material-dashboard.css' %}" rel="stylesheet"/>
+
+    <!--     Fonts and icons     -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- Custom styling -->
+    <link href="{% static 'general/css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'general/css/tutorial.css' %}">
+</head>
+
+<body>
+
+<div class="wrapper">
+
+    {# Side Nav Bar #}
+    <div class="sidebar hidden" data-active-color="purple" data-background-color="black"
+         data-image="{% static 'material-dash/assets/img/sidebar-1.jpg' %}">
+        <div class="logo">
+            <a href="/" class="simple-text">
+                CommunityRate
+            </a>
+        </div>
+
+        <div class="sidebar-wrapper">
+            <div class="user">
+                <div class="photo">
+                    {% if request.user.has_pic %}
+                        <img src="https://s3.amazonaws.com/communityrate/{{ request.user.username }}">
+                    {% else %}
+                        <img src="{% static 'material-dash/assets/img/placeholder.jpg' %}">
+                    {% endif %}
+                </div>
+                <div class="info">
+                    <a data-toggle="collapse" href="#collapseExample" class="collapsed">
+                        {{ request.user.get_full_name }}
+                        <b class="caret"></b>
+                    </a>
+                    <div class="collapse" id="collapseExample">
+                        <ul class="nav">
+                            <li>
+                                <a href="/profile/">My Profile</a>
+                            </li>
+                            <li>
+                                <a href="/settings/">Settings</a>
+                            </li>
+                            <li>
+                                <a href="/logout/">Logout</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <ul class="nav">
+                <li {% if page == 'activity_feed' %}class="active"{% endif %}>
+                    <a href="/">
+                        <i class="material-icons">wifi_tethering</i>
+                        <p>Activity Feed</p>
+                    </a>
+                </li>
+                <li {% if page == 'profile' %}class="active"{% endif %}>
+                    <a href="/profile/">
+                        <i class="material-icons">account_circle</i>
+                        <p>Profile</p>
+                    </a>
+                </li>
+                {#                    <li {% if page == 'discover' %}class="active"{% endif %}>#}
+                {#                        <a href="/discover/">#}
+                {#                            <i class="material-icons">explore</i>#}
+                {#                            <p>Discover</p>#}
+                {#                        </a>#}
+                {#                    </li>#}
+                <li {% if page == 'users' or page == 'relationships' %}class="active"{% endif %}>
+                    <a data-toggle="collapse" href="#users">
+                        <i class="material-icons">people</i>
+                        <p>Users
+                            <b class="caret"></b>
+                        </p>
+                    </a>
+                    <div class="collapse" id="users">
+                        <ul class="nav">
+                            <li {% if page == 'users' %}class="active"{% endif %}>
+                                <a href="/users/">All Users</a>
+                            </li>
+                            <li {% if page == 'relationships' %}class="active"{% endif %}>
+                                <a href="/relationships/">My Relationships</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li {% if page == 'lists' %}class="active"{% endif %}>
+                    <a href="/lists/">
+                        <i class="material-icons">list</i>
+                        <p>Lists</p>
+                    </a>
+                </li>
+                <li {% if page == 'movies' %}class="active"{% endif %}>
+                    <a href="/movies/">
+                        <i class="material-icons">movie</i>
+                        <p>Movie Database</p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    {# Top Nav Bar #}
+    <div class="main-panel">
+        <nav class="navbar navbar-transparent navbar-absolute hidden">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">
+                        Tutorial
+                    </a>
+                </div>
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="material-icons">notifications</i>
+                                <span class="notification">{{ number_notifications }}</span>
+                                <p class="hidden-lg hidden-md">Notifications</p>
+                            </a>
+                            <ul class="dropdown-menu">
+                                {% for note in notifications %}
+                                    <li><a href="/read/{{ note.id }}">{{ note.message }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="material-icons">person</i>
+                                <p class="hidden-lg hidden-md">Profile</p>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/profile/">Profile</a></li>
+                                <li><a href="/settings/">Settings</a></li>
+                                <li class="divider"></li>
+                                <li><a href="/logout/">Log out</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <form class="navbar-form navbar-right" role="search" action="/movies/" method="GET">
+                        <div class="form-group  is-empty">
+                            <input type="text" class="form-control" name="search" placeholder="Search movies">
+                            <span class="material-input"></span>
+                        </div>
+                        <button type="submit" class="btn btn-white btn-round btn-just-icon">
+                            <i class="material-icons">search</i>
+                            <div class="ripple-container"></div>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+
+        <div class="content">
+            <div class="container-fluid">
+                <!-- welcome modal -->
+                <div class="modal fade" id="welcomeModal" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-notice">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="myModalLabel">Welcome to CommunityRate!</h4>
+                                <i>The site where your <strong>friends'</strong> opinions matter, not the whole
+                                    worlds'.</i>
+                            </div>
+                            <div class="modal-body">
+                                <div class="instruction">
+                                    <p>Ever wanted to share your thoughts on movies with your friends? Keep track of
+                                        what movies you want to watch? Figure out what movie to watch next?</p>
+                                    <strong class="text-primary">If so, you've come to the right place!</strong>
+                                </div>
+                                <div class="instruction">
+                                    <div class="col-md-6 text-center">
+                                        <strong>Already know what's up?</strong>
+                                        <button class="btn btn-info" data-dismiss="modal" onclick="tutorial(3)">Skip to profile setup</button>
+                                    </div>
+                                    <div class="col-md-6 text-center">
+                                        <strong>Never been here before?</strong>
+                                        <button class="btn btn-success" data-dismiss="modal" onclick="tutorial(1)">
+                                            Learn about the site
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer text-center">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end welcome modal -->
+
+                <!-- tutorial #1 modal -->
+                <div class="modal fade" id="tutorialModal1" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-notice">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="myModalLabel"><strong>Tutorial step 1/2:</strong> It all
+                                    starts with the nav bar (side edition)</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="instruction">
+                                    <p>As you can now see to the left, the <strong>side nav bar</strong> is revealed.
+                                        This is what you will use to navigate through the site.</p>
+                                </div>
+                                <div class="instruction">
+                                    <p>The navbar has several options:</p>
+                                    <ul>
+                                        <li>If you click on your name, you will be able to <strong class="text-primary">view
+                                            your profile</strong>, <strong class="text-primary">change settings</strong>,
+                                            or <strong class="text-primary">logout</strong></li>
+                                        <li>The <strong class="text-primary">Activity Feed</strong> will present the
+                                            most recent reviews all of your friends have made.
+                                        </li>
+                                        <li>Below is another, more easily accessible link to your <strong
+                                                class="text-primary">Profile</strong></li>
+                                        <li>Under the <strong class="text-primary">Users</strong> tab, you will be able
+                                            to view a list of all users to find new friends, or view the users you
+                                            already have relationships with
+                                        </li>
+                                        <li>With the <strong class="text-primary">Lists</strong> functionality, you'll
+                                            be able to create lists of movies and keep them private or share with others
+                                        </li>
+                                        <li>Finally, the <strong class="text-primary">Movie Database</strong> is where
+                                            you'll be able to search for any movie to give it a review or see what your
+                                            friends thought
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-success" onclick="tutorial(2)" data-dismiss="modal">Next lesson
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end tutorial #1 modal -->
+
+                <!-- tutorial #2 modal -->
+                <div class="modal fade" id="tutorialModal2" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-notice">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="myModalLabel"><strong>Tutorial step 2/2:</strong> It all
+                                    continues with the nav bar (top edition) </h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="instruction">
+                                    <p>At the top of the page, the <strong>top nav bar</strong> is now visible.
+                                        This nav bar has additional options to help you out.</p>
+                                </div>
+                                <div class="instruction">
+                                    <p>This navbar has the following options:</p>
+                                    <ul>
+                                        <li>You can <strong class="text-primary">search for movies</strong> from
+                                            anywhere within the site
+                                        </li>
+                                        <li>Any <strong class="text-primary">notifications</strong> (such as when a user
+                                            follows you) will be displayed in a drop down menu
+                                        </li>
+                                        <li>Your <strong class="text-primary">user options</strong> such as profile,
+                                            settings, and logout are made available again
+                                        </li>
+                                    </ul>
+                                    <p>In addition, in the top left corner the general section of the site you're
+                                        currently on will be displayed.</p>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-success" onclick="tutorial(3)" data-dismiss="modal">Next lesson
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end tutorial #2 modal -->
+
+                <!-- profile set up wizard -->
+                <div class="col-md-8 col-md-offset-2">
+                    <div class="wizard-container hidden">
+                        <div class="card wizard-card" data-color="rose" id="wizardProfile">
+                            <form action="/tutorial/" method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <!--        You can switch " data-color="purple" "  with one of the next bright colors: "green", "orange", "red", "blue"       -->
+                                <div class="wizard-header">
+                                    <h3 class="wizard-title">
+                                        Time to fill out your profile!
+                                    </h3>
+                                    <h5>Follow these steps to get all set up.</h5>
+                                </div>
+                                <div class="wizard-navigation">
+                                    <ul>
+                                        <li>
+                                            <a href="#info" data-toggle="tab">EXTRA INFO</a>
+                                        </li>
+                                        <li>
+                                            <a href="#picture" data-toggle="tab">PROFILE PICTURE</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="tab-content">
+                                    <div class="tab-pane" id="info">
+                                        <div class="row">
+                                            <h4 class="info-text">Enter in some additional info</h4>
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <div class="form-group label-floating">
+                                                        <label class="control-label">Select Timezone</label>
+                                                        {{ form.timezone }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <div class="form-group label-floating">
+                                                        <label class="control-label">Favorite Movie Quote</label>
+                                                        {{ form.fav_quote }}
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <div class="form-group label-floating">
+                                                        <label class="control-label">About Me</label>
+                                                        {{ form.about_me }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane" id="picture">
+                                        <h4 class="info-text"> Add a profile picture </h4>
+                                        <div class="picture-container">
+                                            <div class="picture">
+                                                <img src="{% static '/material-dash/assets/img/placeholder.jpg' %}" class="picture-src"
+                                                     id="wizardPicturePreview" title=""/>
+                                                <input type="file" id="wizard-picture">
+                                            </div>
+                                            <h6>Choose Picture</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="wizard-footer">
+                                    <div class="pull-right">
+                                        <input type='button' class='btn btn-next btn-fill btn-rose btn-wd' name='next'
+                                               value='Next'/>
+                                        <input type='submit' class='btn btn-finish btn-fill btn-rose btn-wd'
+                                               name='finish' value='Get Started!'/>
+                                    </div>
+                                    <div class="pull-left">
+                                        <input type='button' class='btn btn-previous btn-fill btn-default btn-wd'
+                                               name='previous' value='Previous'/>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="footer">
+            <div class="container-fluid">
+                <p class="pull-right">
+                    Created by Ryan Rosenfeld<br>
+                </p>
+                {#                    <a class="btn btn-round btn-just-icon btn-linkedin btn-xs pull-right" href="https://www.linkedin.com/in/ryan-rosenfeld-a4380a10b/" style="">#}
+                {#                        <i class="fa fa-linkedin"></i>#}
+                {#                    </a>#}
+            </div>
+        </footer>
+    </div>
+</div>
+
+</body>
+
+<!--   Core JS Files   -->
+<script src="{% static 'material-dash/assets/js/jquery-3.1.1.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'material-dash/assets/js/jquery-ui.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'material-dash/assets/js/bootstrap.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'material-dash/assets/js/material.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'material-dash/assets/js/perfect-scrollbar.jquery.min.js' %}" type="text/javascript"></script>
+
+<!-- Forms Validations Plugin -->
+<script src="{% static 'material-dash/assets/js/jquery.validate.min.js' %}"></script>
+<!--  Plugin for Date Time Picker and Full Calendar Plugin-->
+<script src="{% static 'material-dash/assets/js/moment.min.js' %}"></script>
+<!--  Charts Plugin -->
+<script src="{% static 'material-dash/assets/js/chartist.min.js' %}"></script>
+<!--  Plugin for the Wizard -->
+<script src="{% static 'material-dash/assets/js/jquery.bootstrap-wizard.js' %}"></script>
+<!--  Notifications Plugin    -->
+<script src="{% static 'material-dash/assets/js/bootstrap-notify.js' %}"></script>
+<!-- DateTimePicker Plugin -->
+<script src="{% static 'material-dash/assets/js/bootstrap-datetimepicker.js' %}"></script>
+<!-- Vector Map plugin -->
+<script src="{% static 'material-dash/assets/js/jquery-jvectormap.js' %}"></script>
+<!-- Sliders Plugin -->
+<script src="{% static 'material-dash/assets/js/nouislider.min.js' %}"></script>
+<!--  Google Maps Plugin    -->
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js"></script>
+<!-- Select Plugin -->
+<script src="{% static 'material-dash/assets/js/jquery.select-bootstrap.js' %}"></script>
+<!--  DataTables.net Plugin    -->
+<script src="{% static 'material-dash/assets/js/jquery.datatables.js' %}"></script>
+<!-- Sweet Alert 2 plugin -->
+<script src="{% static 'material-dash/assets/js/sweetalert2.js' %}"></script>
+<!--	Plugin for Fileupload, full documentation here: http://www.jasny.net/bootstrap/javascript/#fileinput -->
+<script src="{% static 'material-dash/assets/js/jasny-bootstrap.min.js' %}"></script>
+<!--  Full Calendar Plugin    -->
+<script src="{% static 'material-dash/assets/js/fullcalendar.min.js' %}"></script>
+<!-- TagsInput Plugin -->
+<script src="{% static 'material-dash/assets/js/jquery.tagsinput.js' %}"></script>
+
+<!-- Material Dashboard javascript methods -->
+<script src="{% static 'material-dash/assets/js/material-dashboard.js' %}"></script>
+
+<!-- General Functions -->
+<script src="{% static 'general/js/functions.js' %}"></script>
+
+<!-- Tutorial functions -->
+<script src="{% static 'general/js/tutorial.js' %}"></script>
+
+</html>

@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <title>My Relationships</title>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <h3 class="title text-center">My Relationships</h3>
+            <br />
+            <div class="nav-center">
+                <ul class="nav nav-pills nav-pills-danger nav-pills-icons" role="tablist">
+                    <!--
+        color-classes: "nav-pills-primary", "nav-pills-info", "nav-pills-success", "nav-pills-warning","nav-pills-danger"
+    -->
+                    <li class="active">
+                        <a href="#followers" role="tab" data-toggle="tab">
+                            <i class="material-icons">supervisor_account</i>{{ num_followers }} Follower{% if num_followers != 1 %}s{% endif %}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#following" role="tab" data-toggle="tab" id="followingHeader">
+                            <i class="material-icons">favorite</i>{{ num_following }} Following
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="tab-content">
+                <div class="tab-pane active" id="followers">
+                    {# List of followers #}
+                    <div class="card">
+                        <div class="card-content">
+                            <table class="table table-responsive">
+                                <thead class="text-danger">
+                                    <th>Username</th>
+                                    <th>Name</th>
+                                    <th>Followers</th>
+                                    <th class="text-right">Actions</th>
+                                </thead>
+                                <tbody>
+                                    {% for u, count, already_following in follower_users %}
+                                        <tr>
+                                            <td>
+                                                <h4>{{u.username}}</h4>
+                                            </td>
+                                            <td>
+                                                <h4>{{ u.first_name }} {{ u.last_name }}</h4>
+                                            </td>
+                                            <td>
+                                                <h4>{{ count }}</h4>
+                                            </td>
+                                            <td class="td-actions text-right">
+                                                <button type="button" rel="tooltip" title="Visit profile" class="btn btn-info btn-simple" onclick="window.location.href='/profile/{{ u.username }}/'">
+                                                    <i class="material-icons">launch</i>
+                                                </button>
+{#                                                <button type="button" rel="tooltip" title="Block" class="btn btn-danger btn-simple">#}
+{#                                                    <i class="material-icons">block</i>#}
+{#                                                </button>#}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="following">
+                    {# List of following #}
+                    <div class="card">
+                        <div class="card-content">
+                            <table class="table table-responsive">
+                                <thead class="text-danger">
+                                    <th>Username</th>
+                                    <th>Name</th>
+                                    <th>Followers</th>
+                                    <th class="text-right">Actions</th>
+                                </thead>
+                                <tbody>
+                                    {% for u, count, already_following in following_users %}
+                                        <tr id="{{ u.username }}">
+                                            <td >
+                                                <h4>{{u.username}}</h4>
+                                            </td>
+                                            <td>
+                                                <h4>{{ u.first_name }} {{ u.last_name }}</h4>
+                                            </td>
+                                            <td>
+                                                <h4>{{ count }}</h4>
+                                            </td>
+                                            <td class="td-actions text-right">
+                                                <button type="button" rel="tooltip" title="Visit profile" class="btn btn-info btn-simple" onclick="window.location.href='/profile/{{ f.following.username }}/'">
+                                                    <i class="material-icons">launch</i>
+                                                </button>
+                                                <button type="button" rel="tooltip" title="Unfollow" class="btn btn-danger btn-simple" onclick="functions.unfollow('{{ u.username }}', '{{ u.first_name }} {{ u.last_name }}', removeRow)">
+                                                    <i class="material-icons">clear</i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        function removeRow(username) {
+            $("#" + username).remove();
+            var num = parseInt("{{ num_following }}") - 1;
+            $("#followingHeader").html('<i class="material-icons">favorite</i>' +  num + ' Following');
+        }
+    </script>
+{% endblock %}

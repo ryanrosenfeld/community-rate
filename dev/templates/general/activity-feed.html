@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block header %}
+    <title>Activity Feed</title>
+    <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
+    <link href="{% static 'general/css/activity-feed.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    {% if updates|length == 0 %}
+        <div class="col-md-6 col-md-offset-3">
+            <div class="alert alert-info alert-with-icon" data-notify="container">
+                <i class="material-icons" data-notify="icon">sentiment_very_dissatisfied</i>
+                <span data-notify="message">Looks like you don't have anything in your feed. Start following friends to keep track of what they're up to!</span>
+            </div>
+        </div>
+    {% endif %}
+    <div class="col-md-10 col-md-offset-1">
+        {% for user, movie, review in updates %}
+            <div class="card">
+                <div class="col-md-5">
+                    <a href="/movie/{{ movie.movie_id }}">
+                        <div class="card-image-custom" style="display: inline-block">
+                            <img src="http://image.tmdb.org/t/p/w92{{ movie.poster_path }}"
+                                 alt="{% static 'general/img/no_poster.jpg' %}" style="height: 130px; width: 100px;">
+                        </div>
+                    </a>
+                    <a href="/profile/{{ user.username }}/">
+                        <div class="card-image-circle img-circle" style="display: inline-block;">
+                            {% if user.has_pic %}
+                                <img src="https://s3.amazonaws.com/communityrate/{{ user.username }}">
+                            {% else %}
+                                <img src="{% static 'material-dash/assets/img/placeholder.jpg' %}">
+                            {% endif %}
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-7 text-right">
+                    <div class="card-content">
+                        <h3 class="card-title">{{ movie.title }}</h3>
+                        <h4 class="card-description">Reviewed by {{ user.first_name }} {{ user.last_name }}</h4>
+                        <p class="card-description" style="margin-top: -8px;">{{ review.date_added }} <i
+                                class="material-icons" style="font-size: 20px;">access_time</i></p>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <table class="table">
+                        <thead>
+                        <th class="text-center rating-col">Rating</th>
+                        <th class="text-center react-col">Reaction</th>
+                        <th class="text-center thoughts-col">Thoughts</th>
+                        </thead>
+                        <tbdoy>
+                            <tr>
+                                <td class="text-center rating-col"><h2>{{ review.rating }}</h2></td>
+                                <td class="text-center react-col"><h2><i class="{{ review.reaction }}"></i></h2></td>
+                                <td class="text-center thoughts-col">{{ review.thoughts }}</td>
+                            </tr>
+                        </tbdoy>
+                    </table>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $(document).ready(function () {
+            var welcome = "{{ welcome }}";
+            if (welcome == "True") {
+                functions.sweetAlert('welcome')
+            }
+        })
+    </script>
+{% endblock %}
