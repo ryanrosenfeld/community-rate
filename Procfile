@@ -1,1 +1,1 @@
-web: gunicorn community_rate.wsgi --log-file -
+web: gunicorn ./dev/community_rate.wsgi --log-file -

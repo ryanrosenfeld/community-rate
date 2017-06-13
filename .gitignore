@@ -1,6 +1,8 @@
+# IDEA
+.idea/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
-.pyc
 *.py[cod]
 *$py.class
 
@@ -12,6 +14,7 @@ __pycache__/
 env/
 build/
 develop-eggs/
+dist/
 downloads/
 eggs/
 .eggs/
@@ -88,5 +91,5 @@ ENV/
 # Rope project settings
 .ropeproject
 
-migrations/
-.idea/
+# Database
+db.*
