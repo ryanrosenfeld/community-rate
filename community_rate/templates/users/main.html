@@ -30,7 +30,7 @@
                     <h4 class="title card-header-title">All Users</h4>
             </div>
             <div class="card-content">
-                <table class="table">
+                <table class="table table-responsive">
                     <thead class="text-info">
                         <th>Username</th>
                         <th>Name</th>
@@ -39,31 +39,33 @@
                     </thead>
                     <tbody>
                         {% for u, count, already_following in users %}
-                            <tr id="{{ u.first_name|lower }} {{ u.last_name|lower }}">
-                                <td>
-                                    <h4>{{ u.username }}</h4>
-                                </td>
-                                <td>
-                                    <h4>{{ u.first_name }} {{ u.last_name }}</h4>
-                                </td>
-                                <td>
-                                    <h4 class="text-center" id="fcount-{{ u.username }}">{{ count }}</h4>
-                                </td>
-                                <td class="td-actions text-right" id="td-actions-{{ u.username }}">
-                                    <button type="button" rel="tooltip" title="Visit profile" class="btn btn-info btn-simple" onclick="window.location.href='/profile/{{ u.username }}/'">
-                                        <i class="material-icons">launch</i>
-                                    </button>
-                                    {% if already_following %}
-                                        <button type="button" id="fbtn-{{ u.username }}" rel="tooltip" title="Unfollow" class="btn btn-danger btn-simple ufbtn">
-                                            <i class="material-icons">clear</i>
+                            {% if u != request.user %}
+                                <tr id="{{ u.first_name|lower }} {{ u.last_name|lower }}">
+                                    <td>
+                                        <h4>{{ u.username }}</h4>
+                                    </td>
+                                    <td>
+                                        <h4>{{ u.first_name }} {{ u.last_name }}</h4>
+                                    </td>
+                                    <td>
+                                        <h4 class="text-center" id="fcount-{{ u.username }}">{{ count }}</h4>
+                                    </td>
+                                    <td class="td-actions text-right" id="td-actions-{{ u.username }}">
+                                        <button type="button" rel="tooltip" title="Visit profile" class="btn btn-info btn-simple" onclick="window.location.href='/profile/{{ u.username }}/'">
+                                            <i class="material-icons">launch</i>
                                         </button>
-                                    {% else %}
-                                        <button type="button" id="fbtn-{{ u.username }}" rel="tooltip" title="Follow" class="btn btn-primary btn-simple fbtn">
-                                            <i class="material-icons">add_circle_outline</i>
-                                        </button>
-                                    {% endif %}
-                                </td>
-                            </tr>
+                                        {% if already_following %}
+                                            <button type="button" id="fbtn-{{ u.username }}" rel="tooltip" title="Unfollow" class="btn btn-danger btn-simple ufbtn">
+                                                <i class="material-icons">clear</i>
+                                            </button>
+                                        {% else %}
+                                            <button type="button" id="fbtn-{{ u.username }}" rel="tooltip" title="Follow" class="btn btn-primary btn-simple fbtn">
+                                                <i class="material-icons">add_circle_outline</i>
+                                            </button>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endif %}
                         {% endfor %}
                     </tbody>
                 </table>

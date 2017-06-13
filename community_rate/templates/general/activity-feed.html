@@ -9,13 +9,22 @@
 {% endblock %}
 
 {% block content %}
+    {% if updates|length == 0 %}
+        <div class="col-md-6 col-md-offset-3">
+            <div class="alert alert-info alert-with-icon" data-notify="container">
+                <i class="material-icons" data-notify="icon">sentiment_very_dissatisfied</i>
+                <span data-notify="message">Looks like you don't have anything in your feed. Start following friends to keep track of what they're up to!</span>
+            </div>
+        </div>
+    {% endif %}
     <div class="col-md-10 col-md-offset-1">
         {% for user, movie, review in updates %}
             <div class="card">
                 <div class="col-md-5">
                     <a href="/movie/{{ movie.movie_id }}">
                         <div class="card-image-custom" style="display: inline-block">
-                            <img src="http://image.tmdb.org/t/p/w92{{ movie.poster_path }}" alt="{% static 'general/img/no_poster.jpg' %}" style="height: 130px; width: 100px;">
+                            <img src="http://image.tmdb.org/t/p/w92{{ movie.poster_path }}"
+                                 alt="{% static 'general/img/no_poster.jpg' %}" style="height: 130px; width: 100px;">
                         </div>
                     </a>
                     <a href="/profile/{{ user.username }}/">
@@ -32,15 +41,16 @@
                     <div class="card-content">
                         <h3 class="card-title">{{ movie.title }}</h3>
                         <h4 class="card-description">Reviewed by {{ user.first_name }} {{ user.last_name }}</h4>
-                        <p class="card-description" style="margin-top: -8px;">{{ review.date_added }} <i class="material-icons" style="font-size: 20px;">access_time</i></p>
+                        <p class="card-description" style="margin-top: -8px;">{{ review.date_added }} <i
+                                class="material-icons" style="font-size: 20px;">access_time</i></p>
                     </div>
                 </div>
                 <div class="col-md-12">
                     <table class="table">
                         <thead>
-                            <th class="text-center rating-col">Rating</th>
-                            <th class="text-center react-col">Reaction</th>
-                            <th class="text-center thoughts-col">Thoughts</th>
+                        <th class="text-center rating-col">Rating</th>
+                        <th class="text-center react-col">Reaction</th>
+                        <th class="text-center thoughts-col">Thoughts</th>
                         </thead>
                         <tbdoy>
                             <tr>
@@ -59,7 +69,7 @@
 
 {% block scripts %}
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             var welcome = "{{ welcome }}";
             if (welcome == "True") {
                 functions.sweetAlert('welcome')

@@ -20,7 +20,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#following" role="tab" data-toggle="tab">
+                        <a href="#following" role="tab" data-toggle="tab" id="followingHeader">
                             <i class="material-icons">favorite</i>{{ num_following }} Following
                         </a>
                     </li>
@@ -31,7 +31,7 @@
                     {# List of followers #}
                     <div class="card">
                         <div class="card-content">
-                            <table class="table">
+                            <table class="table table-responsive">
                                 <thead class="text-danger">
                                     <th>Username</th>
                                     <th>Name</th>
@@ -54,9 +54,9 @@
                                                 <button type="button" rel="tooltip" title="Visit profile" class="btn btn-info btn-simple" onclick="window.location.href='/profile/{{ u.username }}/'">
                                                     <i class="material-icons">launch</i>
                                                 </button>
-                                                <button type="button" rel="tooltip" title="Block" class="btn btn-danger btn-simple">
-                                                    <i class="material-icons">block</i>
-                                                </button>
+{#                                                <button type="button" rel="tooltip" title="Block" class="btn btn-danger btn-simple">#}
+{#                                                    <i class="material-icons">block</i>#}
+{#                                                </button>#}
                                             </td>
                                         </tr>
                                     {% endfor %}
@@ -69,7 +69,7 @@
                     {# List of following #}
                     <div class="card">
                         <div class="card-content">
-                            <table class="table table-hover">
+                            <table class="table table-responsive">
                                 <thead class="text-danger">
                                     <th>Username</th>
                                     <th>Name</th>
@@ -78,7 +78,7 @@
                                 </thead>
                                 <tbody>
                                     {% for u, count, already_following in following_users %}
-                                        <tr onclick=window.location.href="/profile/{{ u.username }}">
+                                        <tr id="{{ u.username }}">
                                             <td >
                                                 <h4>{{u.username}}</h4>
                                             </td>
@@ -92,7 +92,7 @@
                                                 <button type="button" rel="tooltip" title="Visit profile" class="btn btn-info btn-simple" onclick="window.location.href='/profile/{{ f.following.username }}/'">
                                                     <i class="material-icons">launch</i>
                                                 </button>
-                                                <button type="button" rel="tooltip" title="Unfollow" class="btn btn-danger btn-simple">
+                                                <button type="button" rel="tooltip" title="Unfollow" class="btn btn-danger btn-simple" onclick="functions.unfollow('{{ u.username }}', '{{ u.first_name }} {{ u.last_name }}', removeRow)">
                                                     <i class="material-icons">clear</i>
                                                 </button>
                                             </td>
@@ -106,4 +106,14 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        function removeRow(username) {
+            $("#" + username).remove();
+            var num = parseInt("{{ num_following }}") - 1;
+            $("#followingHeader").html('<i class="material-icons">favorite</i>' +  num + ' Following');
+        }
+    </script>
 {% endblock %}

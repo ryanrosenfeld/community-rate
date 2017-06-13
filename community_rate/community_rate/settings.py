@@ -28,6 +28,7 @@ ALLOWED_HOSTS = [
     'communityrate.herokuapp.com',
     '127.0.0.1',
     '0.0.0.0',
+    '192.168.1.254'
 ]
 
 # Application definition
