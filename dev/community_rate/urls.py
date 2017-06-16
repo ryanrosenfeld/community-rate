@@ -21,6 +21,7 @@ urlpatterns = [
     # Movie views
     url(r'^movie/(.*)/', movie_views.movie_page),
     url(r'^movies/', movie_views.movie_db),
+    url(r'^top-movies/', movie_views.top_movies),
     url(r'^lists/', movie_views.lists),
     url(r'^list/(.*)/', movie_views.list_page),
     url(r'^new-list/', movie_views.new_list),

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <title>Top Movies</title>
+    <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    <div class="card card-plain">
+        <div class="card-header" data-background-color="rose">
+            <h4 class="title card-header-title">Top Movies by Friend Rating</h4>
+        </div>
+        <div class="card-content table-responsive">
+            <table class="table table-hover table-shopping">
+                <thead class="text-rose">
+                    <th class="text-center"></th>
+                    <th class="movie-col">Movie</th>
+                    <th class="text-center rating-col">Average Rating</th>
+                    <th class="text-center react-col">Most Common Reaction</th>
+                    <th class="text-center">Number of Reviews</th>
+                </thead>
+                <tbody>
+                {% for movie in top_movies %}
+                    <tr onclick="window.location.href='/movie/{{ movie.0.movie_id }}/'">
+                        <td>
+                            <div class="img-container">
+                                <img src="http://image.tmdb.org/t/p/w92{{ movie.0.poster_path }}" alt="...">
+                            </div>
+                        </td>
+                        <td class="td-name">
+                            <a class="text-rose">{{ movie.0.title }}</a>
+                            <br/>
+                            <small>{{ movie.0.release_year }}</small>
+                        </td>
+                        <td class="text-center">{{ movie.1 }}</td>
+                        <td class="text-center"><i class="{{ movie.2 }}"></i></td>
+                        <td class="text-center">{{ movie.3 }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+{% endblock %}

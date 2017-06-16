@@ -53,8 +53,34 @@ def movie_db(request):
     query = None
     if request.method == 'GET':
         query = request.GET.get('search', None)
-    print(query)
     return render(request, 'movie-db.html', {'page': 'movies', 'query': query})
+
+
+def top_movies(request):
+    # Get following users
+    following = [f.following for f in request.user.follower_set.all()]
+
+    # Get all movies
+    movies = Movie.objects.all()
+
+    # Top movies: Tuple (movie, av rating, most common react)
+    top = []
+
+    # Collect av rating, most common reaction for all movies with friend reviews
+    for movie in movies:
+        friend_reviews = []
+        for user in following:
+            reviews = Review.objects.filter(movie_id=movie.movie_id, creator=user)
+            for review in reviews:
+                friend_reviews.append((user, review))
+        if len(friend_reviews) > 0:
+            average = calc_average_review(friend_reviews)
+            top.append((movie, average[0], average[1], len(friend_reviews)))
+
+    # Sort top movies by rating
+    top = sorted(top, key=lambda x: (x[1], x[3]), reverse=True)
+
+    return render(request, 'top-movies.html', {'page': 'top_movies', 'top_movies': top})
 
 
 def lists(request):

@@ -89,7 +89,7 @@
                                                 <h4>{{ count }}</h4>
                                             </td>
                                             <td class="td-actions text-right">
-                                                <button type="button" rel="tooltip" title="Visit profile" class="btn btn-info btn-simple" onclick="window.location.href='/profile/{{ f.following.username }}/'">
+                                                <button type="button" rel="tooltip" title="Visit profile" class="btn btn-info btn-simple" onclick="window.location.href='/profile/{{ u.username }}/'">
                                                     <i class="material-icons">launch</i>
                                                 </button>
                                                 <button type="button" rel="tooltip" title="Unfollow" class="btn btn-danger btn-simple" onclick="functions.unfollow('{{ u.username }}', '{{ u.first_name }} {{ u.last_name }}', removeRow)">

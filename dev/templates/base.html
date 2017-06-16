@@ -101,6 +101,24 @@
                 {#                            <p>Discover</p>#}
                 {#                        </a>#}
                 {#                    </li>#}
+                <li {% if page == 'movie_db' or page == 'top_movies' or page == 'movies' %}class="active"{% endif %}>
+                    <a data-toggle="collapse" href="#movies">
+                        <i class="material-icons">movie</i>
+                        <p>Movies
+                            <b class="caret"></b>
+                        </p>
+                    </a>
+                    <div class="collapse" id="movies">
+                        <ul class="nav">
+                            <li {% if page == 'top_movies' %}class="active"{% endif %}>
+                                <a href="/top-movies/">Top Movies</a>
+                            </li>
+                            <li {% if page == 'movie_db' %}class="active"{% endif %}>
+                                <a href="/movies/">Movie Database</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
                 <li {% if page == 'users' or page == 'relationships' %}class="active"{% endif %}>
                     <a data-toggle="collapse" href="#users">
                         <i class="material-icons">people</i>
@@ -123,12 +141,6 @@
                     <a href="/lists/">
                         <i class="material-icons">list</i>
                         <p>Lists</p>
-                    </a>
-                </li>
-                <li {% if page == 'movies' %}class="active"{% endif %}>
-                    <a href="/movies/">
-                        <i class="material-icons">movie</i>
-                        <p>Movie Database</p>
                     </a>
                 </li>
             </ul>
