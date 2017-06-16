@@ -173,6 +173,15 @@ def new_list(request):
     return HttpResponseRedirect('/list/' + str(l.id) + '/')
 
 
+def delete_list(request, list_id):
+    try:
+        l = List.objects.get(id=int(list_id))
+    except l.DoesNotExist:
+        return HttpResponseRedirect('/lists/')
+    l.delete()
+    return HttpResponseRedirect('/lists/')
+
+
 # AJAX views
 def filter_movies(request):
     if request.method == 'GET':

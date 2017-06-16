@@ -251,7 +251,7 @@
 
         {# USER STATS #}
         {# Followers/Following #}
-        <a href="/relationships/">
+        {% if owner %}<a href="/relationships/">{% endif %}
             <div class="col-sm-10 col-sm-offset-1">
                 <div class="card card-stats">
                     <div class="card-header" data-background-color="red">
@@ -265,7 +265,7 @@
                     </div>
                 </div>
             </div>
-        </a>
+        {% if owner %}</a>{% endif %}
 
         <!-- Edit Profile Modal -->
         <div class="modal fade" id="editProfileModal" tabindex="-1" role="dialog" aria-labelledby="editProfile"

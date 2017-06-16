@@ -1,4 +1,4 @@
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.contrib import admin
 from general import views as general_views
 from movies import views as movie_views
@@ -11,6 +11,7 @@ urlpatterns = [
     url(r'^login/', general_views.login_view),
     url(r'^register/$', general_views.new_user),
     url(r'^logout/', general_views.logout_view),
+    url(r'^oauth/', include('social_django.urls', namespace='social')),
     url(r'^accounts/login/$', general_views.login_view, name='login'),
     url(r'^activity-feed/', general_views.activity_feed),
     url(r'^tutorial/', general_views.tutorial),
@@ -23,7 +24,8 @@ urlpatterns = [
     url(r'^movies/', movie_views.movie_db),
     url(r'^top-movies/', movie_views.top_movies),
     url(r'^lists/', movie_views.lists),
-    url(r'^list/(.*)/', movie_views.list_page),
+    url(r'^list/(.*)/delete/', movie_views.delete_list),
+    url(r'^list/(.*)/$', movie_views.list_page),
     url(r'^new-list/', movie_views.new_list),
 
     # Users views
