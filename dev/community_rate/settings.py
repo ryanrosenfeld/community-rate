@@ -94,6 +94,8 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
+LOGIN_REDIRECT_URL = '/activity-feed/'
+
 SOCIAL_AUTH_FACEBOOK_KEY = '471658626516914'  # App ID
 SOCIAL_AUTH_FACEBOOK_SECRET = '5f1e7cd9f97d24bf3866741c55f6d25c'  # App Secret
 
