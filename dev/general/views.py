@@ -16,7 +16,6 @@ from users.functions import upload_prof_pic
 User = get_user_model()
 
 
-# Create your views here.
 def login_view(request):
     if request.user.is_authenticated():
         return HttpResponseRedirect('/')
@@ -29,13 +28,58 @@ def login_view(request):
             user = authenticate(username=u, password=p)
             
             if user is not None:
-
                 login(request, user)
-                request.user.remember = request.POST.get('remember', False)
                 return HttpResponseRedirect('/')
     else:
         form = LoginForm()
     return render(request, 'general/login.html', {'form': form, 'page': 'login'})
+
+
+def fb_login(request):
+    # Get passed in parameters
+    first_name = request.GET.get('first_name', None)
+    last_name = request.GET.get('last_name', None)
+    email = request.GET.get('email', None)
+    fb_id = request.GET.get('fb_id', None)
+
+    # Check if user already exists in system w/ this fb id
+    user = SiteUser.objects.filter(fb_id=fb_id)
+    if len(user) > 0:
+        user = user[0]
+        login(request, user)
+        return HttpResponseRedirect('/')
+
+    # Check if matching user & assign fb id & login
+    user = SiteUser.objects.filter(email=email)
+    if len(user) > 0:
+        user = user[0]
+        user.fb_id = fb_id
+        user.save()
+        login(request, user)
+        return HttpResponseRedirect('/')
+
+    # If not, create new user & login
+    username = first_name + "_" + last_name
+    conflicts = SiteUser.objects.filter(username=username)
+    if len(conflicts) > 0:
+        num = 1
+        while True:
+            conflicts = SiteUser.objects.filter(username=username+num)
+            if len(conflicts) > 0:
+                num += 1
+            else:
+                username = username + num
+                break
+    user = SiteUser.objects.create_user(
+        username=username,
+        first_name=first_name,
+        last_name=last_name,
+        email=email,
+        fb_id=fb_id
+    )
+    user.save()
+    login(request, user)
+    return HttpResponseRedirect('/')
 
 
 def logout_view(request):
@@ -75,7 +119,7 @@ def new_user(request):
             # Check username, passwords (may want to also check emails)
             if verify_username(username) and passwords_match(password1, password2):
                 # Create new (site) user object
-                user = User.objects.create_user(username=username, 
+                user = SiteUser.objects.create_user(username=username,
                     password=password1,
                     first_name=first,
                     last_name=last,
