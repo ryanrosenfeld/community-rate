@@ -26,20 +26,40 @@
     <!-- Custom styling -->
     <link href="{% static 'general/css/style.css' %}" rel="stylesheet">
 
-    <!-- Google Ads -->
-    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-    <script>
-        (adsbygoogle = window.adsbygoogle || []).push({
-            google_ad_client: "ca-pub-8624179453654757",
-            enable_page_level_ads: true
-        });
-    </script>
-
     {% block header %}
     {% endblock %}
 </head>
 
 <body>
+
+<script>
+    window.fbAsyncInit = function () {
+        FB.init({
+            appId: '471658626516914',
+            autoLogAppEvents: true,
+            xfbml: true,
+            version: 'v2.9'
+        });
+        FB.AppEvents.logPageView();
+    };
+
+    (function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {
+            return;
+        }
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+
+
+    function logout() {
+        FB.logout(function(response) {});
+        window.location.replace("/logout/")
+    }
+</script>
 
 <div class="wrapper">
 
@@ -76,7 +96,7 @@
                                 <a href="/settings/">Settings</a>
                             </li>
                             <li>
-                                <a href="/logout/">Logout</a>
+                                <a onclick="logout()">Logout</a>
                             </li>
                         </ul>
                     </div>
@@ -195,7 +215,7 @@
                                 <li><a href="/profile/">Profile</a></li>
                                 <li><a href="/settings/">Settings</a></li>
                                 <li class="divider"></li>
-                                <li><a href="/logout/">Log out</a></li>
+                                <li><a onclick="logout()">Log out</a></li>
                             </ul>
                         </li>
                     </ul>

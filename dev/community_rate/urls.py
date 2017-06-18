@@ -9,6 +9,7 @@ urlpatterns = [
     url(r'^$', general_views.home),
     url(r'^admin/', admin.site.urls),
     url(r'^login/', general_views.login_view),
+    url(r'fb-login/', general_views.fb_login),
     url(r'^register/$', general_views.new_user),
     url(r'^logout/', general_views.logout_view),
     url(r'^accounts/login/$', general_views.login_view, name='login'),

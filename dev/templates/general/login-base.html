@@ -4,62 +4,107 @@
 {% load static %}
 
 <head>
-    <meta charset="utf-8" />
-	<link rel="icon" type="image/png" href="{% static 'general/img/favicon4.ico' %}" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta charset="utf-8"/>
+    <link rel="icon" type="image/png" href="{% static 'general/img/favicon4.ico' %}"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <title>Community Rate</title>
-    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
-    <meta name="viewport" content="width=device-width" />
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport'/>
+    <meta name="viewport" content="width=device-width"/>
     <!-- Bootstrap core CSS     -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
     <!--  Material Dashboard CSS    -->
-    <link href="{% static 'material-dash/assets/css/material-dashboard.css' %}" rel="stylesheet" />
+    <link href="{% static 'material-dash/assets/css/material-dashboard.css' %}" rel="stylesheet"/>
     <!--     Fonts and icons     -->
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons" />
-
-    <!-- Google Ads -->
-    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-    <script>
-      (adsbygoogle = window.adsbygoogle || []).push({
-        google_ad_client: "ca-pub-8624179453654757",
-        enable_page_level_ads: true
-      });
-    </script>
+    <link rel="stylesheet" type="text/css"
+          href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons"/>
 </head>
 
 <body>
-    <nav class="navbar navbar-primary navbar-transparent navbar-absolute">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation-example-2">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <p class="navbar-brand">CommunityRate</p>
-                <p class="navbar-absolute" style="margin-top: 35px;"><i>The site where your <strong>friends'</strong> opinions<br>matter, not the whole world's</i></p>
-            </div>
-            <div class="collapse navbar-collapse">
-                <ul class="nav navbar-nav navbar-right">
-                    <li class="{% if page == 'register' %} active {% endif %}">
-                        <a href="/register/">
-                            <i class="material-icons">person_add</i> Register
-                        </a>
-                    </li>
-                    <li class="{% if page == 'login' %} active {% endif %}">
-                        <a href="/login/">
-                            <i class="material-icons">fingerprint</i> Login
-                        </a>
-                    </li>
-                </ul>
-            </div>
+{# FB SDK #}
+<script>
+    window.fbAsyncInit = function () {
+        FB.init({
+            appId: '471658626516914',
+            autoLogAppEvents: true,
+            xfbml: true,
+            version: 'v2.9'
+        });
+        FB.AppEvents.logPageView();
+
+{#        {% if not logout %}#}
+{#            FB.getLoginStatus(function (response) {#}
+{#                if (response.status == 'connected') {#}
+{#                    onFbLogin(response);#}
+{#                }#}
+{#            });#}
+{#        {% endif %}#}
+    };
+
+    (function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {
+            return;
+        }
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+
+    function fbLogin() {
+        FB.login(function (response) {
+            if (response.status == 'connected') {
+                onFbLogin(response);
+            }
+        }, {scope: 'public_profile,email,user_friends'});
+    }
+
+    function onFbLogin(auth) {
+        var fb_id = auth.authResponse.userID;
+
+        FB.api('/me?fields=email,first_name,last_name', function(response) {
+          window.location.replace("/fb-login/?" +
+              "fb_id=" + fb_id + "&" +
+              "email=" + response.email + "&" +
+              "first_name=" + response.first_name + "&" +
+              "last_name=" + response.last_name)
+        });
+    }
+</script>
+
+<nav class="navbar navbar-primary navbar-transparent navbar-absolute">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation-example-2">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <p class="navbar-brand">CommunityRate</p>
+            <p class="navbar-absolute" style="margin-top: 35px;"><i>The site where your <strong>friends'</strong>
+                opinions<br>matter, not the whole world's</i></p>
         </div>
-    </nav>
-    <div class="wrapper wrapper-full-page">
-        {% block content %}{% endblock %}
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li class="{% if page == 'register' %} active {% endif %}">
+                    <a href="/register/">
+                        <i class="material-icons">person_add</i> Register
+                    </a>
+                </li>
+                <li class="{% if page == 'login' %} active {% endif %}">
+                    <a href="/login/">
+                        <i class="material-icons">fingerprint</i> Login
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
+</nav>
+<div class="wrapper wrapper-full-page">
+    {% block content %}{% endblock %}
+</div>
 </body>
 
 <!--   Core JS Files   -->
@@ -107,10 +152,10 @@
 <script src="{% static 'material-dash/assets/js/demo.js' %}"></script>
 
 <script type="text/javascript">
-    $().ready(function() {
+    $().ready(function () {
         demo.checkFullPageBackgroundImage();
 
-        setTimeout(function() {
+        setTimeout(function () {
             // after 1000 ms we add the class animated to the login/register card
             $('.card').removeClass('card-hidden');
         }, 700)
