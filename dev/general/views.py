@@ -79,7 +79,7 @@ def fb_login(request):
     )
     user.save()
     login(request, user)
-    return HttpResponseRedirect('/')
+    return HttpResponseRedirect('/tutorial/')
 
 
 def logout_view(request):
