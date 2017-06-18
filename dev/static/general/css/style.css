@@ -114,3 +114,13 @@ a:hover {
     cursor: pointer;
 }
 
+@media (max-width: 978px) {
+    .card-login {
+        margin-top: 50px;
+    }
+}
+
+.el-footer {
+    margin-left: -15px;
+    display: inline;
+}
