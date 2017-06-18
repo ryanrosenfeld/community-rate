@@ -107,7 +107,7 @@ function addMovieRow(movie, my_rating, my_reaction, av_rating, av_reaction) {
 
 function updateListName() {
     var name = $("#edit-list-name").val();
-    if (name != '' && name != $("#list-name").html()) {
+    if (name != '') {
         $("#list-name").html(name);
         $.ajax({
             url: '/ajax/update-list-name/',
@@ -117,9 +117,9 @@ function updateListName() {
             },
             dataType: 'json'
         })
-        functions.sweetAlert('update-list-name');
     }
     toggleDisplayUpdateListName();
+    functions.sweetAlert('update-list-name');
 }
 
 function removeListItem(movie_id) {

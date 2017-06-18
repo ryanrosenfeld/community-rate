@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     'users',
     'boto3',
     'widget_tweaks',
-    'social_django',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -57,9 +56,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
     'general.middleware.TimezoneMiddleware',
-    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 ROOT_URLCONF = 'community_rate.urls'
@@ -80,24 +77,14 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-
                 'general.context_processors.collect_notifications',
-                'social_django.context_processors.backends',
-                'social_django.context_processors.login_redirect'
             ],
         },
     },
 ]
 
-AUTHENTICATION_BACKENDS = (
-    'social_core.backends.facebook.FacebookOAuth2',
-    'django.contrib.auth.backends.ModelBackend',
-)
+# TEMPLATES[0]['OPTIONS']['context_processors'].append("general.context_processors.rand_pic_string")
 
-LOGIN_REDIRECT_URL = '/activity-feed/'
-
-SOCIAL_AUTH_FACEBOOK_KEY = '471658626516914'  # App ID
-SOCIAL_AUTH_FACEBOOK_SECRET = '5f1e7cd9f97d24bf3866741c55f6d25c'  # App Secret
 
 WSGI_APPLICATION = 'community_rate.wsgi.application'
 
@@ -160,10 +147,12 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 
+
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
 
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+
 
 MEDIA_ROOT = os.path.join(os.path.dirname(__file__), 'media')
 MEDIA_URL = '/media/'
