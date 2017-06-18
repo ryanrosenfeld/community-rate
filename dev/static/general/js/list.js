@@ -107,7 +107,7 @@ function addMovieRow(movie, my_rating, my_reaction, av_rating, av_reaction) {
 
 function updateListName() {
     var name = $("#edit-list-name").val();
-    if (name != '') {
+    if (name != '' && name != $("#list-name").html()) {
         $("#list-name").html(name);
         $.ajax({
             url: '/ajax/update-list-name/',
@@ -116,10 +116,10 @@ function updateListName() {
                 'name': name
             },
             dataType: 'json'
-        })
+        });
+        functions.sweetAlert('update-list-name');
     }
     toggleDisplayUpdateListName();
-    functions.sweetAlert('update-list-name');
 }
 
 function removeListItem(movie_id) {
@@ -136,7 +136,7 @@ function removeListItem(movie_id) {
 
 function toggleDisplayUpdateListName() {
     if ($("#edit-list-name-group").css("display") == "none") {
-        $("#edit-list-name-group").css("display", "inline-block");
+        $("#edit-list-name-group").css("display", "inline");
         $("#btn-show-edit-list-name").css("display", "none");
     }
     else {

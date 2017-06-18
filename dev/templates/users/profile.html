@@ -10,8 +10,75 @@
 {% endblock %}
 
 {% block content %}
+    {# Right column #}
+    <div class="col-md-4 col-md-push-8">
+        {# Profile summary #}
+        <div class="card card-profile">
+            <div class="card-avatar">
+                <div class="thumbnail img-circle">
+                    {% if user.has_pic %}
+                        <img src="https://s3.amazonaws.com/communityrate/{{ user.username }}" id="profPic">
+                    {% else %}
+                        <img src="{% static 'material-dash/assets/img/placeholder.jpg' %}" id="profPic">
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="content">
+                <h6 class="category text-gray">@{{ user.username }}</h6>
+                <h4 class="card-title">{{ user.get_full_name }}</h4>
+                <div class="card-content">
+                    {% if user.fav_quote != None and user.fav_quote != '' %}
+                        <p class="category">Favorite Movie Quote</p>
+                        <p class="content"><i>"{{ user.fav_quote }}"</i></p>
+                    {% endif %}
+                    {% if user.about_me != None and user.about_me != '' %}
+                        <p class="category">About Me</p>
+                        <p class="content">{{ user.about_me }}</p>
+                    {% endif %}
+                    <hr>
+                    {% if owner %}
+                        <div class="row">
+                            <button onclick="showEditProfile()" class="btn btn-default btn-round">Edit Profile
+                            </button>
+                            <button class="btn btn-info btn-round" onclick="showUpdatePic()">Update
+                                Picture
+                            </button>
+                        </div>
+                    {% else %}
+                        <div id="follow-unfollow">
+                            {% if not already_following %}
+                                <button class="btn btn-primary" id="followBtn" onclick="functions.follow('{{ user.username }}', '{{ user.first_name }} {{ user.last_name }}', toggleFollowBtn)">Follow</button>
+                            {% else %}
+                                <button onclick="functions.unfollow('{{ user.username }}', '{{ user.first_name }} {{ user.last_name }}', toggleFollowBtn)" id="unfollowBtn" class="btn btn-primary">Unfollow</button>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        {# USER STATS #}
+        {# Followers/Following #}
+        {% if owner %}<a href="/relationships/">{% endif %}
+            <div class="col-sm-10 col-sm-offset-1">
+                <div class="card card-stats">
+                    <div class="card-header" data-background-color="red">
+                        <i class="material-icons">people</i>
+                    </div>
+                    <div class="card-content">
+                        <p class="category">Followers</p>
+                        <h3 class="title">{{ num_followers }}</h3>
+                        <p class="category">Following</p>
+                        <h3 class="title">{{ num_following }}</h3>
+                    </div>
+                </div>
+            </div>
+        {% if owner %}</a>{% endif %}
+    </div>
+
     {#  LEFT COLUMN  #}
-    <div class="col-md-8">
+    <div class="col-md-8 col-md-pull-4">
         {# Number of Reviews #}
         <div class="col-sm-6">
             <div class="card card-stats">
@@ -203,180 +270,130 @@
         </div>
     </div>
 
-    {# Right column #}
-    <div class="col-md-4">
-        {# Profile summary #}
-        <div class="card card-profile">
-            <div class="card-avatar">
-                <div class="thumbnail img-circle">
-                    {% if user.has_pic %}
-                        <img src="https://s3.amazonaws.com/communityrate/{{ user.username }}" id="profPic">
-                    {% else %}
-                        <img src="{% static 'material-dash/assets/img/placeholder.jpg' %}" id="profPic">
-                    {% endif %}
-                </div>
-            </div>
 
-            <div class="content">
-                <h6 class="category text-gray">@{{ user.username }}</h6>
-                <h4 class="card-title">{{ user.get_full_name }}</h4>
-                <div class="card-content">
-                    {% if user.fav_quote != None and user.fav_quote != '' %}
-                        <p class="category">Favorite Movie Quote</p>
-                        <p class="content"><i>"{{ user.fav_quote }}"</i></p>
-                    {% endif %}
-                    {% if user.about_me != None and user.about_me != '' %}
-                        <p class="category">About Me</p>
-                        <p class="content">{{ user.about_me }}</p>
-                    {% endif %}
-                    <hr>
-                    {% if owner %}
-                        <div class="row">
-                            <button onclick="showEditProfile()" class="btn btn-default btn-round">Edit Profile
-                            </button>
-                            <button class="btn btn-info btn-round" onclick="showUpdatePic()">Update
-                                Picture
-                            </button>
-                        </div>
-                    {% else %}
-                        {% if not already_following %}
-                            <a href="/follow/{{ user.username }}" class="btn btn-primary">Follow</a>
-                        {% else %}
-                            <a href="/unfollow/{{ user.username }}" class="btn btn-primary">Unfollow</a>
-                        {% endif %}
-                    {% endif %}
-                </div>
-            </div>
-        </div>
 
-        {# USER STATS #}
-        {# Followers/Following #}
-        <a href="/relationships/">
-            <div class="col-sm-10 col-sm-offset-1">
-                <div class="card card-stats">
-                    <div class="card-header" data-background-color="red">
-                        <i class="material-icons">people</i>
-                    </div>
-                    <div class="card-content">
-                        <p class="category">Followers</p>
-                        <h3 class="title">{{ num_followers }}</h3>
-                        <p class="category">Following</p>
-                        <h3 class="title">{{ num_following }}</h3>
-                    </div>
-                </div>
-            </div>
-        </a>
-
-        <!-- Edit Profile Modal -->
-        <div class="modal fade" id="editProfileModal" tabindex="-1" role="dialog" aria-labelledby="editProfile"
-             aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <form action="/profile/" method="POST">
-                        {% csrf_token %}
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                                <i class="material-icons">clear</i>
-                            </button>
-                            <h4 class="modal-title">Edit Profile</h4>
-                        </div>
-                        <div class="modal-body">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group label-floating">
-                                        <label class="control-label">Username</label>
-                                        {{ form.username }}
-                                    </div>
-                                </div>
-                                <div class="col-md-8">
-                                    <div class="form-group label-floating">
-                                        <label class="control-label">Email address</label>
-                                        {{ form.email }}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-5">
-                                    <div class="form-group label-floating">
-                                        <label class="control-label">Fist Name</label>
-                                        {{ form.first_name }}
-                                    </div>
-                                </div>
-                                <div class="col-md-7">
-                                    <div class="form-group label-floating">
-                                        <label class="control-label">Last Name</label>
-                                        {{ form.last_name }}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <div class="form-group label-floating">
-                                            <label class="control-label">Favorite Movie Quote</label>
-                                            {{ form.fav_quote }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <div class="form-group label-floating">
-                                            <label class="control-label">About Me</label>
-                                            {{ form.about_me }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-success">Update</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <!--  End Modal -->
-
-        <!-- Edit Picture Modal -->
-        <div class="modal fade" id="updatePicModal" tabindex="-1" role="dialog" aria-labelledby="updatePic"
-             aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
+    <!-- Edit Profile Modal -->
+    <div class="modal fade" id="editProfileModal" tabindex="-1" role="dialog" aria-labelledby="editProfile"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="/profile/" method="POST">
+                    {% csrf_token %}
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                             <i class="material-icons">clear</i>
                         </button>
-                        <h4 class="modal-title">Update your profile picture</h4>
+                        <h4 class="modal-title">Edit Profile</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="prof-pic-container">
-                            <div class="prof-pic">
-                                <img src="https://s3.amazonaws.com/communityrate/{{ request.user.username }}"
-                                     class="prof-pic-src"
-                                     id="profPicPreview" title=""/>
-                                <input type="file" id="wizard-picture">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Username</label>
+                                    {{ form.username }}
+                                </div>
                             </div>
-                            <h6>Choose Picture</h6>
+                            <div class="col-md-8">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Email address</label>
+                                    {{ form.email }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Fist Name</label>
+                                    {{ form.first_name }}
+                                </div>
+                            </div>
+                            <div class="col-md-7">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Last Name</label>
+                                    {{ form.last_name }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class="form-group label-floating">
+                                        <label class="control-label">Favorite Movie Quote</label>
+                                        {{ form.fav_quote }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class="form-group label-floating">
+                                        <label class="control-label">About Me</label>
+                                        {{ form.about_me }}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-success" onclick="updatePic()">Update</button>
+                        <button type="submit" class="btn btn-success">Update</button>
                     </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--  End Modal -->
+
+    <!-- Edit Picture Modal -->
+    <div class="modal fade" id="updatePicModal" tabindex="-1" role="dialog" aria-labelledby="updatePic"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        <i class="material-icons">clear</i>
+                    </button>
+                    <h4 class="modal-title">Update your profile picture</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="prof-pic-container">
+                        <div class="prof-pic">
+                            <img src="https://s3.amazonaws.com/communityrate/{{ request.user.username }}"
+                                 class="prof-pic-src"
+                                 id="profPicPreview" title=""/>
+                            <input type="file" id="wizard-picture">
+                        </div>
+                        <h6>Choose Picture</h6>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" onclick="updatePic()">Update</button>
                 </div>
             </div>
         </div>
-        <!--  End Modal -->
     </div>
+    <!--  End Modal -->
 {% endblock %}
 
 {% block scripts %}
     <script src="{% static 'general/js/functions.js' %}"></script>
     <script src="{% static 'general/js/profile.js' %}"></script>
+    <script>
+        function toggleFollowBtn() {
+            var div = $("#follow-unfollow");
+            if (div.children("button").html() == "Follow") {
+                div.html('<button onclick="functions.unfollow(\'{{ user.username }}\', \'{{ user.first_name }} ' +
+                    '{{ user.last_name }}\', toggleFollowBtn)" id="unfollowBtn" class="btn btn-primary">Unfollow</button>');
+            }
+            else {
+                div.html('<button class="btn btn-primary" id="followBtn" onclick="functions.follow(\'{{ user.username }}\',' +
+                    ' \'{{ user.first_name }} {{ user.last_name }}\', toggleFollowBtn)">Follow</button>');
+            }
+        }
+    </script>
 {% endblock %}

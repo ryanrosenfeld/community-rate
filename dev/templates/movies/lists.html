@@ -12,9 +12,6 @@
         <div class="col-md-10 col-md-offset-1">
             <div class="nav-center">
                 <ul class="nav nav-pills nav-pills-success nav-pills-icons" role="tablist">
-                    <!--
-        color-classes: "nav-pills-primary", "nav-pills-info", "nav-pills-success", "nav-pills-warning","nav-pills-danger"
-    -->
                     <li class="active">
                         <a href="#my-lists" role="tab" data-toggle="tab">
                             <i class="material-icons">person_outline</i>My Lists
@@ -37,81 +34,87 @@
                 <div class="tab-pane active" id="my-lists">
                     <div class="card">
                         <div class="card-content">
-                            <table class="table table-hover">
-                                <thead class="text-success">
-                                    <th>Name</th>
-                                    <th>Last Change</th>
-                                    <th class="text-center">Public/Private</th>
-                                    <th class="text-center">Number of Movies</th>
-                                    <th class="text-center">Likes</th>
-                                </thead>
-                                <tbody>
-                                    {% for list, num, likes in my_lists %}
-                                        <tr onclick="window.location.href='/list/{{ list.id }}/'">
-                                            <td>{{ list.name }}</td>
-                                            {% load tz %}
-                                            <td>{{ list.date_updated|localtime }}</td>
-                                            <td class="text-center"><i class="material-icons">{% if list.public %}public{% else %}lock_outline{% endif %}</i></td>
-                                            <td class="text-center">{{ num }}</td>
-                                            <td class="text-center">{{ likes }}</td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="text-success">
+                                        <th>Name</th>
+                                        <th>Last Change</th>
+                                        <th class="text-center">Public/Private</th>
+                                        <th class="text-center">Number of Movies</th>
+                                        <th class="text-center">Likes</th>
+                                    </thead>
+                                    <tbody>
+                                        {% for list, num, likes in my_lists %}
+                                            <tr onclick="window.location.href='/list/{{ list.id }}/'">
+                                                <td>{{ list.name }}</td>
+                                                {% load tz %}
+                                                <td>{{ list.date_updated|localtime }}</td>
+                                                <td class="text-center"><i class="material-icons">{% if list.public %}public{% else %}lock_outline{% endif %}</i></td>
+                                                <td class="text-center">{{ num }}</td>
+                                                <td class="text-center">{{ likes }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="tab-pane" id="popular">
                     <div class="card">
                         <div class="card-content">
-                            <table class="table table-hover">
-                                <thead class="text-success">
-                                    <th>Name</th>
-                                    <th>Creator</th>
-                                    <th>Last Change</th>
-                                    <th class="text-center">Number of Movies</th>
-                                    <th class="text-center">Likes</th>
-                                </thead>
-                                <tbody>
-                                    {% for list, num, likes in friend_lists %}
-                                        <tr onclick="window.location.href='/list/{{ list.id }}/'">
-                                            <td>{{ list.name }}</td>
-                                            <td>{{ list.creator.first_name }} {{ list.creator.last_name }}</td>
-                                            <td>{{ list.date_updated }}</td>
-                                            <td class="text-center">{{ num }}</td>
-                                            <td class="text-center">{{ likes }}</td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="text-success">
+                                        <th>Name</th>
+                                        <th>Creator</th>
+                                        <th>Last Change</th>
+                                        <th class="text-center">Number of Movies</th>
+                                        <th class="text-center">Likes</th>
+                                    </thead>
+                                    <tbody>
+                                        {% for list, num, likes in friend_lists %}
+                                            <tr onclick="window.location.href='/list/{{ list.id }}/'">
+                                                <td>{{ list.name }}</td>
+                                                <td>{{ list.creator.first_name }} {{ list.creator.last_name }}</td>
+                                                <td>{{ list.date_updated }}</td>
+                                                <td class="text-center">{{ num }}</td>
+                                                <td class="text-center">{{ likes }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="tab-pane" id="shared">
                     <div class="card">
                         <div class="card-content">
-                            <table class="table table-hover">
-                                <thead class="text-success">
-                                    <th>Name</th>
-                                    <th>Creator</th>
-                                    <th>Last Change</th>
-                                    <th class="text-center">Public/Private</th>
-                                    <th class="text-center">Number of Movies</th>
-                                    <th class="text-center">Likes</th>
-                                </thead>
-                                <tbody>
-                                    {% for list, num, likes in shared_lists %}
-                                        <tr onclick="window.location.href='/list/{{ list.id }}/'">
-                                            <td>{{ list.name }}</td>
-                                            <td>{{ list.creator.first_name }} {{ list.creator.last_name }}</td>
-                                            <td>{{ list.date_updated }}</td>
-                                            <td class="text-center"><i class="material-icons">{% if list.public %}public{% else %}lock_outline{% endif %}</i></td>
-                                            <td class="text-center">{{ num }}</td>
-                                            <td class="text-center">{{ likes }}</td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="text-success">
+                                        <th>Name</th>
+                                        <th>Creator</th>
+                                        <th>Last Change</th>
+                                        <th class="text-center">Public/Private</th>
+                                        <th class="text-center">Number of Movies</th>
+                                        <th class="text-center">Likes</th>
+                                    </thead>
+                                    <tbody>
+                                        {% for list, num, likes in shared_lists %}
+                                            <tr onclick="window.location.href='/list/{{ list.id }}/'">
+                                                <td>{{ list.name }}</td>
+                                                <td>{{ list.creator.first_name }} {{ list.creator.last_name }}</td>
+                                                <td>{{ list.date_updated }}</td>
+                                                <td class="text-center"><i class="material-icons">{% if list.public %}public{% else %}lock_outline{% endif %}</i></td>
+                                                <td class="text-center">{{ num }}</td>
+                                                <td class="text-center">{{ likes }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
