@@ -18,7 +18,7 @@
 {#                <i class="material-icons">people</i> {{ num_editors }}#}
 {#            </button>#}
             <button class="btn btn-round btn-info btn-just-icon btn-edit-options" id="btn-show-edit-list-name" rel="tooltip" title="Update list name" onclick="toggleDisplayUpdateListName()" style="display: inline">
-                <i class="material-icons">text_fields</i>
+                <i class="material-icons">mode_edit</i>
             </button>
             <div id="edit-list-name-group">
                 <input class="form-control" placeholder="Edit list name" id="edit-list-name">
@@ -33,7 +33,6 @@
                 {% if liked %}<i class="material-icons">check</i>{% endif %}
             </button>
         {% endif %}
-        {% if owner %}<a class="btn btn-danger btn-just-icon pull-right" id="delete-btn" href="delete/"><i class="material-icons">delete</i></a>{% endif %}
         {% if owner or editor %}
             <button class="btn btn-info non-edit-display pull-right" id="editList" onclick="toggleEditMode()">
                 <i class="material-icons">edit</i> Edit List
