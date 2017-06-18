@@ -82,18 +82,18 @@
                     {% endif %}
                 </div>
                 <div class="info">
-                    <a data-toggle="collapse" href="#collapseExample" class="collapsed">
+                    <a data-toggle="collapse" href="#userOptions" class="collapsed">
                         {{ request.user.get_full_name }}
                         <b class="caret"></b>
                     </a>
-                    <div class="collapse" id="collapseExample">
+                    <div class="collapse" id="userOptions">
                         <ul class="nav">
                             <li>
                                 <a href="/profile/">My Profile</a>
                             </li>
-                            <li>
-                                <a href="/settings/">Settings</a>
-                            </li>
+{#                            <li>#}
+{#                                <a href="/settings/">Settings</a>#}
+{#                            </li>#}
                             <li>
                                 <a onclick="logout()">Logout</a>
                             </li>
@@ -212,7 +212,7 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a href="/profile/">Profile</a></li>
-                                <li><a href="/settings/">Settings</a></li>
+{#                                <li><a href="/settings/">Settings</a></li>#}
                                 <li class="divider"></li>
                                 <li><a onclick="logout()">Log out</a></li>
                             </ul>
@@ -220,7 +220,7 @@
                     </ul>
 
                     <form class="navbar-form navbar-right" role="search" action="/movies/" method="GET">
-                        <div class="form-group  is-empty">
+                        <div class="form-group form-search is-empty">
                             <input type="text" class="form-control" name="search" placeholder="Search movies">
                             <span class="material-input"></span>
                         </div>

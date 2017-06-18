@@ -46,3 +46,17 @@
     margin-right: 5px;
     margin-left: 5px;
 }
+
+@media (max-width: 978px) {
+    .btn-edit-options {
+        margin-top: 100px;
+    }
+
+    #btn-public_private {
+        margin-left: 0;
+    }
+}
+
+#delete-btn {
+    margin-left: 5px;
+}

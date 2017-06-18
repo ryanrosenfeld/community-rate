@@ -270,6 +270,7 @@ md = {
 
 
     initRightMenu: debounce(function(){
+        console.log("initRight");
         $sidebar_wrapper = $('.sidebar-wrapper');
 
         if(!mobile_menu_initialized){
@@ -279,12 +280,11 @@ md = {
             mobile_menu_content = '';
 
             $navbar.children('ul').each(function(){
-
                 content_buff = $(this).html();
                 nav_content = nav_content + content_buff;
             });
 
-            nav_content = '<ul class="nav nav-mobile-menu">' + nav_content + '</ul>';
+            nav_content = '<ul class="nav nav-mobile-menu"></ul>';
 
             $navbar_form = $('nav').find('.navbar-form').clone(true);
 
@@ -368,7 +368,6 @@ md = {
 
 
     initBootstrapNavbarMenu: debounce(function(){
-
         if(!bootstrap_nav_initialized){
             $navbar = $('nav').find('.navbar-collapse').first().clone(true);
 

@@ -53,7 +53,7 @@ def movie_db(request):
     query = None
     if request.method == 'GET':
         query = request.GET.get('search', None)
-    return render(request, 'movie-db.html', {'page': 'movies', 'query': query})
+    return render(request, 'movie-db.html', {'page': 'movie_db', 'query': query})
 
 
 def top_movies(request):
@@ -171,6 +171,15 @@ def new_list(request):
     l = List(creator=request.user)
     l.save()
     return HttpResponseRedirect('/list/' + str(l.id) + '/')
+
+
+def delete_list(request, list_id):
+    l = List.objects.filter(id=int(list_id))
+    if len(l) == 0:
+        return HttpResponseRedirect('/lists/')
+    l = l[0]
+    l.delete()
+    return HttpResponseRedirect('/lists/')
 
 
 # AJAX views
