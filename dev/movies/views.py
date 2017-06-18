@@ -78,7 +78,7 @@ def top_movies(request):
             top.append((movie, average[0], average[1], len(friend_reviews)))
 
     # Sort top movies by rating
-    top = sorted(top, key=lambda x: (x[1], x[3]), reverse=True)
+    top = sorted(top, key=lambda x: (float(x[1]), x[3]), reverse=True)
 
     return render(request, 'top-movies.html', {'page': 'top_movies', 'top_movies': top})
 
