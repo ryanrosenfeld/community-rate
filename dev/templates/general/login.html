@@ -14,22 +14,16 @@
                             <div class="card card-login card-hidden">
                                 <div class="card-header text-center" data-background-color="rose">
                                     <h4 class="card-title">Login</h4>
-                                    <div class="social-line">
-                                        <a href="#btn" class="btn btn-just-icon btn-simple">
-                                            <i class="fa fa-facebook-square"></i>
-                                        </a>
-                                        <a href="#pablo" class="btn btn-just-icon btn-simple">
-                                            <i class="fa fa-twitter"></i>
-                                        </a>
-                                        <a href="#eugen" class="btn btn-just-icon btn-simple">
-                                            <i class="fa fa-google-plus"></i>
-                                        </a>
-                                    </div>
                                 </div>
-                                <p class="category text-center">
-                                    Or Be Traditional
-                                </p>
+                                <div class="text-center">
+                                    <button onclick="fbLogin()" class="btn btn-social btn-fill btn-facebook">
+                                        <i class="fa fa-facebook-square" style="margin-right: 6px"></i> Facebook Login
+                                    </button>
+                                </div>
                                 <div class="card-content">
+                                    <p class="category text-center" style="margin-top: 10px; margin-bottom: -10px;">
+                                        OR
+                                    </p>
                                     <div class="input-group">
                                         <span class="input-group-addon">
                                             <i class="material-icons">face</i>
@@ -67,3 +61,5 @@
         </footer>
     </div>
 {% endblock %}
+
+

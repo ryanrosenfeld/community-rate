@@ -49,20 +49,14 @@
                             </div>
                             <div class="col-md-5">
                                 <div class="social text-center">
-                                    <button class="btn btn-just-icon btn-round btn-twitter">
-                                        <i class="fa fa-twitter"></i>
-                                    </button>
-                                    <button class="btn btn-just-icon btn-round btn-dribbble">
-                                        <i class="fa fa-dribbble"></i>
-                                    </button>
-                                    <button class="btn btn-just-icon btn-round btn-facebook">
-                                        <i class="fa fa-facebook"> </i>
+                                   <button onclick="fbLogin()" class="btn btn-social btn-fill btn-facebook">
+                                        <i class="fa fa-facebook-square" style="margin-right: 6px"></i> Facebook Login
                                     </button>
                                 </div>
                                 <form class="form" method="POST" action="/register/">
                                     {% csrf_token %}
                                     <div class="card-content">
-                                        <p class="category text-center">Or Be Traditional</p>
+                                        <p class="category text-center">OR</p>
                                         <div class="input-group">
                                             <span class="input-group-addon">
                                                 <i class="material-icons">keyboard_arrow_left</i>
