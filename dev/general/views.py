@@ -116,25 +116,20 @@ def new_user(request):
             last = form.cleaned_data['last_name']
             email = form.cleaned_data['email']
 
-            # Check username, passwords (may want to also check emails)
-            if verify_username(username) and passwords_match(password1, password2):
-                # Create new (site) user object
-                user = SiteUser.objects.create_user(username=username,
-                    password=password1,
-                    first_name=first,
-                    last_name=last,
-                    email=email)
-                user.save()
-                
-                # Log the user in, take them to their homepage
-                user = authenticate(username=username, password=password1)
+            user = SiteUser.objects.create_user(username=username,
+                password=password1,
+                first_name=first,
+                last_name=last,
+                email=email)
+            user.save()
 
-                login(request, user)
+            # Log the user in, take them to their homepage
+            user = authenticate(username=username, password=password1)
 
-                request.session['new-user'] = True
-                return HttpResponseRedirect('/tutorial/')
+            login(request, user)
 
-            return HttpResponseRedirect('/register/')
+            request.session['new-user'] = True
+            return HttpResponseRedirect('/tutorial/')
     else:
         form = SignupForm()
     return render(request, 'general/register.html', {'form': form, 'page': 'register'})

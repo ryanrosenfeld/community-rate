@@ -57,42 +57,49 @@
                                     {% csrf_token %}
                                     <div class="card-content">
                                         <p class="category text-center">OR</p>
+                                        <p class="text-danger">{{ form.non_field_errors.as_text }}</p>
                                         <div class="input-group">
                                             <span class="input-group-addon">
                                                 <i class="material-icons">keyboard_arrow_left</i>
                                             </span>
                                             {{ form.first_name }}
                                         </div>
+                                        <p class="text-danger">{{ form.first_name.errors.as_text }}</p>
                                         <div class="input-group">
                                             <span class="input-group-addon">
                                                 <i class="material-icons">keyboard_arrow_right</i>
                                             </span>
                                             {{ form.last_name }}
                                         </div>
+                                        <p class="text-danger">{{ form.last_name.errors.as_text }}</p>
                                         <div class="input-group">
                                             <span class="input-group-addon">
                                                 <i class="material-icons">email</i>
                                             </span>
                                             {{ form.email }}
                                         </div>
+                                        <p class="text-danger">{{ form.email.errors.as_text }}</p>
                                         <div class="input-group">
                                             <span class="input-group-addon">
                                                 <i class="material-icons">face</i>
                                             </span>
                                             {{ form.username }}
                                         </div>
+                                        <p class="text-danger">{{ form.username.errors.as_text }}</p>
                                         <div class="input-group">
                                             <span class="input-group-addon">
                                                 <i class="material-icons">lock</i>
                                             </span>
                                             {{ form.password }}
                                         </div>
+                                        <p class="text-danger">{{ form.password.errors.as_text }}</p>
                                         <div class="input-group">
                                             <span class="input-group-addon">
                                                 <i class="material-icons">lock_outline</i>
                                             </span>
                                             {{ form.conf_password }}
                                         </div>
+                                        <p class="text-danger">{{ form.conf_password.errors.as_text }}</p>
                                     </div>
                                     <div class="footer text-center">
                                         <button type="submit" class="btn btn-primary btn-round">Get Started</button>
