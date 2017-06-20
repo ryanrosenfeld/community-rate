@@ -29,7 +29,7 @@ ALLOWED_HOSTS = [
     'communityrate-test.herokuapp.com',
     '127.0.0.1',
     '0.0.0.0',
-    '192.168.1.254',
+    '192.168.1.218',
     'localhost',
 ]
 
