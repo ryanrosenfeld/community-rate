@@ -21,20 +21,16 @@
 }
 
 .card .card-image-circle {
-    height: 60%;
+    height: 110px;
+    width: 110px;
     position: relative;
-    overflow: hidden;
     margin-left: 10px;
     margin-right: 10px;
-    margin-top: -50px;
+    margin-top: -75px;
     border-radius: 6px;
 }
 
 .card .card-image-circle img {
-    height: 100%;
-    width: 100%;
-    max-height: 120px;
-    max-width: 120px;
     border-radius: 50%;
     pointer-events: none;
 }
@@ -49,57 +45,57 @@
 }
 
 .card-plain .card-image-custom {
-  margin: 0;
-  border-radius: 3px;
+    margin: 0;
+    border-radius: 3px;
 }
+
 .card-plain .card-image-custom img {
-  border-radius: 3px;
+    border-radius: 3px;
 }
 
 .table-shopping .img-container {
-  width: 55px;
+    width: 55px;
 }
 
 /* Styling for profile picture selector */
 
 .prof-pic-container {
-  position: relative;
-  cursor: pointer;
-  text-align: center;
+    position: relative;
+    cursor: pointer;
+    text-align: center;
 }
 
 .prof-pic {
-  width: 106px;
-  height: 106px;
-  background-color: #999999;
-  border: 4px solid #CCCCCC;
-  color: #FFFFFF;
-  border-radius: 50%;
-  margin: 5px auto;
-  overflow: hidden;
-  transition: all 0.2s;
-  -webkit-transition: all 0.2s;
+    width: 106px;
+    height: 106px;
+    background-color: #999999;
+    border: 4px solid #CCCCCC;
+    color: #FFFFFF;
+    border-radius: 50%;
+    margin: 5px auto;
+    overflow: hidden;
+    transition: all 0.2s;
+    -webkit-transition: all 0.2s;
 }
 
 .prof-pic:hover {
-  border-color: #2ca8ff;
+    border-color: #2ca8ff;
 }
 
 .prof-pic input[type="file"] {
-  cursor: pointer;
-  display: block;
-  height: 100%;
-  left: 0;
-  opacity: 0 !important;
-  position: absolute;
-  top: 0;
-  width: 100%;
+    cursor: pointer;
+    display: block;
+    height: 100%;
+    left: 0;
+    opacity: 0 !important;
+    position: absolute;
+    top: 0;
+    width: 100%;
 }
 
 .prof-pic-src {
-  width: 100%;
+    width: 100%;
 }
-
 
 .unread-notification {
     background-color: #e5dfde;
@@ -123,4 +119,25 @@ a:hover {
 .el-footer {
     margin-left: -15px;
     display: inline;
+}
+
+.card-avatar .photo {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    margin: 0 auto;
+    box-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.42), 0 4px 25px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2);
+}
+
+.photo {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    overflow: hidden;
+}
+
+.photo img {
+    flex-shrink: 0;
+    min-width: 100%;
+    min-height: 100%;
 }

@@ -5592,6 +5592,7 @@ h2.title {
 .sidebar .user .photo img,
 .off-canvas-sidebar .user .photo img {
   width: 100%;
+  height: 100%;
 }
 .sidebar .user a,
 .off-canvas-sidebar .user a {
@@ -10561,8 +10562,8 @@ footer .btn {
 }
 .card-profile .card-avatar,
 .card-testimonial .card-avatar {
-  max-width: 130px;
-  max-height: 130px;
+  width: 110px;
+  height: 110px;
   margin: -50px auto 0;
   border-radius: 50%;
   overflow: hidden;

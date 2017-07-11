@@ -11,6 +11,7 @@ from movies.services import get_movie_by_id
 from .functions import *
 from random import randint
 
+
 @login_required
 def profile(request, username=""):
     """Public or private view of a person's profile"""
@@ -134,6 +135,7 @@ def settings(request):
     })
 
 
+@login_required
 def main_view(request, response=None):
     """Main view for users page"""
 

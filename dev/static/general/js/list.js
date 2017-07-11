@@ -8,7 +8,16 @@ $(document).ready(function() {
         }
     });
 
-    $("#edit-list-name").val($("#list-name").html());
+    $("#editor-name").keyup(function() {
+        var query = $("#editor-name").val().toLowerCase();
+        if (query.length > 0) {
+            $('#add-editor-list tr').not('[class*="' + query + '"]').hide();
+            $('#add-editor-list tr[class*="' + query + '"]').show();
+        }
+        else {
+            $('#add-editor-list tr').show()
+        }
+    });
 });
 
 function searchMovies() {
@@ -117,9 +126,7 @@ function updateListName() {
             },
             dataType: 'json'
         });
-        functions.sweetAlert('update-list-name');
     }
-    toggleDisplayUpdateListName();
 }
 
 function removeListItem(movie_id) {
@@ -134,17 +141,6 @@ function removeListItem(movie_id) {
     })
 }
 
-function toggleDisplayUpdateListName() {
-    if ($("#edit-list-name-group").css("display") == "none") {
-        $("#edit-list-name-group").css("display", "inline");
-        $("#btn-show-edit-list-name").css("display", "none");
-    }
-    else {
-        $("#edit-list-name-group").css("display", "none");
-        $("#btn-show-edit-list-name").css("display", "inline-block");
-    }
-}
-
 function toggleEditMode() {
     if ($(".edit-display").css("display") == "none") {
         $(".edit-display").css("display", "inline");
@@ -152,6 +148,8 @@ function toggleEditMode() {
         $(".non-edit-display").css("display", "none");
         $(".td-link").css('pointerEvents', 'none');
         $("table").removeClass('table-hover');
+        $("#edit-list-name-group").css("display", "inline-block");
+        $("#list-name").css("display", "none");
     }
     else {
         $(".edit-display").css("display", "none");
@@ -161,18 +159,28 @@ function toggleEditMode() {
         $("table").addClass('table-hover');
         $("#edit-list-name-group").css("display", "none");
         $("#btn-show-edit-list-name").css("display", "inline-block");
+        $("#edit-list-name-group").css("display", "none");
+        $("#list-name").css("display", "inline-block");
+
+        // Update list name if it changed
+        updateListName();
     }
 }
 
 function togglePublicPrivate() {
-    var btn = $("#btn-public_private i");
-    if (btn.html() == 'public') {
-        btn.html('lock_outline');
-        functions.sweetAlert('toggle-list-private');
+    var icon = $("#btn-public_private i");
+    // var text = $("#btn-public_private").contents(":not(i)");
+    var text = $("#btn-public_private span");
+    console.log(icon.html());
+    if (icon.html() == 'public') {
+        icon.html('lock_outline');
+        text.html(" Private");
+        //functions.sweetAlert('toggle-list-private');
     }
     else {
-        btn.html('public');
-        functions.sweetAlert('toggle-list-public');
+        icon.html('public');
+        text.html(" Public");
+        //functions.sweetAlert('toggle-list-public');
     }
     $.ajax({
         url: '/ajax/toggle-public-private/',
@@ -204,4 +212,58 @@ function like() {
             }
         }
     })
+}
+
+function addEditor(userId) {
+    $.ajax({
+        url: '/ajax/add-editor/',
+        data: {
+            'list_id': l_id,
+            'user_id': userId
+        },
+        dataType: 'json'
+    });
+
+    // Remove from right column and add to left column
+    var userRow = $("#user-" + userId);
+    var userRowHtml = userRow.html();
+    userRowHtml = userRowHtml.substring(85, userRowHtml.length - 42);
+    console.log(userRowHtml);
+    userRow.remove();
+    $("#editor-list").append(
+        '<tr id="user-' + userId + '">' +
+        '<td>' + userRowHtml + '</td>' +
+        '<td class="text-center">' +
+        '<button type="button" class="btn btn-danger btn-simple btn-xs" onclick=\'removeEditor("' + userId + '", "' + userRowHtml + '")\'>' +
+        '<i class="material-icons">close</i>' +
+        '</button>' +
+        '</td>' +
+        '</tr>'
+    );
+}
+
+function removeEditor(userId, text) {
+    $.ajax({
+        url: '/ajax/remove-editor/',
+        data: {
+            'list_id': l_id,
+            'user_id': userId
+        },
+        dataType: 'json'
+    });
+
+    // Remove from left column and add to right column
+    var userRow = $("#user-" + userId);
+    userRow.remove();
+
+    // Get first & last name combo
+    var endIndex = text.indexOf('@') - 2;
+    var name = text.substring(0, endIndex);
+    console.log(name);
+
+    $("#add-editor-list").append(
+        '<tr onclick="addEditor(' + userId + ')" id="user-"' + userId + ' class="' + name + '">' +
+        '<td><strong class="text-info"><</strong>' + text + '</td>' +
+        '</tr>'
+    );
 }
