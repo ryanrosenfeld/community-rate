@@ -11,12 +11,17 @@
 {% block content %}
     <div class="col-md-10 col-md-offset-1">
         {% if not owner %}
-            <button class="btn btn-primary btn-just-icon pull-right active" id="btn-like" onclick="like()">
+            <button class="btn btn-primary btn-just-icon pull-right" id="btn-like" onclick="like()">
                 <i class="material-icons">thumb_up</i>
                 {% if liked %}<i class="material-icons">check</i>{% endif %}
             </button>
         {% endif %}
-        {% if owner %}<a class="btn btn-danger btn-just-icon pull-right" id="delete-btn" href="delete/"><i class="material-icons">delete</i></a>{% endif %}
+        {% if owner %}
+            <a class="btn btn-danger btn-just-icon pull-right" id="delete-btn" href="delete/"><i class="material-icons">delete</i></a>
+            <button class="btn btn-primary btn btn-edit-options pull-right" id="btn-editors" data-toggle="modal" data-target="#permissionsModal">
+                <i class="material-icons">people</i> Permissions
+            </button>
+        {% endif %}
         {% if owner or editor %}
             <button class="btn btn-info non-edit-display pull-right" id="editList" onclick="toggleEditMode()">
                 <i class="material-icons">edit</i> Edit List
@@ -25,32 +30,7 @@
         <button class="btn btn-rose edit-display pull-right" onclick="toggleEditMode()">
             <i class="material-icons">check</i> Finish Editing
         </button>
-        <div class="form-group edit-display">
-            <button class="btn btn-round btn-warning btn-just-icon btn-edit-options" id="btn-public_private" rel="tooltip" title="Change public/private status" onclick="togglePublicPrivate()">
-                <i class="material-icons" id="public_private-btn-content">{% if l.public %}public{% else %}lock_outline{% endif %}</i>
-            </button>
-{#            <button class="btn btn-primary btn-round btn-just-icon btn-edit-options" id="btn-editors" rel="tooltip" title="Edit user permissions">#}
-{#                <i class="material-icons">people</i> {{ num_editors }}#}
-{#            </button>#}
-            <button class="btn btn-round btn-info btn-just-icon btn-edit-options" id="btn-show-edit-list-name" rel="tooltip" title="Update list name" onclick="toggleDisplayUpdateListName()" style="display: inline">
-                <i class="material-icons">text_fields</i>
-            </button>
-            <div id="edit-list-name-group">
-                <input class="form-control" placeholder="Edit list name" id="edit-list-name">
-                <button class="btn btn-round btn-primary btn-just-icon" id="btn-edit-list-name" onclick="updateListName()">
-                    <i class="material-icons">check</i>
-                </button>
-            </div>
-        </div>
-        <br>
-{#        <div class="edit-display" id="edit-permissions">#}
-{#            <div class="col-md-5 col-md-offset-1 text-center" id="edit-users">#}
-{#                <h4>Users who can edit my list</h4>#}
-{#            </div>#}
-{#            <div class="col-md-5 text-center" id="view-users">#}
-{#                <h4>Users who can see my list</h4>#}
-{#            </div>#}
-{#        </div>#}
+        <br><br>
         <div class="col-md-6 edit-display" id="add-movies">
             <div class="dropdown">
                 <div class="form-group label-floating dropdown-toggle" data-toggle="dropdown">
@@ -63,6 +43,9 @@
         <div class="card">
             <div class="card-header" data-background-color="green">
                 <h4 class="title card-header-title" id="list-name">{{ list.name }}</h4>
+                <div class="form-group" id="edit-list-name-group" style="display: none">
+                    <input class="form-control" id="edit-list-name" value="{{ list.name }}">
+                </div>
             </div>
             <div class="card-content">
                 <div class="table-responsive">
@@ -106,6 +89,71 @@
             </div>
         </div>
     </div>
+
+    <!-- Edit Permissions Modal -->
+    <div class="modal fade" id="permissionsModal" tabindex="-1" role="dialog" aria-labelledby="editProfile"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        <i class="material-icons">clear</i>
+                    </button>
+                    <h4 class="modal-title">Edit User Permissions</h4>
+                </div>
+                <div class="modal-body">
+                    {# Public/Private Status #}
+                    <p>
+                        Status (click to toggle):
+                        <button class="btn btn-warning btn-simple" id="btn-public_private" onclick="togglePublicPrivate()">
+                            <span>
+                                {% if list.public %} Public{% else %} Private{% endif %}
+                            </span>
+                            <i class="material-icons" id="public_private-btn-content">{% if list.public %}public{% else %}lock_outline{% endif %}</i>
+                        </button>
+                    </p>
+
+                    {# Editors #}
+                    <div class="col-md-6">
+                        <p class="permission-title">Current Editors</p>
+                        <table class="table" id="table-editors">
+                            <tbody id="editor-list">
+                                {% for editor in editors %}
+                                    <tr id="user-{{ editor.id }}">
+                                        <td>{{ editor.first_name }} {{ editor.last_name }} (@{{ editor.username }})</td>
+                                        <td class="text-center">
+                                            <button type="button" class="btn btn-danger btn-simple btn-xs" onclick='removeEditor("{{ editor.id }}", "{{ editor.first_name }} {{ editor.last_name }} (@{{ editor.username }})")'>
+                                                <i class="material-icons">close</i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="permission-title">Add Editor</p>
+                        <div class="form-group">
+                            <input class="form-control" placeholder="Filter by name" id="editor-name">
+                        </div>
+                        <table class="table table-hover table-bordered">
+                            <tbody id="add-editor-list">
+                                {% for user in following %}
+                                    <tr onclick="addEditor({{ user.id }})" id="user-{{ user.id }}" class="{{ user.first_name|lower }} {{ user.last_name|lower }}">
+                                        <td><strong class="text-info"><</strong> {{ user.first_name }} {{ user.last_name }} (@{{ user.username }})</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" data-dismiss="modal">Done</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--  End Modal -->
 {% endblock %}
 
 {% block scripts %}

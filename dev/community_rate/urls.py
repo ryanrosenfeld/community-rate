@@ -45,6 +45,8 @@ urlpatterns = [
     url(r'^ajax/remove-list-item/', movie_views.remove_list_item),
     url(r'^ajax/toggle-public-private/', movie_views.toggle_public_private),
     url(r'^ajax/like-list/', movie_views.like_list),
+    url(r'^ajax/add-editor/', movie_views.add_editor),
+    url(r'^ajax/remove-editor/', movie_views.remove_editor),
 
     # User AJAX Requests
     url(r'^ajax/follow/', user_views.follow),

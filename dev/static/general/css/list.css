@@ -26,11 +26,12 @@
 }
 
 #btn-public_private {
-    margin-left: 40px;
+    font-size: large;
+    padding: 0;
 }
 
 #add-movies {
-    margin-left: 35px;
+    /*margin-left: 35px;*/
 }
 
 #edit-list-name-group {
@@ -47,16 +48,33 @@
     margin-left: 5px;
 }
 
-@media (max-width: 978px) {
-    .btn-edit-options {
-        margin-top: 100px;
-    }
-
-    #btn-public_private {
-        margin-left: 0;
-    }
-}
-
 #delete-btn {
     margin-left: 5px;
+}
+
+#edit-list-name {
+    font-size: large;
+    color: white;
+    font-weight: bold;
+    border: none;
+}
+
+#add-editor {
+    width: 60%;
+}
+
+.permission-title {
+    font-weight: bold;
+    font-size: 16px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+#add-editor-list td strong {
+    margin-right: 5px;
+    font-size: 16px;
+}
+
+#table-editors {
+    border: 1px solid #ddd;
 }

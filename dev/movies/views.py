@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect, JsonResponse
+
+from general.models import SiteUser
 from .forms import ReviewForm
 from .models import List, ListEntry
 from .services import *
@@ -128,9 +130,17 @@ def list_page(request, list_id):
     if len(l) == 0:
         return HttpResponseRedirect('/profile/')
     l = l[0]
+    print(l.id)
+
+    # Get editors
+    editors = l.editors.all()
+    print(editors)
 
     # Check if list creator
     owner = l.creator == request.user
+
+    # Check if user possesses editor rights
+    editor = request.user in editors
 
     # Check if list liked
     liked = False
@@ -164,7 +174,11 @@ def list_page(request, list_id):
 
         movies.append((movie, my_review, average_review))
 
-    return render(request, 'list.html', {'list': l, 'movies': movies, 'owner': owner, 'liked': liked, 'page': 'lists'})
+    # Get following set
+    following = [user.following for user in request.user.follower_set.all() if user.following not in editors]
+
+    return render(request, 'list.html', {'list': l, 'movies': movies, 'owner': owner, 'liked': liked, 'page': 'lists',
+                                         'following': following, 'editors': editors, 'editor': editor})
 
 
 def new_list(request):
@@ -267,7 +281,7 @@ def remove_list_item(request):
 def toggle_public_private(request):
     list_id = request.GET.get('list_id', None)
     l = List.objects.filter(id=list_id)[0]
-    l.public = False
+    l.public = not l.public
     l.save()
     return JsonResponse({})
 
@@ -275,8 +289,32 @@ def toggle_public_private(request):
 def like_list(request):
     list_id = request.GET.get('list_id', None)
     l = List.objects.filter(id=list_id)[0]
+
     if List.objects.filter(id=list_id, likers=request.user).count() > 0:
         l.likers.remove(request.user)
         return JsonResponse({'liked': False})
+
     l.likers.add(request.user)
     return JsonResponse({'liked': True})
+
+
+def add_editor(request):
+    list_id = request.GET.get('list_id', None)
+    l = List.objects.filter(id=list_id)[0]
+
+    user_id = request.GET.get('user_id', None)
+    user = SiteUser.objects.filter(id=user_id)[0]
+
+    l.editors.add(user)
+    return JsonResponse({})
+
+
+def remove_editor(request):
+    list_id = request.GET.get('list_id', None)
+    l = List.objects.filter(id=list_id)[0]
+
+    user_id = request.GET.get('user_id', None)
+    user = SiteUser.objects.filter(id=user_id)[0]
+
+    l.editors.remove(user)
+    return JsonResponse({})
