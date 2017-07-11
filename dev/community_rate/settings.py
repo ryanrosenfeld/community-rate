@@ -27,6 +27,8 @@ DEBUG = True
 ALLOWED_HOSTS = [
     'communityrate.herokuapp.com',
     'communityrate-test.herokuapp.com',
+    'community-rate.com',
+    'www.community-rate.com',
     '127.0.0.1',
     '0.0.0.0',
     '192.168.1.218',

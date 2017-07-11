@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.http import HttpResponseRedirect, JsonResponse
 
@@ -8,6 +9,7 @@ from .services import *
 from .functions import *
 
 
+@login_required
 def movie_page(request, id):
     try:
         r = Review.objects.get(movie_id=id, creator=request.user)
@@ -51,6 +53,7 @@ def movie_page(request, id):
                                                  'common_react': most_common_react})
 
 
+@login_required
 def movie_db(request):
     query = None
     if request.method == 'GET':
@@ -58,6 +61,7 @@ def movie_db(request):
     return render(request, 'movie-db.html', {'page': 'movie_db', 'query': query})
 
 
+@login_required
 def top_movies(request):
     # Get following users
     following = [f.following for f in request.user.follower_set.all()]
@@ -85,6 +89,7 @@ def top_movies(request):
     return render(request, 'top-movies.html', {'page': 'top_movies', 'top_movies': top})
 
 
+@login_required
 def lists(request):
     # Get all friend's lists
     following = request.user.follower_set.all()
@@ -124,6 +129,7 @@ def lists(request):
                                                  'page': "lists"})
 
 
+@login_required
 def list_page(request, list_id):
     # Get list
     l = List.objects.filter(id=list_id)
@@ -181,12 +187,14 @@ def list_page(request, list_id):
                                          'following': following, 'editors': editors, 'editor': editor})
 
 
+@login_required
 def new_list(request):
     l = List(creator=request.user)
     l.save()
     return HttpResponseRedirect('/list/' + str(l.id) + '/')
 
 
+@login_required
 def delete_list(request, list_id):
     l = List.objects.filter(id=int(list_id))
     if len(l) == 0:
