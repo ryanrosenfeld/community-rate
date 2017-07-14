@@ -39,7 +39,7 @@ def movie_page(request, id):
                 r.save()
             return render(request, 'movies/movie.html', {'movie': movie, 'form': form, 'review': r,
                                                          'following_users': following_users, 'av_rating': av_rating,
-                                                         'common_react': most_common_react})
+                                                         'common_react': most_common_react, 'page': 'movies'})
     if r is None:
         form = ReviewForm()
     else:
@@ -50,7 +50,7 @@ def movie_page(request, id):
         })
     return render(request, 'movies/movie.html', {'movie': movie, 'form': form, 'review': r,
                                                  'following_users': following_users, 'av_rating': av_rating,
-                                                 'common_react': most_common_react})
+                                                 'common_react': most_common_react, 'page': 'movies'})
 
 
 @login_required
@@ -126,7 +126,7 @@ def lists(request):
     return render(request, 'movies/lists.html', {'friend_lists': friend_lists,
                                                  'my_lists': my_lists,
                                                  'shared_lists': shared_lists,
-                                                 'page': "lists"})
+                                                 'page': 'lists'})
 
 
 @login_required

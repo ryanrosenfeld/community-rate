@@ -179,7 +179,7 @@ def main_view(request, response=None):
                                                'response': response,
                                                'title': title,
                                                'comment': comment,
-                                               'page': 'users',
+                                               'page': 'all_users',
                                                'followers': followers,
                                                'following': following})
 
