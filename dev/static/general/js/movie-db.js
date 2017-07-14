@@ -15,7 +15,7 @@ function addMovieRow(index, movie) {
         img_path = "http://image.tmdb.org/t/p/w92" + movie.poster_path;
     }
     $("#movie-table-body").append(
-        "<tr onclick=window.location.href='/movie/" + movie.id + "/'>" +
+        "<tr class='pointer' onclick=window.location.href='/movie/" + movie.id + "/'>" +
             "<td>" +
                 "<h4><img src='" + img_path +  "' alt=''>     " + movie.title + "</h4>" +
             "<td class='text-center' id='rating" + index + "'></td>" +

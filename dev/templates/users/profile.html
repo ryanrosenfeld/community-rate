@@ -143,7 +143,7 @@
                                 </thead>
                                 <tbody>
                                 {% for m in favorites %}
-                                    <tr onclick=window.location.href="/movie/{{ m.movie.movie_id }}/">
+                                    <tr class="pointer" onclick=window.location.href="/movie/{{ m.movie.movie_id }}/">
                                         <td>
                                             <h4><img src="http://image.tmdb.org/t/p/w92{{ m.movie.poster_path }}"
                                                      alt=''> {{ m.movie.title }}</h4>
@@ -170,7 +170,7 @@
                                 </thead>
                                 <tbody>
                                 {% for m in recents %}
-                                    <tr onclick=window.location.href="/movie/{{ m.movie.id }}/">
+                                    <tr class="pointer" onclick=window.location.href="/movie/{{ m.movie.id }}/">
                                         <td>
                                             <h4><img src="http://image.tmdb.org/t/p/w92{{ m.movie.poster_path }}"
                                                      alt=''> {{ m.movie.title }}</h4>
@@ -235,7 +235,7 @@
                             <tbody>
                             {% for list, num, likes in lists %}
                                 {% if list.public %}
-                                    <tr onclick="window.location.href='/list/{{ list.id }}/'">
+                                    <tr class="pointer" onclick="window.location.href='/list/{{ list.id }}/'">
                                         <td>{{ list.name }}</td>
                                         <td>{{ num }}</td>
                                         <td>{{ likes }}</td>
@@ -255,7 +255,7 @@
                                 <tbody>
                                 {% for list, num, likes in lists %}
                                     {% if not list.public %}
-                                        <tr onclick="window.location.href='/list/{{ list.id }}/'">
+                                        <tr class="pointer" onclick="window.location.href='/list/{{ list.id }}/'">
                                             <td>{{ list.name }}</td>
                                             <td>{{ num }}</td>
                                         </tr>
@@ -386,7 +386,7 @@
     <script>
         function toggleFollowBtn() {
             var div = $("#follow-unfollow");
-            if (div.children("button").html() == "Follow") {
+            if (div.children("button").html().trim().substring(0, 6) == "Follow") {
                 div.html('<button onclick="functions.unfollow(\'{{ user.username }}\', \'{{ user.first_name }} ' +
                     '{{ user.last_name }}\', toggleFollowBtn)" id="unfollowBtn" class="btn btn-primary">Unfollow</button>');
             }

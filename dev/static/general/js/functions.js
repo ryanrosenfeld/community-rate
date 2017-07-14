@@ -1,52 +1,20 @@
 functions = {
-    sweetAlert: function (type, message) {
+    sweetAlert: function (type, message, onConfirmFunction) {
 
-        if (type == 'follow-success') {
+        if (type == 'success') {
             swal({
-                title: "You are now following " + message,
+                title: message,
                 buttonsStyling: false,
                 confirmButtonClass: "btn btn-success",
                 type: "success"
             });
         }
-        else if (type == 'unfollow-success') {
+        else if (type == "warning") {
             swal({
-                title: "Successfully unfollowed " + message,
-                buttonsStyling: false,
-                confirmButtonClass: "btn btn-success",
-                type: "success"
-            });
-        }
-        else if (type == 'problem') {
-            swal({
-                title: 'There was a problem.',
-                type: 'warning',
-                confirmButtonClass: 'btn btn-success',
-                buttonsStyling: false
-            })
-        }
-        else if (type == 'toggle-list-public') {
-            swal({
-                title: 'Changed list to public',
-                buttonsStyling: false,
-                confirmButtonClass: 'btn btn-success',
-                type: "success"
-            })
-        }
-        else if (type == 'toggle-list-private') {
-            swal({
-                title: 'Changed list to private',
-                buttonsStyling: false,
-                confirmButtonClass: 'btn btn-success',
-                type: "success"
-            })
-        }
-        else if (type == 'update-list-name') {
-            swal({
-                title: 'Changed list name',
-                buttonsStyling: false,
-                confirmButtonClass: 'btn btn-success',
-                type: "success"
+                title: message,
+                buttonStyling: false,
+                confirmButtonClass: 'btn btn-info',
+                type: "warning"
             })
         }
         else if (type == 'welcome') {
@@ -60,14 +28,20 @@ functions = {
                 type: "success"
             })
         }
-        else if (type == "warning") {
+        else if (type == 'warning-message-and-confirmation') {
             swal({
-                title: message,
-                buttonStyling: false,
-                confirmButtonClass: 'btn btn-info',
-                type: "warning"
-            })
-        }
+                    title: 'Are you sure?',
+                    text: message,
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonClass: 'btn btn-success',
+                    cancelButtonClass: 'btn btn-danger',
+                    confirmButtonText: 'Yes, delete it!',
+                    buttonsStyling: false
+                }).then(function() {
+                        onConfirmFunction();
+                    });
+    	}
     },
 
     follow: function (username, name, onSuccess) {
@@ -79,7 +53,7 @@ functions = {
             dataType: 'json',
             success: function (data) {
                 if (data.success) {
-                    functions.sweetAlert('follow-success', name);
+                    functions.sweetAlert('success', "Successfully followed " + name);
                     onSuccess(username, name);
                 }
                 else {
@@ -98,11 +72,11 @@ functions = {
             dataType: 'json',
             success: function (data) {
                 if (data.success) {
-                    functions.sweetAlert('unfollow-success', name);
+                    functions.sweetAlert('success', "Successfully unfollowed " + name);
                     onSuccess(username, name)
                 }
                 else {
-                    functions.sweetAlert('problem');
+                    functions.sweetAlert('warning', "There was a problem.");
                 }
             }
         });

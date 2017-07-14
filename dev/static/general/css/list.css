@@ -75,6 +75,9 @@
     font-size: 16px;
 }
 
-#table-editors {
+.table-editors {
     border: 1px solid #ddd;
+    display: block;
+    max-height: 300px;
+    overflow-y: scroll;
 }

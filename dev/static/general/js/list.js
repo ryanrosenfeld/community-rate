@@ -262,8 +262,17 @@ function removeEditor(userId, text) {
     console.log(name);
 
     $("#add-editor-list").append(
-        '<tr onclick="addEditor(' + userId + ')" id="user-"' + userId + ' class="' + name + '">' +
+        '<tr class="pointer" onclick="addEditor(' + userId + ')" id="user-"' + userId + ' class="' + name + '">' +
         '<td><strong class="text-info"><</strong>' + text + '</td>' +
         '</tr>'
     );
+}
+
+function performDeletion() {
+    window.location.href="delete/";
+}
+
+function deleteList() {
+    functions.sweetAlert("warning-message-and-confirmation", "Are you sure you want to delete this list?",
+        performDeletion);
 }

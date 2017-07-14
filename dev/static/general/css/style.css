@@ -141,3 +141,8 @@ a:hover {
     min-width: 100%;
     min-height: 100%;
 }
+
+/* Class to make cursor style pointer (changes mouse to hand) */
+.pointer:hover {
+    cursor: pointer;
+}

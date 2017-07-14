@@ -45,7 +45,7 @@
                                     </thead>
                                     <tbody>
                                         {% for list, num, likes in my_lists %}
-                                            <tr onclick="window.location.href='/list/{{ list.id }}/'">
+                                            <tr class="pointer" onclick="window.location.href='/list/{{ list.id }}/'">
                                                 <td>{{ list.name }}</td>
                                                 {% load tz %}
                                                 <td>{{ list.date_updated|localtime }}</td>
@@ -74,7 +74,7 @@
                                     </thead>
                                     <tbody>
                                         {% for list, num, likes in friend_lists %}
-                                            <tr onclick="window.location.href='/list/{{ list.id }}/'">
+                                            <tr class="pointer" onclick="window.location.href='/list/{{ list.id }}/'">
                                                 <td>{{ list.name }}</td>
                                                 <td>{{ list.creator.first_name }} {{ list.creator.last_name }}</td>
                                                 <td>{{ list.date_updated }}</td>
@@ -103,7 +103,7 @@
                                     </thead>
                                     <tbody>
                                         {% for list, num, likes in shared_lists %}
-                                            <tr onclick="window.location.href='/list/{{ list.id }}/'">
+                                            <tr class="pointer" onclick="window.location.href='/list/{{ list.id }}/'">
                                                 <td>{{ list.name }}</td>
                                                 <td>{{ list.creator.first_name }} {{ list.creator.last_name }}</td>
                                                 <td>{{ list.date_updated }}</td>

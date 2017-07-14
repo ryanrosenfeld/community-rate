@@ -21,7 +21,7 @@
                 </thead>
                 <tbody>
                 {% for movie in top_movies %}
-                    <tr onclick="window.location.href='/movie/{{ movie.0.movie_id }}/'">
+                    <tr class="pointer" onclick="window.location.href='/movie/{{ movie.0.movie_id }}/'">
                         <td>
                             <div class="img-container">
                                 <img src="http://image.tmdb.org/t/p/w92{{ movie.0.poster_path }}" alt="...">
