@@ -36,3 +36,10 @@ class ListEntry(models.Model):
     date_added = models.DateTimeField(auto_now_add=True, editable=False)
     list = models.ForeignKey(List)
     movie_id = models.IntegerField()
+
+
+class Comment(models.Model):
+    author = models.ForeignKey(SiteUser)
+    review = models.ForeignKey(Review)
+    comment = models.TextField()
+    date_added = models.DateTimeField(auto_now=True)

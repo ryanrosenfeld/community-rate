@@ -8,7 +8,7 @@ import re
 
 from .forms import *
 from .models import *
-from movies.models import Review
+from movies.models import Review, Comment
 from movies.services import get_movie_by_id
 from users.forms import profileSetupForm
 
@@ -168,7 +168,9 @@ def activity_feed(request):
         reviews = Review.objects.filter(creator=user)
         for r in reviews:
             movie = get_movie_by_id(r.movie_id, True)
-            updates.append((user, movie, r))
+            comments = Comment.objects.filter(review=r)
+            comments = sorted(comments, key=lambda x: x.date_added, reverse=True)
+            updates.append((user, movie, r, comments))
     updates = sorted(updates, key=lambda x: x[2].date_added, reverse=True)
 
     # Check if new user & show welcome message
