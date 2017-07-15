@@ -69,12 +69,18 @@
                 </div>
                 <div class="col-md-10 col-md-offset-1 text-center comments" id="comments-{{ review.id }}">
                     <div class="col-lg-8 col-lg-offset-2">
-                        <div class="form-group form-inline">
-                            <input class="form-control comment" placeholder="Enter a new comment" id="comment-{{ review.id }}" style="width: 70%; margin-right: 7px;">
-                            <button class="btn btn-primary btn-just-icon" onclick="submitComment({{ review.id }})">
-                                <i class="material-icons">check</i>
-                            </button>
-                        </div>
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-xs-10">
+                                    <input class="form-control comment" placeholder="Enter a new comment" id="comment-{{ review.id }}">
+                                </div>
+                                <div class="col-xs-2">
+                                    <button type="button" class="btn btn-primary btn-just-icon" onclick="submitComment({{ review.id }})">
+                                        <i class="material-icons">check</i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                     <div class="col-md-10 col-md-offset-1">
                         <table class="table table-striped text-left table-comments" id="comment-list-{{ review.id }}" style="margin-bottom: 10px;">
