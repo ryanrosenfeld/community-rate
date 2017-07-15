@@ -53,13 +53,15 @@
                 <div class="table-responsive">
                     <table class="table table-shopping table-hover">
                         <thead class="text-success">
-                            <th class="text-center"></th>
-                            <th>Movie</th>
-                            <th class="text-center">My Rating</th>
-                            <th class="text-center">Average Rating</th>
-                            <th class="text-center">My Reaction</th>
-                            <th class="text-center">Most Common Reaction</th>
-                            <th class="text-center edit-display-table">Remove?</th>
+                            <tr>
+                                <th class="text-center"></th>
+                                <th>Movie</th>
+                                <th class="text-center">My Rating</th>
+                                <th class="text-center">Average Rating</th>
+                                <th class="text-center">My Reaction</th>
+                                <th class="text-center">Most Common Reaction</th>
+                                <th class="text-center edit-display-table">Remove?</th>
+                            </tr>
                         </thead>
                         <tbody id="movie-table-body">
                             {% for movie, rev, av_rev in movies %}

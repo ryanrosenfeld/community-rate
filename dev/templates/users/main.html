@@ -61,7 +61,7 @@
                                                 </button>
                                             {% else %}
                                                 <button type="button" id="fbtn-{{ u.username }}" rel="tooltip" title="Follow" class="btn btn-primary btn-simple fbtn">
-                                                    <i class="material-icons">add_circle_outline</i>
+                                                    <i class="material-icons">person_add</i>
                                                 </button>
                                             {% endif %}
                                         </td>
@@ -124,7 +124,7 @@
             btn.attr('data-original-title', 'Follow');
             btn.removeClass('btn-danger');
             btn.addClass('btn-primary');
-            btn.html('<i class="material-icons">add_circle_outline</i>');
+            btn.html('<i class="material-icons">person_add</i>');
             btn.unbind('click');
             btn.click(function() {
                 functions.follow(username, name, onFollow);

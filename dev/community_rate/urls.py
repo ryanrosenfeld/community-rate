@@ -43,6 +43,7 @@ urlpatterns = [
 
     # General AJAX Requests
     url(r'^ajax/mark-notifications-read/', general_ajax.mark_notifications_read),
+    url(r'^ajax/add-comment/', general_ajax.add_comment),
 
     # Movie AJAX Requests
     url(r'^ajax/filter-movies/', movie_ajax.filter_movies),
@@ -58,5 +59,6 @@ urlpatterns = [
 
     # User AJAX Requests
     url(r'^ajax/follow/', user_ajax.follow),
-    url(r'^ajax/unfollow/', user_ajax.unfollow)
+    url(r'^ajax/unfollow/', user_ajax.unfollow),
+    url(r'^ajax/has-pic/', user_ajax.has_pic)
 ]

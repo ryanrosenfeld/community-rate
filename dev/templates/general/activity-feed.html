@@ -18,7 +18,7 @@
         </div>
     {% endif %}
     <div class="col-md-10 col-md-offset-1">
-        {% for user, movie, review in updates %}
+        {% for user, movie, review, comments in updates %}
             <div class="card">
                 <div class="col-md-5">
                     <a href="/movie/{{ movie.movie_id }}">
@@ -48,18 +48,57 @@
                 <div class="col-md-12">
                     <table class="table">
                         <thead>
-                        <th class="text-center rating-col">Rating</th>
-                        <th class="text-center react-col">Reaction</th>
-                        <th class="text-center thoughts-col">Thoughts</th>
+                            <tr>
+                                <th class="text-center rating-col">Rating</th>
+                                <th class="text-center react-col">Reaction</th>
+                                <th class="text-center thoughts-col">Thoughts</th>
+                            </tr>
                         </thead>
-                        <tbdoy>
+                        <tbody>
                             <tr>
                                 <td class="text-center rating-col"><h2>{{ review.rating }}</h2></td>
                                 <td class="text-center react-col"><h2><i class="{{ review.reaction }}"></i></h2></td>
                                 <td class="text-center thoughts-col">{{ review.thoughts }}</td>
                             </tr>
-                        </tbdoy>
+                        </tbody>
                     </table>
+                </div>
+                <div class="col-md-5 col-md-offset-6 text-right" style="margin-top: -30px;">
+                    <button class="btn btn-simple" onclick="toggleCommentsDisplay({{ review.id }})">Comments (<span id="comment-num-{{ review.id }}">{{ comments|length }}</span>) <i class="material-icons">chat</i>
+                    </button>
+                </div>
+                <div class="col-md-10 col-md-offset-1 text-center comments" id="comments-{{ review.id }}">
+                    <div class="col-lg-8 col-lg-offset-2">
+                        <div class="form-group form-inline">
+                            <input class="form-control comment" placeholder="Enter a new comment" id="comment-{{ review.id }}" style="width: 70%; margin-right: 7px;">
+                            <button class="btn btn-primary btn-just-icon" onclick="submitComment({{ review.id }})">
+                                <i class="material-icons">check</i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-10 col-md-offset-1">
+                        <table class="table table-striped text-left table-comments" id="comment-list-{{ review.id }}" style="margin-bottom: 10px;">
+                            <tbody>
+                                {% for comment in comments %}
+                                    <tr>
+                                        <td class="col-comment">
+                                            <a href="/profile/{{ comment.author.username }}/">
+                                                {{ comment.author.first_name }} {{ comment.author.last_name }}
+                                            </a>
+                                            {{ comment.comment }}
+                                        </td>
+{#                                        {% if comment.author.id == request.user.id %}#}
+{#                                            <td class="text-center col-delete">#}
+{#                                                <button type="button" class="btn btn-danger btn-simple" onclick="deleteComment({{ comment.id }})">#}
+{#                                                    <i class="material-icons">clear</i>#}
+{#                                                </button>#}
+{#                                            </td>#}
+{#                                        {% endif %}#}
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         {% endfor %}
@@ -74,6 +113,47 @@
             if (welcome == "True") {
                 functions.sweetAlert('welcome')
             }
-        })
+        });
+
+        function toggleCommentsDisplay(reviewId) {
+            var commentBlock = $("#comments-" + reviewId);
+            if (commentBlock.css("display") == "none") {
+                commentBlock.css("display", "block");
+            }
+            else {
+                commentBlock.css("display", "none");
+            }
+        }
+
+        function submitComment(reviewId) {
+            var commentInput = $("#comment-" + reviewId);
+            var comment = commentInput.val();
+            commentInput.val('');
+            if (comment.length > 0) {
+                $.ajax({
+                    url: '/ajax/add-comment/',
+                    data: {
+                        'review_id': reviewId,
+                        'comment': comment
+                    },
+                    dataType: 'json'
+                });
+
+                $("#comment-list-" + reviewId).prepend(
+                    '<tr>' +
+                        '<td>' +
+                            '<a href="/profile/{{ request.user.username }}/">' +
+                                '{{ request.user.first_name }} {{ request.user.last_name }}' +
+                            '</a> ' +
+                            comment +
+                        '</td>' +
+                    '</tr>'
+                );
+
+                var numComments = $("#comment-num-" + reviewId);
+                var newNum = parseInt(numComments.html()) + 1;
+                numComments.html(newNum);
+            }
+        }
     </script>
 {% endblock %}

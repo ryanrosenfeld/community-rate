@@ -9,3 +9,13 @@
 .thoughts-col {
     width: 60%;
 }
+
+.comments {
+    border: solid lightgray 1px;
+    margin-bottom: 10px;
+    display: none;
+}
+
+.table-comments {
+    border: 2px dashed #00bcd4;
+}

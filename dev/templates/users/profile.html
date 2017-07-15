@@ -361,8 +361,9 @@
                 </div>
                 <div class="modal-body">
                     <div class="prof-pic-container">
-                        <div class="prof-pic">
-                            <img src="https://s3.amazonaws.com/communityrate/{{ request.user.username }}"
+                        <div class="prof-pic photo">
+                            <img src="{% if request.user.has_pic %}https://s3.amazonaws.com/communityrate/{{ request.user.username }}
+                                      {% else %}{% static '/material-dash/assets/img/placeholder.jpg' %}{% endif %}"
                                  class="prof-pic-src"
                                  id="profPicPreview" title=""/>
                             <input type="file" id="wizard-picture">
