@@ -158,16 +158,20 @@ def home(request):
 
 @login_required
 def activity_feed(request):
-    # Get following users
-    following = request.user.follower_set.all()
+    # Get following users & append current user
+    users = [follower_obj.following for follower_obj in request.user.follower_set.all()]
+    users.append(request.user)
+
+    # Collect updates in activity feed
     updates = []
-    for follower_obj in following:
-        reviews = Review.objects.filter(creator=follower_obj.following)
+    for user in users:
+        reviews = Review.objects.filter(creator=user)
         for r in reviews:
             movie = get_movie_by_id(r.movie_id, True)
-            updates.append((follower_obj.following, movie, r))
+            updates.append((user, movie, r))
     updates = sorted(updates, key=lambda x: x[2].date_added, reverse=True)
 
+    # Check if new user & show welcome message
     welcome = request.session.get('welcome', False)
     if welcome:
         request.session['welcome'] = None
