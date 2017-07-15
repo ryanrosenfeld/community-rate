@@ -66,22 +66,27 @@ def top_movies(request):
     # Get following users
     following = [f.following for f in request.user.follower_set.all()]
 
-    # Get all movies
-    movies = Movie.objects.all()
-
-    # Top movies: Tuple (movie, av rating, most common react)
+    # Top movies: Tuple (movie, av rating, most common react, number of reviews)
     top = []
 
-    # Collect av rating, most common reaction for all movies with friend reviews
-    for movie in movies:
-        friend_reviews = []
-        for user in following:
-            reviews = Review.objects.filter(movie_id=movie.movie_id, creator=user)
-            for review in reviews:
-                friend_reviews.append((user, review))
-        if len(friend_reviews) > 0:
-            average = calc_average_review(friend_reviews)
-            top.append((movie, average[0], average[1], len(friend_reviews)))
+    # Collect all relevant movie information from all friend reviews
+    movies = {}
+    for user in following:
+        reviews = Review.objects.filter(creator=user)
+        for review in reviews:
+            if review.movie_id not in movies:
+                movies[review.movie_id] = {'movie': Movie.objects.get(movie_id=review.movie_id), 'count': 1,
+                                           'sum': review.rating, 'reactions': [review.reaction]}
+            else:
+                current = movies[review.movie_id]
+                current['count'] += 1
+                current['sum'] += review.rating
+                current['reactions'].append(review.reaction)
+
+    # Organize movie information into list of top movies
+    for movie_id, movie in movies.items():
+        average_rating = "{0:.1f}".format(float(movie['sum']) / movie['count'])
+        top.append((movie['movie'], average_rating, most_common(movie['reactions']), movie['count']))
 
     # Sort top movies by rating
     top = sorted(top, key=lambda x: (float(x[1]), x[3]), reverse=True)
