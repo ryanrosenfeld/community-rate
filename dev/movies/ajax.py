@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 
-from general.models import SiteUser
+from general.models import SiteUser, Notification
 from movies.functions import get_following_user_reviews, calc_average_review
 from movies.models import Review, ListEntry, List
 from movies.services import get_movie_by_id, search_movies
@@ -115,6 +115,12 @@ def add_editor(request):
     user = SiteUser.objects.filter(id=user_id)[0]
 
     l.editors.add(user)
+
+    # Add a notification
+    msg = "{0} {1} added you as an editor on the list {2}".format(request.user.first_name, request.user.last_name,
+                                                                   l.name)
+    n = Notification.objects.create(message=msg, user=user)
+    n.save()
     return JsonResponse({})
 
 

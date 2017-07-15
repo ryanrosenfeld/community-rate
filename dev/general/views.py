@@ -196,7 +196,6 @@ def tutorial(request):
             request.user.about_me = about_me
             request.user.fav_quote = fav_quote
             request.user.timezone = timezone
-            request.user.has_pic = True
             request.user.save()
 
             request.session['welcome'] = True

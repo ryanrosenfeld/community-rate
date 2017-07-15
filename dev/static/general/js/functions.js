@@ -119,6 +119,7 @@ functions = {
             if(xhr.readyState === 4){
               if(xhr.status === 200 || xhr.status === 204){
                 // success
+                  alert("Success");
               }
               else{
                 // failure (but this seems to always be the case and it still works ??)
@@ -126,6 +127,11 @@ functions = {
            }
           };
           xhr.send(postData);
+
+          // Send ajax request to reflect the user now has a picture
+          $.ajax({
+            url: '/ajax/has-pic/'
+          });
       }
     },
 

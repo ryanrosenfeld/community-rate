@@ -37,7 +37,7 @@ def follow(request):
 
     # Create a notification for the person who was followed
     msg = "{0} {1} is now following you!".format(request.user.first_name, request.user.last_name)
-    n = Notification.objects.create(message=msg, notification_class="Follower", user=following_user)
+    n = Notification.objects.create(message=msg, user=following_user)
     n.save()
     return JsonResponse({'success': True})
 
@@ -76,3 +76,10 @@ def unfollow(request):
     f.delete()
 
     return JsonResponse({'success': True})
+
+
+@login_required
+def has_pic(request):
+    request.user.has_pic = True
+    request.user.save()
+    return JsonResponse({})
