@@ -3,14 +3,14 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
-import re, os, json, boto3
+import boto3
+import re
 
 from .forms import *
 from .models import *
 from movies.models import Review
 from movies.services import get_movie_by_id
 from users.forms import profileSetupForm
-from users.functions import upload_prof_pic
 
 
 User = get_user_model()
@@ -226,12 +226,3 @@ def sign_s3(request):
         'data': presigned_post,
         'url': 'https://communityrate.s3.amazonaws.com/' + file_name
     })
-
-
-@login_required
-def mark_notifications_read(request):
-    notes = Notification.objects.filter(user=request.user, is_read=False)
-    for n in notes:
-        n.is_read = True
-        n.save()
-    return JsonResponse({})

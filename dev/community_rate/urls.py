@@ -1,8 +1,8 @@
 from django.conf.urls import url
 from django.contrib import admin
-from general import views as general_views
-from movies import views as movie_views
-from users import views as user_views
+from general import views as general_views, ajax as general_ajax
+from movies import views as movie_views, ajax as movie_ajax
+from users import views as user_views, ajax as user_ajax
 
 urlpatterns = [
     # General views
@@ -36,20 +36,25 @@ urlpatterns = [
     url(r'^settings/$', user_views.settings),
     url(r'^relationships/$', user_views.relationships),
 
+
+    # AJAX URLs -------------------------------------------------
+
+    # General AJAX Requests
+    url(r'^ajax/mark-notifications-read/', general_ajax.mark_notifications_read),
+
     # Movie AJAX Requests
-    url(r'^ajax/filter-movies/', movie_views.filter_movies),
-    url(r'^ajax/get-movie-rating/', movie_views.get_movie_rating),
-    url(r'^ajax/get-movie-info/', movie_views.get_movie_info),
-    url(r'^ajax/add-list-entry/', movie_views.add_list_entry),
-    url(r'^ajax/update-list-name/', movie_views.update_list_name),
-    url(r'^ajax/remove-list-item/', movie_views.remove_list_item),
-    url(r'^ajax/toggle-public-private/', movie_views.toggle_public_private),
-    url(r'^ajax/like-list/', movie_views.like_list),
-    url(r'^ajax/add-editor/', movie_views.add_editor),
-    url(r'^ajax/remove-editor/', movie_views.remove_editor),
+    url(r'^ajax/filter-movies/', movie_ajax.filter_movies),
+    url(r'^ajax/get-movie-rating/', movie_ajax.get_movie_rating),
+    url(r'^ajax/get-movie-info/', movie_ajax.get_movie_info),
+    url(r'^ajax/add-list-entry/', movie_ajax.add_list_entry),
+    url(r'^ajax/update-list-name/', movie_ajax.update_list_name),
+    url(r'^ajax/remove-list-item/', movie_ajax.remove_list_item),
+    url(r'^ajax/toggle-public-private/', movie_ajax.toggle_public_private),
+    url(r'^ajax/like-list/', movie_ajax.like_list),
+    url(r'^ajax/add-editor/', movie_ajax.add_editor),
+    url(r'^ajax/remove-editor/', movie_ajax.remove_editor),
 
     # User AJAX Requests
-    url(r'^ajax/follow/', user_views.follow),
-    url(r'^ajax/unfollow/', user_views.unfollow),
-    url(r'^ajax/mark-notifications-read/', general_views.mark_notifications_read)
+    url(r'^ajax/follow/', user_ajax.follow),
+    url(r'^ajax/unfollow/', user_ajax.unfollow)
 ]
