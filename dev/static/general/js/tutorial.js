@@ -1,14 +1,8 @@
-$(window).on('load', function () {
-    var newUser = "{{ new_user }}";
-    if (newUser == "True") {
-        $('#welcomeModal').modal({backdrop: 'static', keyboard: false});
-    }
-    else {
-        tutorial(1);
-    }
-});
-
 function tutorial(step) {
+    // If on mobile device skip straight to profile setup
+    if ( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+        step = 3;
+    }
     switch (step) {
         case 1:
             $('#tutorialModal1').modal({backdrop: 'static', keyboard: false});

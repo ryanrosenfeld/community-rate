@@ -225,17 +225,10 @@
                                         what movies you want to watch? Figure out what movie to watch next?</p>
                                     <strong class="text-primary">If so, you've come to the right place!</strong>
                                 </div>
-                                <div class="instruction">
-                                    <div class="col-md-6 text-center">
-                                        <strong>Already know what's up?</strong>
-                                        <button class="btn btn-info" data-dismiss="modal" onclick="tutorial(3)">Skip to profile setup</button>
-                                    </div>
-                                    <div class="col-md-6 text-center">
-                                        <strong>Never been here before?</strong>
-                                        <button class="btn btn-success" data-dismiss="modal" onclick="tutorial(1)">
-                                            Learn about the site
-                                        </button>
-                                    </div>
+                                <div class="instruction text-center">
+                                    <button class="btn btn-success" data-dismiss="modal" onclick="tutorial(1)">
+                                        Get started!
+                                    </button>
                                 </div>
                             </div>
                             <div class="modal-footer text-center">
@@ -482,6 +475,24 @@
 
 <!-- General Functions -->
 <script src="{% static 'general/js/functions.js' %}"></script>
+
+<script>
+    $(window).on('load', function () {
+    var newUser = "{{ new_user }}";
+    console.log(newUser);
+    if (newUser == "True") {
+        $('#welcomeModal').modal({backdrop: 'static', keyboard: false});
+    }
+    else {
+        if ( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+            tutorial(3);
+        }
+        else {
+            tutorial(1);
+        }
+    }
+});
+</script>
 
 <!-- Tutorial functions -->
 <script src="{% static 'general/js/tutorial.js' %}"></script>
