@@ -30,7 +30,7 @@ urlpatterns = [
 
     # Users views
     url(r'^users/', user_views.main_view),
-    url(r'^follow/(?P<username>\w{0,50})/$', user_views.follow),
+    url(r'^follow/(?P<username>\w{0,50})/$', user_ajax.follow),
     url(r'^profile/(?P<username>\w{0,50})/$', user_views.profile),
     url(r'^profile/$', user_views.profile),
     url(r'^settings/$', user_views.settings),
