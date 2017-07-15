@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block header %}
+    <title>Help</title>
+{% endblock %}
+
+{% block content %}
+    <div class="col-md-10 col-md-offset-1">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Help -
+                    <small>Instructions, Tips, and Common Questions</small>
+                </h4>
+            </div>
+            <div class="card-content">
+                <div class="col-md-4">
+                    <ul class="nav nav-pills nav-pills-success nav-stacked">
+                        <li class="active">
+                            <a href="#pill1" data-toggle="tab">How do I rate movies?</a>
+                        </li>
+                        <li>
+                            <a href="#pill2" data-toggle="tab">How can I share lists with friends?</a>
+                        </li>
+                        <li>
+                            <a href="#pill3" data-toggle="tab">Why is my activity feed blank?</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-8">
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="pill1">
+                            To start rating movies, follow these 3 easy steps:
+                            <ol>
+                                <li>Search for a movie, either in the <strong class="text-primary">search bar</strong> at the top of the page or in the <strong class="text-primary">Movie Database</strong></li>
+                                <li>Go to the movie page for the movie you want to rate by clicking on the movie's row</li>
+                                <li>Click the <strong class="text-primary">Update Review</strong> button in the <strong class="text-primary">My Review</strong> section on the right side of the page to enter a rating!</li>
+                            </ol>
+                        </div>
+                        <div class="tab-pane" id="pill2">
+                            Click on the <strong class="text-primary">Lists</strong> link on the side nav bar to go to the main Lists page. From here, you have 3 views:<br>
+                            <ol>
+                                <li><strong class="text-primary">My Lists</strong>: all the lists you have made</li>
+                                <li><strong class="text-primary">Popular Lists</strong>: the most popular public lists your friends have made</li>
+                                <li><strong class="text-primary">Editable Lists</strong>: the lists your friends have given you permission to edit</li>
+                            </ol>
+                            Out of the gate it's really easy to share public lists with friends, as you can
+                            automatically see all your friends' lists and <strong class="text-primary">like</strong>
+                            them if they're really cool. But, this can be taken even further<br><br>
+                            By clicking on the <strong class="text-primary">Permissions</strong> button on one of your
+                            lists, you can add <strong class="text-primary">Editors</strong> to your list.
+                            Any friends you add as Editors can also edit the list, so now you can create awesome group
+                            lists with friends!
+                        </div>
+                        <div class="tab-pane" id="pill3">
+                            The activity feed only shows the movie reviews of the people you follow.
+                            Either you aren't following any other users, or the users you are following haven't reviewed anything yet.<br><br>
+                            Start <strong class="text-primary">following users</strong>, or tell your friends to <strong class="text-primary">get active</strong> and start making ratings!
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

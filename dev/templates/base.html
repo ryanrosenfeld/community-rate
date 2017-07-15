@@ -183,6 +183,8 @@
                         {% elif page == 'users' or page == 'all_users' or page == 'relationships' %}Users
                         {% elif page == 'movies' or page == 'movie_db' or page == 'top_movies' %}Movies
                         {% elif page == 'lists' %}Lists
+                        {% elif page == 'contact' %}Contact
+                        {% elif page == 'help' %}Help
                         {% endif %}
                     </a>
                 </div>
@@ -213,8 +215,16 @@
                             <ul class="dropdown-menu">
                                 <li><a href="/profile/">Profile</a></li>
 {#                                <li><a href="/settings/">Settings</a></li>#}
-                                <li class="divider"></li>
                                 <li><a onclick="logout()">Log out</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="material-icons">help</i>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/help/">Instructions/Tips</a></li>
+                                <li><a href="/contact/">Contact</a></li>
                             </ul>
                         </li>
                     </ul>

@@ -205,6 +205,16 @@ def welcome(request):
 
 
 @login_required
+def help_page(request):
+    return render(request, 'help.html', {'page': 'help'})
+
+
+@login_required
+def contact(request):
+    return render(request, 'contact.html', {'page': 'contact'})
+
+
+@login_required
 def sign_s3(request):
     file_name = request.user.username
     file_type = request.GET.get('file_type', None)
