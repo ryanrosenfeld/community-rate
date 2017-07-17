@@ -1,0 +1,54 @@
+{% extends 'login-base.html' %}
+
+{% load static %}
+
+{% block content %}
+    <div class="full-page login-page" filter-color="black" data-image="{% static 'material-dash/assets/img/login.jpeg' %}">
+        <!--   you can change the color of the filter page using: data-color="blue | purple | green | orange | red | rose " -->
+        <div class="content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4 col-sm-6 col-md-offset-4 col-sm-offset-3">
+                        <form method="POST" action="/login/">
+                            {% csrf_token %}
+                            <div class="card card-login card-hidden">
+                                <div class="card-header text-center" data-background-color="rose">
+                                    <h4 class="card-title">Link Account</h4>
+                                </div>
+                                <div class="card-content">
+                                    <div class="text-center">
+                                        <h3>Are any of these accounts yours?</h3>
+                                    </div>
+                                    <div class="col-md-10 col-md-offset-1">
+                                        <table class="table table-hover">
+                                            <tbody>
+                                                {% for match in matches %}
+                                                    <tr>
+                                                        <td>{{ match.first_name }} {{ match.last_name }} ({{ match.username }})</td>
+                                                        <td>{{ match.email }}</td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="footer text-center">
+                                    <button type="submit" class="btn btn-rose btn-simple btn-wd btn-lg">Let's go</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="footer">
+            <div class="container">
+                <p class="pull-right">
+                    Created by Ryan Rosenfeld
+                </p>
+            </div>
+        </footer>
+    </div>
+{% endblock %}
+
+

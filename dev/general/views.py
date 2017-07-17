@@ -6,6 +6,8 @@ from django.shortcuts import render
 import boto3
 import re
 
+from sympy import Q
+
 from .forms import *
 from .models import *
 from movies.models import Review, Comment
@@ -49,17 +51,20 @@ def fb_login(request):
         login(request, user)
         return HttpResponseRedirect('/')
 
-    # Check if matching user & assign fb id & login
-    user = SiteUser.objects.filter(email=email)
-    if len(user) > 0:
-        user = user[0]
-        user.fb_id = fb_id
-        user.save()
-        login(request, user)
-        return HttpResponseRedirect('/')
+    # Check if matching user & redirect to page to check if their account
+    matches = SiteUser.objects.filter(Q(email=email) | Q(first_name=first_name, last_name=last_name))
+    if len(matches) > 0:
+        user = {
+            'fb_id': fb_id,
+            'first': first_name,
+            'last': last_name,
+            'email': email
+        }
+        request.session['user-match-check'] = user
+        return HttpResponseRedirect('/login/check-matches/')
 
     # If not, create new user & login
-    username = first_name + "_" + last_name
+    username = str.lower(first_name + last_name)
     conflicts = SiteUser.objects.filter(username=username)
     if len(conflicts) > 0:
         num = 1
@@ -80,6 +85,15 @@ def fb_login(request):
     user.save()
     login(request, user)
     return HttpResponseRedirect('/tutorial/')
+
+
+def fb_check_matches(request):
+    user = request.session.get('user-match-check', None)
+    if user is None:
+        return HttpResponseRedirect('/login/')
+
+    matches = SiteUser.objects.filter(Q(email=email) | Q(first_name=first_name, last_name=last_name))
+    return render(request, 'check-matches.html', {'user': user, 'matches': matches})
 
 
 def logout_view(request):
