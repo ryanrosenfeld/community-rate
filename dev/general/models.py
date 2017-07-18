@@ -8,6 +8,7 @@ class SiteUser(AbstractUser):
     about_me = models.TextField(blank=True)
     has_pic = models.BooleanField(default=False)
     timezone = models.CharField(max_length=100, default="US/Eastern")
+    reset_key = models.TextField(default='1')
 
 
 class Notification(models.Model):

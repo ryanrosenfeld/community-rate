@@ -11,6 +11,8 @@ urlpatterns = [
     url(r'^login/', general_views.login_view),
     url(r'fb-login/', general_views.fb_login),
     url(r'^register/$', general_views.new_user),
+    url(r'^forgot-password/', general_views.forgot_password),
+    url(r'^reset-password/(.*)/', general_views.reset_password),
     url(r'^logout/', general_views.logout_view),
     url(r'^accounts/login/$', general_views.login_view, name='login'),
     url(r'^activity-feed/', general_views.activity_feed),

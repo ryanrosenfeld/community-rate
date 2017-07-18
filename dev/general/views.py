@@ -1,3 +1,7 @@
+import binascii
+import os
+from threading import Timer
+
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
@@ -6,6 +10,7 @@ from django.shortcuts import render
 import boto3
 import re
 
+from general.services import send_email
 from .forms import *
 from .models import *
 from movies.models import Review, Comment
@@ -21,8 +26,8 @@ def login_view(request):
         return HttpResponseRedirect('/')
     elif request.method == 'POST':
         form = LoginForm(request.POST)
-        if form.is_valid():
 
+        if form.is_valid():
             u = request.POST['username']
             p = request.POST['password']
             user = authenticate(username=u, password=p)
@@ -116,11 +121,9 @@ def new_user(request):
             last = form.cleaned_data['last_name']
             email = form.cleaned_data['email']
 
-            user = SiteUser.objects.create_user(username=username,
-                password=password1,
-                first_name=first,
-                last_name=last,
-                email=email)
+            user = SiteUser.objects.create_user(username=username, password=password1,
+                                                first_name=first, last_name=last,
+                                                email=email)
             user.save()
 
             # Log the user in, take them to their homepage
@@ -133,6 +136,64 @@ def new_user(request):
     else:
         form = SignupForm()
     return render(request, 'general/register.html', {'form': form, 'page': 'register'})
+
+
+def forgot_password(request):
+    form = ForgotPasswordForm()
+    message = ''
+
+    if request.method == 'POST':
+        form = ForgotPasswordForm(request.POST)
+
+        if form.is_valid():
+            u = SiteUser.objects.filter(email=request.POST['email'])
+            if len(u) > 0:
+                base_url = 'http://localhost:8000'
+                # base_url = 'http://www.community-rate.com'
+                u = u[0]
+                u.reset_key = binascii.hexlify(os.urandom(24)).decode('utf-8')
+                u.save()
+
+                def reset_rk():
+                    u.reset_key = '1'
+                    u.save()
+
+                # Reset reset_key after 5 minutes
+                t = Timer(300.0, reset_rk)
+                t.start()
+
+                send_email('communityrate.help@gmail.com', 'CommunityRateMovies', u.email, 'CommunityRate Reset Password',
+                           'Hello ' + u.first_name + ', please follow this link to reset your password: ' + base_url +
+                           '/reset-password/' + u.reset_key + '/.\n\nUsername for your account:  ' + u.username)
+                return HttpResponseRedirect('/login/')
+            else:
+                message = 'The email address could not be found in the system'
+    return render(request, 'general/forgot-password.html', {'form': form, 'message': message})
+
+
+def reset_password(request, key):
+    form = ResetPassForm()
+    message = ''
+    key_check = SiteUser.objects.filter(reset_key=key)
+    if len(key_check) == 0:
+        return HttpResponseRedirect('/login/')
+    if request.method == 'POST':
+        form = ResetPassForm(request.POST)
+        if form.is_valid():
+            if request.POST['password'] != request.POST['conf_password']:
+                message = "The passwords did not match"
+            else:
+                u = SiteUser.objects.filter(username=request.POST['username'])
+                if len(u) > 0:
+                    u = u[0]
+                    if key == u.reset_key and key != '1':
+                        u.set_password(request.POST['password'])
+                        u.reset_key = '1'
+                        u.save()
+                        return HttpResponseRedirect('/login/')
+                    else:
+                        message = "Invalid request"
+    return render(request, 'reset-password.html', {'form': form, 'message': message, 'key': key})
 
 
 @login_required

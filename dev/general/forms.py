@@ -72,3 +72,29 @@ class SignupForm(forms.Form):
         if len(users) > 0:
             raise ValidationError(self.fields['email'].error_messages['invalid'])
         return email
+
+
+class ForgotPasswordForm(forms.Form):
+    email = forms.EmailField(
+        label='',
+        max_length=100,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'type': 'email'})
+    )
+
+
+class ResetPassForm(forms.Form):
+    username = forms.CharField(
+        label='',
+        max_length=100,
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
+    password = forms.CharField(
+        label='',
+        max_length=100,
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'minLength': '6'})
+    )
+    conf_password = forms.CharField(
+        label='',
+        max_length=100,
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'minLength': '6'})
+    )
