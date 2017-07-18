@@ -48,7 +48,7 @@
                                         <div class="img-container">
                                             <a href="/profile/{{ u.username }}/">
                                                 {% if u.has_pic %}
-                                                    <img src="https://s3.amazonaws.com/communityrate/{{ u.username }}">
+                                                    <img src="https://s3.amazonaws.com/communityrate/{{ u.id }}">
                                                 {% else %}
                                                     <img src="{% static '/material-dash/assets/img/placeholder.jpg' %}">
                                                 {% endif %}

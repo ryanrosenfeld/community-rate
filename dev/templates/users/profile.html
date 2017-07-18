@@ -17,7 +17,7 @@
             <div class="card-avatar">
                 <div class="photo">
                     {% if user.has_pic %}
-                        <img src="https://s3.amazonaws.com/communityrate/{{ user.username }}" id="profPic">
+                        <img src="https://s3.amazonaws.com/communityrate/{{ user.id }}" id="profPic">
                     {% else %}
                         <img src="{% static 'material-dash/assets/img/placeholder.jpg' %}" id="profPic">
                     {% endif %}
@@ -362,7 +362,7 @@
                 <div class="modal-body">
                     <div class="prof-pic-container">
                         <div class="prof-pic photo">
-                            <img src="{% if request.user.has_pic %}https://s3.amazonaws.com/communityrate/{{ request.user.username }}
+                            <img src="{% if request.user.has_pic %}https://s3.amazonaws.com/communityrate/{{ request.user.id }}
                                       {% else %}{% static '/material-dash/assets/img/placeholder.jpg' %}{% endif %}"
                                  class="prof-pic-src"
                                  id="profPicPreview" title=""/>
