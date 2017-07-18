@@ -12,10 +12,10 @@
 {% block content %}
 
     {% if response %}
-    <h1>{{response}}</h1>
+        <h1>{{ response }}</h1>
     {% endif %}
 
-    <div class="col-md-12">
+    <div class="col-md-10 col-md-offset-1">
         {# Search #}
         <div class="col-md-5">
             <div class="form-group label-floating">
@@ -27,47 +27,64 @@
         {# List of users #}
         <div class="card">
             <div class="card-header" data-background-color="blue">
-                    <h4 class="title card-header-title">All Users</h4>
+                <h4 class="title card-header-title">All Users</h4>
             </div>
             <div class="card-content">
                 <div class="table-responsive">
-                    <table class="table">
-                        <thead class="text-info">
-                            <th>Username</th>
-                            <th>Name</th>
-                            <th class="text-center">Followers</th>
-                            <th class="text-right">Actions</th>
+                    <table class="table table-shopping">
+                        <thead class="text-rose">
+                        <tr>
+                            <th class="text-center"></th>
+                            <th>User</th>
+                            <th class="text-center">Number of Followers</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
                         </thead>
                         <tbody>
-                            {% for u, count, already_following in users %}
-                                {% if u != request.user %}
-                                    <tr id="{{ u.first_name|lower }} {{ u.last_name|lower }}">
-                                        <td>
-                                            <h4>{{ u.username }}</h4>
-                                        </td>
-                                        <td>
-                                            <h4>{{ u.first_name }} {{ u.last_name }}</h4>
-                                        </td>
-                                        <td>
-                                            <h4 class="text-center" id="fcount-{{ u.username }}">{{ count }}</h4>
-                                        </td>
-                                        <td class="td-actions text-right" id="td-actions-{{ u.username }}">
-                                            <button type="button" rel="tooltip" title="Visit profile" class="btn btn-info btn-simple" onclick="window.location.href='/profile/{{ u.username }}/'">
-                                                <i class="material-icons">launch</i>
+                        {% for u, count, already_following in users %}
+                            {% if u != request.user %}
+                                <tr id="{{ u.first_name|lower }} {{ u.last_name|lower }}">
+                                    <td class="text-center">
+                                        <div class="img-container">
+                                            <a href="/profile/{{ u.username }}/">
+                                                {% if u.has_pic %}
+                                                    <img src="https://s3.amazonaws.com/communityrate/{{ u.username }}">
+                                                {% else %}
+                                                    <img src="{% static '/material-dash/assets/img/placeholder.jpg' %}">
+                                                {% endif %}
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td class="td-name">
+                                        <a class="text-primary"
+                                           href="/profile/{{ u.username }}/">{{ u.first_name }} {{ u.last_name }}</a>
+                                        <br>
+                                        <small>@{{ u.username }}</small>
+                                    </td>
+                                    <td>
+                                        <h4 class="text-center" id="fcount-{{ u.username }}">{{ count }}</h4>
+                                    </td>
+                                    <td class="td-actions text-center" id="td-actions-{{ u.username }}">
+                                        <button type="button" rel="tooltip" title="Visit profile"
+                                                class="btn btn-info btn-simple"
+                                                onclick="window.location.href='/profile/{{ u.username }}/'">
+                                            <i class="material-icons">launch</i>
+                                        </button>
+                                        {% if already_following %}
+                                            <button type="button" id="fbtn-{{ u.username }}" rel="tooltip"
+                                                    title="Unfollow" class="btn btn-danger btn-simple ufbtn">
+                                                <i class="material-icons">clear</i>
                                             </button>
-                                            {% if already_following %}
-                                                <button type="button" id="fbtn-{{ u.username }}" rel="tooltip" title="Unfollow" class="btn btn-danger btn-simple ufbtn">
-                                                    <i class="material-icons">clear</i>
-                                                </button>
-                                            {% else %}
-                                                <button type="button" id="fbtn-{{ u.username }}" rel="tooltip" title="Follow" class="btn btn-primary btn-simple fbtn">
-                                                    <i class="material-icons">person_add</i>
-                                                </button>
-                                            {% endif %}
-                                        </td>
-                                    </tr>
-                                {% endif %}
-                            {% endfor %}
+                                        {% else %}
+                                            <button type="button" id="fbtn-{{ u.username }}" rel="tooltip"
+                                                    title="Follow" class="btn btn-primary btn-simple fbtn">
+                                                <i class="material-icons">person_add</i>
+                                            </button>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
                         </tbody>
                     </table>
                 </div>
@@ -78,8 +95,8 @@
 
 {% block scripts %}
     <script>
-        $(document).ready(function() {
-            $("#filter-users").keyup(function() {
+        $(document).ready(function () {
+            $("#filter-users").keyup(function () {
                 var query = $("#filter-users").val().toLowerCase();
                 if (query.length > 0) {
                     $('tbody tr').not('[id*="' + query + '"]').hide();
@@ -91,7 +108,7 @@
             });
 
             {% for u, count, already_following in users %}
-                $("#fbtn-{{ u.username }}").click(function() {
+                $("#fbtn-{{ u.username }}").click(function () {
                     {% if already_following %}
                         functions.unfollow('{{ u.username }}', '{{ u.first_name }} {{ u.last_name }}', onUnfollow);
                     {% else %}
@@ -110,7 +127,7 @@
             btn.addClass('btn-danger');
             btn.html('<i class="material-icons">clear</i>');
             btn.unbind('click');
-            btn.click(function() {
+            btn.click(function () {
                 functions.unfollow(username, name, onUnfollow);
                 $(".tooltip").hide();
             });
@@ -126,12 +143,12 @@
             btn.addClass('btn-primary');
             btn.html('<i class="material-icons">person_add</i>');
             btn.unbind('click');
-            btn.click(function() {
+            btn.click(function () {
                 functions.follow(username, name, onFollow);
                 $(".tooltip").hide();
             });
             var fcount = $("#fcount-" + username);
             fcount.html(parseInt(fcount.html()) - 1);
-         }
+        }
     </script>
 {% endblock %}

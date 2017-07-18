@@ -13,11 +13,13 @@
         <div class="card-content table-responsive">
             <table class="table table-hover table-shopping">
                 <thead class="text-rose">
-                    <th class="text-center"></th>
-                    <th class="movie-col">Movie</th>
-                    <th class="text-center rating-col">Average Rating</th>
-                    <th class="text-center react-col">Most Common Reaction</th>
-                    <th class="text-center">Number of Reviews</th>
+                    <tr>
+                        <th class="text-center"></th>
+                        <th class="movie-col">Movie</th>
+                        <th class="text-center rating-col">Average Rating</th>
+                        <th class="text-center react-col">Most Common Reaction</th>
+                        <th class="text-center">Number of Reviews</th>
+                    </tr>
                 </thead>
                 <tbody>
                 {% for movie in top_movies %}
