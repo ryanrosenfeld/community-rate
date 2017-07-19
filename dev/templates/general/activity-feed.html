@@ -30,7 +30,7 @@
                     <a href="/profile/{{ user.username }}/">
                         <div class="card-image-circle photo" style="display: inline-block;">
                             {% if user.has_pic %}
-                                <img src="https://s3.amazonaws.com/communityrate/{{ user.username }}">
+                                <img src="https://s3.amazonaws.com/communityrate/{{ user.id }}">
                             {% else %}
                                 <img src="{% static 'material-dash/assets/img/placeholder.jpg' %}">
                             {% endif %}
