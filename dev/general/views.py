@@ -148,8 +148,7 @@ def forgot_password(request):
         if form.is_valid():
             u = SiteUser.objects.filter(email=request.POST['email'])
             if len(u) > 0:
-                base_url = 'http://localhost:8000'
-                # base_url = 'http://www.community-rate.com'
+                base_url = 'http://www.community-rate.com'
                 u = u[0]
                 u.reset_key = binascii.hexlify(os.urandom(24)).decode('utf-8')
                 u.save()
