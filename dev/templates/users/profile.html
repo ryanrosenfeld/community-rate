@@ -221,10 +221,13 @@
 
             <div class="card-content">
                 <div class="tab-content">
-                    <div class="col-sm-12">
-                        <a class="btn btn-primary pull-right" href="/new-list/" id="btn-new-list"><i
-                                class="material-icons">add_circle_outline</i> New List</a>
-                    </div>
+                    {% if owner %}
+                        <div class="col-sm-12">
+                            <a class="btn btn-primary pull-right" href="/new-list/" id="btn-new-list"><i
+                                    class="material-icons">add_circle_outline</i> New List
+                            </a>
+                        </div>
+                    {% endif %}
                     <div class="tab-pane active" id="public">
                         <table class="table table-hover review-table">
                             <thead class="text-success">
