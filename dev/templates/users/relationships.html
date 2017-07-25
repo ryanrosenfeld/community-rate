@@ -1,7 +1,10 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block header %}
     <title>My Relationships</title>
+    <link href="{% static 'general/css/users-pages.css' %}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
@@ -43,10 +46,14 @@
                                         {% for u, count, already_following in follower_users %}
                                             <tr>
                                                 <td>
-                                                    <h4>{{u.username}}</h4>
+                                                    <a href="/profile/{{ u.id }}/">
+                                                        <h4>{{u.username}}</h4>
+                                                    </a>
                                                 </td>
                                                 <td>
-                                                    <h4>{{ u.first_name }} {{ u.last_name }}</h4>
+                                                    <a href="/profile/{{ u.id }}/">
+                                                        <h4>{{ u.first_name }} {{ u.last_name }}</h4>
+                                                    </a>
                                                 </td>
                                                 <td>
                                                     <h4>{{ count }}</h4>
@@ -82,11 +89,15 @@
                                     <tbody>
                                         {% for u, count, already_following in following_users %}
                                             <tr id="{{ u.id }}">
-                                                <td >
-                                                    <h4>{{u.username}}</h4>
+                                                <td>
+                                                    <a href="/profile/{{ u.id }}/">
+                                                        <h4>{{u.username}}</h4>
+                                                    </a>
                                                 </td>
                                                 <td>
-                                                    <h4>{{ u.first_name }} {{ u.last_name }}</h4>
+                                                    <a href="/profile/{{ u.id }}/">
+                                                        <h4>{{ u.first_name }} {{ u.last_name }}</h4>
+                                                    </a>
                                                 </td>
                                                 <td>
                                                     <h4>{{ count }}</h4>

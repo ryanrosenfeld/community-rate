@@ -282,7 +282,7 @@ def contact(request):
 
 @login_required
 def sign_s3(request):
-    file_name = request.user.id
+    file_name = str(request.user.id)
     file_type = request.GET.get('file_type', None)
 
     s3 = boto3.client('s3')
