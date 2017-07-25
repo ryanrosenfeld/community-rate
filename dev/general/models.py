@@ -13,5 +13,6 @@ class SiteUser(AbstractUser):
 
 class Notification(models.Model):
     message = models.CharField(max_length=300)
+    url = models.CharField(max_length=200, blank=True)
     is_read = models.BooleanField(default=False)
     user = models.ForeignKey(SiteUser)

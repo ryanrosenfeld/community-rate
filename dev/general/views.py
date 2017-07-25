@@ -13,8 +13,7 @@ import re
 from general.services import send_email
 from .forms import *
 from .models import *
-from movies.models import Review, Comment
-from movies.services import get_movie_by_id
+from .functions import collect_feed_updates
 from users.forms import profileSetupForm
 
 
@@ -223,15 +222,7 @@ def activity_feed(request):
     users.append(request.user)
 
     # Collect updates in activity feed
-    updates = []
-    for user in users:
-        reviews = Review.objects.filter(creator=user)
-        for r in reviews:
-            movie = get_movie_by_id(r.movie_id, True)
-            comments = Comment.objects.filter(review=r)
-            comments = sorted(comments, key=lambda x: x.date_added, reverse=True)
-            updates.append((user, movie, r, comments))
-    updates = sorted(updates, key=lambda x: x[2].date_added, reverse=True)
+    updates = collect_feed_updates(users)
 
     # Check if new user & show welcome message
     welcome = request.session.get('welcome', False)

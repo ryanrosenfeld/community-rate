@@ -30,8 +30,9 @@ def add_comment(request):
 
     # Add a notification
     movie = get_movie_by_id(review.movie_id, False)
-    msg = "{0} {1} made a comment on your review of {2}!".format(request.user.first_name, request.user.last_name,
+    msg = "{0} {1} made a comment on your review of {2}".format(request.user.first_name, request.user.last_name,
                                                                  movie['title'])
-    n = Notification.objects.create(message=msg, user=review.creator)
+    url = "/my-reviews/#review-" + review_id
+    n = Notification.objects.create(message=msg, url=url, user=review.creator)
     n.save()
     return JsonResponse({})

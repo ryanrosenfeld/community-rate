@@ -120,7 +120,7 @@
                 {#                            <p>Discover</p>#}
                 {#                        </a>#}
                 {#                    </li>#}
-                <li {% if page == 'movie_db' or page == 'top_movies' or page == 'movies' %}class="active"{% endif %}>
+                <li {% if page == 'movie_db' or page == 'top_movies' or page == 'movies' or page == 'my_reviews' %}class="active"{% endif %}>
                     <a data-toggle="collapse" href="#movies">
                         <i class="material-icons">movie</i>
                         <p>Movies
@@ -134,6 +134,9 @@
                             </li>
                             <li {% if page == 'movie_db' %}class="active"{% endif %}>
                                 <a href="/movies/">Movie Database</a>
+                            </li>
+                            <li {% if page == 'my_reviews' %}class="active"{% endif %}>
+                                <a href="/my-reviews/">My Reviews</a>
                             </li>
                         </ul>
                     </div>
@@ -181,7 +184,7 @@
                         {% if page == 'activity_feed' %}Activity Feed
                         {% elif page == 'profile' %}Profile
                         {% elif page == 'users' or page == 'all_users' or page == 'relationships' %}Users
-                        {% elif page == 'movies' or page == 'movie_db' or page == 'top_movies' %}Movies
+                        {% elif page == 'movies' or page == 'movie_db' or page == 'top_movies' or page == 'my_reviews' %}Movies
                         {% elif page == 'lists' %}Lists
                         {% elif page == 'contact' %}Contact
                         {% elif page == 'help' %}Help
@@ -200,9 +203,9 @@
                             <ul class="dropdown-menu" id="notification-dropdown">
                                 {% for note in notifications %}
                                     {% if note.is_read %}
-                                        <li><a>{{ note.message }}</a></li>
+                                        <li><a href="{{ note.url }}">{{ note.message }}</a></li>
                                     {% else %}
-                                        <li class="unread-notification"><a>{{ note.message }}</a></li>
+                                        <li class="unread-notification"><a href="{{ note.url }}">{{ note.message }}</a></li>
                                     {% endif %}
                                 {% endfor %}
                             </ul>

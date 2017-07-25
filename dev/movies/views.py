@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 
+from general.functions import collect_feed_updates
 from .forms import ReviewForm
 from .models import List, ListEntry
 from .services import *
@@ -91,6 +92,13 @@ def top_movies(request):
     top = sorted(top, key=lambda x: (float(x[1]), x[3]), reverse=True)
 
     return render(request, 'top-movies.html', {'page': 'top_movies', 'top_movies': top})
+
+
+@login_required
+def my_reviews(request):
+    users = [request.user]
+    updates = collect_feed_updates(users)
+    return render(request, 'my-reviews.html', {'updates': updates, 'page': 'my_reviews'})
 
 
 @login_required

@@ -119,7 +119,8 @@ def add_editor(request):
     # Add a notification
     msg = "{0} {1} added you as an editor on the list {2}".format(request.user.first_name, request.user.last_name,
                                                                    l.name)
-    n = Notification.objects.create(message=msg, user=user)
+    url = "/list/" + list_id + "/"
+    n = Notification.objects.create(message=msg, url=url, user=user)
     n.save()
     return JsonResponse({})
 

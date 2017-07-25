@@ -27,6 +27,7 @@ urlpatterns = [
     url(r'^movie/(.*)/', movie_views.movie_page),
     url(r'^movies/', movie_views.movie_db),
     url(r'^top-movies/', movie_views.top_movies),
+    url(r'^my-reviews/', movie_views.my_reviews),
     url(r'^lists/', movie_views.lists),
     url(r'^list/(.*)/delete/', movie_views.delete_list),
     url(r'^list/(.*)/', movie_views.list_page),
