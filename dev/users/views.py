@@ -16,11 +16,14 @@ def profile(request, user_id=""):
         user = request.user
     else:
         try:
-            user = SiteUser.objects.get(id=user_id)
+            user_id = int(user_id)
+        except ValueError:
+            return HttpResponseRedirect("/users/")
 
+        try:
+            user = SiteUser.objects.get(id=user_id)
         except ObjectDoesNotExist:
-            response = "User \"{0}\" does not exist".format(user_id)
-            return main_view(request, response)
+            return HttpResponseRedirect("/users/")
 
     # Check if person requesting profile is the owner
     owner = user == request.user
