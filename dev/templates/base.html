@@ -89,7 +89,7 @@
                     <div class="collapse" id="userOptions">
                         <ul class="nav">
                             <li>
-                                <a href="/profile/{{ request.user.username }}/">My Profile</a>
+                                <a href="/profile/{{ request.user.id }}/">My Profile</a>
                             </li>
 {#                            <li>#}
 {#                                <a href="/settings/">Settings</a>#}
@@ -109,7 +109,7 @@
                     </a>
                 </li>
                 <li {% if page == 'profile' %}class="active"{% endif %}>
-                    <a href="/profile/{{ request.user.username }}/">
+                    <a href="/profile/{{ request.user.id }}/">
                         <i class="material-icons">account_circle</i>
                         <p>Profile</p>
                     </a>
@@ -213,7 +213,7 @@
                                 <p class="hidden-lg hidden-md">Profile</p>
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a href="/profile/{{ request.user.username }}/">Profile</a></li>
+                                <li><a href="/profile/{{ request.user.id }}/">Profile</a></li>
 {#                                <li><a href="/settings/">Settings</a></li>#}
                                 <li><a onclick="logout()">Log out</a></li>
                             </ul>

@@ -44,7 +44,7 @@ functions = {
     	}
     },
 
-    follow: function (username, name, onSuccess) {
+    follow: function (username, name, onSuccess, user_id) {
         $.ajax({
             url: '/ajax/follow/',
             data: {
@@ -54,7 +54,12 @@ functions = {
             success: function (data) {
                 if (data.success) {
                     functions.sweetAlert('success', "Successfully followed " + name);
-                    onSuccess(username, name);
+                    if (user_id != null) {
+                        onSuccess(username, name, user_id);
+                    }
+                    else {
+                        onSuccess(username, name);
+                    }
                 }
                 else {
                     functions.sweetAlert('problem');
@@ -63,7 +68,7 @@ functions = {
         });
     },
 
-    unfollow: function (username, name, onSuccess) {
+    unfollow: function (username, name, onSuccess, user_id) {
         $.ajax({
             url: '/ajax/unfollow/',
             data: {
@@ -73,7 +78,13 @@ functions = {
             success: function (data) {
                 if (data.success) {
                     functions.sweetAlert('success', "Successfully unfollowed " + name);
-                    onSuccess(username, name)
+                    if (user_id != null) {
+                        onSuccess(username, name, user_id);
+                    }
+                    else {
+                        onSuccess(username, name);
+                    }
+
                 }
                 else {
                     functions.sweetAlert('warning', "There was a problem.");

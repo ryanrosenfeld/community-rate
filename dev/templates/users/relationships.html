@@ -52,7 +52,7 @@
                                                     <h4>{{ count }}</h4>
                                                 </td>
                                                 <td class="td-actions text-right">
-                                                    <button type="button" rel="tooltip" title="Visit profile" class="btn btn-info btn-simple" onclick="window.location.href='/profile/{{ u.username }}/'">
+                                                    <button type="button" rel="tooltip" title="Visit profile" class="btn btn-info btn-simple" onclick="window.location.href='/profile/{{ u.id }}/'">
                                                         <i class="material-icons">launch</i>
                                                     </button>
     {#                                                <button type="button" rel="tooltip" title="Block" class="btn btn-danger btn-simple">#}
@@ -81,7 +81,7 @@
                                     </thead>
                                     <tbody>
                                         {% for u, count, already_following in following_users %}
-                                            <tr id="{{ u.username }}">
+                                            <tr id="{{ u.id }}">
                                                 <td >
                                                     <h4>{{u.username}}</h4>
                                                 </td>
@@ -92,10 +92,10 @@
                                                     <h4>{{ count }}</h4>
                                                 </td>
                                                 <td class="td-actions text-right">
-                                                    <button type="button" rel="tooltip" title="Visit profile" class="btn btn-info btn-simple" onclick="window.location.href='/profile/{{ u.username }}/'">
+                                                    <button type="button" rel="tooltip" title="Visit profile" class="btn btn-info btn-simple" onclick="window.location.href='/profile/{{ u.id }}/'">
                                                         <i class="material-icons">launch</i>
                                                     </button>
-                                                    <button type="button" rel="tooltip" title="Unfollow" class="btn btn-danger btn-simple" onclick="functions.unfollow('{{ u.username }}', '{{ u.first_name }} {{ u.last_name }}', removeRow)">
+                                                    <button type="button" rel="tooltip" title="Unfollow" class="btn btn-danger btn-simple" onclick="functions.unfollow('{{ u.username }}', '{{ u.first_name }} {{ u.last_name }}', removeRow, '{{ u.id }}')">
                                                         <i class="material-icons">clear</i>
                                                     </button>
                                                 </td>
@@ -114,8 +114,8 @@
 
 {% block scripts %}
     <script>
-        function removeRow(username) {
-            $("#" + username).remove();
+        function removeRow(username, name, user_id) {
+            $("#" + user_id).remove();
             var num = parseInt("{{ num_following }}") - 1;
             $("#followingHeader").html('<i class="material-icons">favorite</i>' +  num + ' Following');
         }

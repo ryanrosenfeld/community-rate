@@ -46,7 +46,7 @@
                                 <tr id="{{ u.first_name|lower }} {{ u.last_name|lower }}">
                                     <td class="text-center">
                                         <div class="img-container">
-                                            <a href="/profile/{{ u.username }}/">
+                                            <a href="/profile/{{ u.id }}/">
                                                 {% if u.has_pic %}
                                                     <img src="https://s3.amazonaws.com/communityrate/{{ u.id }}">
                                                 {% else %}
@@ -57,26 +57,26 @@
                                     </td>
                                     <td class="td-name">
                                         <a class="text-primary"
-                                           href="/profile/{{ u.username }}/">{{ u.first_name }} {{ u.last_name }}</a>
+                                           href="/profile/{{ u.id }}/">{{ u.first_name }} {{ u.last_name }}</a>
                                         <br>
                                         <small>@{{ u.username }}</small>
                                     </td>
                                     <td>
-                                        <h4 class="text-center" id="fcount-{{ u.username }}">{{ count }}</h4>
+                                        <h4 class="text-center" id="fcount-{{ u.id }}">{{ count }}</h4>
                                     </td>
                                     <td class="td-actions text-center" id="td-actions-{{ u.username }}">
                                         <button type="button" rel="tooltip" title="Visit profile"
                                                 class="btn btn-info btn-simple"
-                                                onclick="window.location.href='/profile/{{ u.username }}/'">
+                                                onclick="window.location.href='/profile/{{ u.id }}/'">
                                             <i class="material-icons">launch</i>
                                         </button>
                                         {% if already_following %}
-                                            <button type="button" id="fbtn-{{ u.username }}" rel="tooltip"
+                                            <button type="button" id="fbtn-{{ u.id }}" rel="tooltip"
                                                     title="Unfollow" class="btn btn-danger btn-simple ufbtn">
                                                 <i class="material-icons">clear</i>
                                             </button>
                                         {% else %}
-                                            <button type="button" id="fbtn-{{ u.username }}" rel="tooltip"
+                                            <button type="button" id="fbtn-{{ u.id }}" rel="tooltip"
                                                     title="Follow" class="btn btn-primary btn-simple fbtn">
                                                 <i class="material-icons">person_add</i>
                                             </button>
@@ -108,19 +108,21 @@
             });
 
             {% for u, count, already_following in users %}
-                $("#fbtn-{{ u.username }}").click(function () {
+                $("#fbtn-{{ u.id }}").click(function () {
                     {% if already_following %}
-                        functions.unfollow('{{ u.username }}', '{{ u.first_name }} {{ u.last_name }}', onUnfollow);
+                        functions.unfollow('{{ u.username }}', '{{ u.first_name }} {{ u.last_name }}', onUnfollow,
+                            '{{ u.id }}');
                     {% else %}
-                        functions.follow('{{ u.username }}', '{{ u.first_name }} {{ u.last_name }}', onFollow);
+                        functions.follow('{{ u.username }}', '{{ u.first_name }} {{ u.last_name }}', onFollow,
+                            '{{ u.id }}');
                     {% endif %}
                     $(".tooltip").hide();
                 });
             {% endfor %}
         });
 
-        function onFollow(username, name) {
-            var btn = $("#fbtn-" + username);
+        function onFollow(username, name, user_id) {
+            var btn = $("#fbtn-" + user_id);
             btn.attr('title', 'Unfollow');
             btn.attr('data-original-title', 'Unfollow');
             btn.removeClass('btn-primary');
@@ -128,15 +130,15 @@
             btn.html('<i class="material-icons">clear</i>');
             btn.unbind('click');
             btn.click(function () {
-                functions.unfollow(username, name, onUnfollow);
+                functions.unfollow(username, name, onUnfollow, user_id);
                 $(".tooltip").hide();
             });
-            var fcount = $("#fcount-" + username);
+            var fcount = $("#fcount-" + user_id);
             fcount.html(parseInt(fcount.html()) + 1);
         }
 
-        function onUnfollow(username, name) {
-            var btn = $("#fbtn-" + username);
+        function onUnfollow(username, name, user_id) {
+            var btn = $("#fbtn-" + user_id);
             btn.attr('title', 'Follow');
             btn.attr('data-original-title', 'Follow');
             btn.removeClass('btn-danger');
@@ -144,10 +146,10 @@
             btn.html('<i class="material-icons">person_add</i>');
             btn.unbind('click');
             btn.click(function () {
-                functions.follow(username, name, onFollow);
+                functions.follow(username, name, onFollow, user_id);
                 $(".tooltip").hide();
             });
-            var fcount = $("#fcount-" + username);
+            var fcount = $("#fcount-" + user_id);
             fcount.html(parseInt(fcount.html()) - 1);
         }
     </script>

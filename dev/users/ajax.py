@@ -45,26 +45,22 @@ def follow(request):
 @login_required
 def unfollow(request):
     """Creates follow connection between requester and person they wish to follow"""
-    print("Unfollowing...")
     # Get username
     username = request.GET.get('username', None)
     if username is None:
         return JsonResponse({})
-    print(username)
 
     # Retrieve the SiteUser account of the person they wish to follow
     try:
         following_user = SiteUser.objects.get(username=username)
     except ObjectDoesNotExist:
         return JsonResponse({})
-    print(following_user)
 
     # Determine if this user is already following them
     query = request.user.follower_set.filter(following=following_user)
     already_following = len(query) > 0
     if not already_following:
         return JsonResponse({})
-    print(already_following)
 
     # If person exists and this user is following them delete Follower object
     f = ''

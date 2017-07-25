@@ -10,16 +10,16 @@ from .functions import *
 
 
 @login_required
-def profile(request, username=""):
+def profile(request, user_id=""):
     """Public or private view of a person's profile"""
-    if username == "":
+    if user_id == "":
         user = request.user
     else:
         try:
-            user = SiteUser.objects.get(username=username)
+            user = SiteUser.objects.get(id=user_id)
 
         except ObjectDoesNotExist:
-            response = "User \"{0}\" does not exist".format(username)
+            response = "User \"{0}\" does not exist".format(user_id)
             return main_view(request, response)
 
     # Check if person requesting profile is the owner
