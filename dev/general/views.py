@@ -63,7 +63,7 @@ def fb_login(request):
         return HttpResponseRedirect('/')
 
     # If not, create new user & login
-    username = first_name + "_" + last_name
+    username = str.lower(first_name + last_name)
     conflicts = SiteUser.objects.filter(username=username)
     if len(conflicts) > 0:
         num = 1
