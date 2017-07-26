@@ -126,6 +126,15 @@
             if (functions.checkHamburgerMenu()) {
                 $("#mobile-message").css("display", "block");
             }
+
+            $(window).resize(function() {
+                if (functions.checkHamburgerMenu()) {
+                    $("#mobile-message").css("display", "block");
+                }
+                else {
+                   $("#mobile-message").css("display", "none");
+               }
+            });
         });
 
         function toggleCommentsDisplay(reviewId) {
