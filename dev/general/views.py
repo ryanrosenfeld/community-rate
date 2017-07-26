@@ -280,8 +280,7 @@ def sign_s3(request):
 
     bucket = "communityrate-test"
     base_url = request.get_host()
-    print(base_url)
-    if base_url == 'https://communityrate-test.herokuapp.com':
+    if base_url == 'https://communityrate-test.herokuapp.com' or base_url == "communityrate-test.herokuapp.com":
         bucket = "communityrate-staging"
     elif base_url == "http://www.community-rate.com" or base_url == "https://communityrate.herokuapp.com":
         bucket = "communityrate"
