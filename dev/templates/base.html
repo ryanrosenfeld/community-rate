@@ -154,7 +154,7 @@
                                 <a href="/users/">All Users</a>
                             </li>
                             <li {% if page == 'relationships' %}class="active"{% endif %}>
-                                <a href="/relationships/">My Relationships</a>
+                                <a href="/relationships/{{ request.user.id }}/">My Relationships</a>
                             </li>
                         </ul>
                     </div>

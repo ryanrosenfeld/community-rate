@@ -1,3 +1,11 @@
-a {
+.tab-content a {
     color: inherit;
+}
+
+#return-to-profile {
+    font-size: small;
+}
+
+#return-to-profile a {
+    color: #00bcd4;
 }
