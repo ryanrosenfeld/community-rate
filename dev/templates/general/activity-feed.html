@@ -43,7 +43,7 @@
                 <div class="col-md-7 text-right">
                     <div class="card-content">
                         <h3 class="card-title">{{ movie.title }}</h3>
-                        <h4 class="card-description">Reviewed by {{ user.first_name }} {{ user.last_name }}</h4>
+                        <h4 class="card-description">Reviewed by <a href="/profile/{{ user.id }}/">{{ user.first_name }} {{ user.last_name }}</a></h4>
                         <p class="card-description" style="margin-top: -8px;">{{ review.date_added }} <i
                                 class="material-icons" style="font-size: 20px;">access_time</i></p>
                     </div>
