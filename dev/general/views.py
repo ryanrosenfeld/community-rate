@@ -148,14 +148,15 @@ def forgot_password(request):
         if form.is_valid():
             u = SiteUser.objects.filter(email=request.POST['email'])
             if len(u) > 0:
-                base_url = 'http://www.community-rate.com'
+                base_url = 'http://' + request.get_host()
                 u = u[0]
                 u.reset_key = binascii.hexlify(os.urandom(24)).decode('utf-8')
                 u.save()
 
                 def reset_rk():
-                    u.reset_key = '1'
-                    u.save()
+                    user = SiteUser.objects.get(id=u.id)
+                    user.reset_key = '1'
+                    user.save()
 
                 # Reset reset_key after 5 minutes
                 t = Timer(300.0, reset_rk)
