@@ -81,13 +81,11 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'general.context_processors.collect_notifications',
+                'general.context_processors.get_profile_pic_base_url'
             ],
         },
     },
 ]
-
-# TEMPLATES[0]['OPTIONS']['context_processors'].append("general.context_processors.rand_pic_string")
-
 
 WSGI_APPLICATION = 'community_rate.wsgi.application'
 

@@ -27,10 +27,10 @@
                                  alt="{% static 'general/img/no_poster.jpg' %}" style="height: 130px; width: 100px;">
                         </div>
                     </a>
-                    <a href="/profile/{{ user.username }}/">
+                    <a href="/profile/{{ user.id }}/">
                         <div class="card-image-circle photo" style="display: inline-block;">
                             {% if user.has_pic %}
-                                <img src="https://s3.amazonaws.com/communityrate/{{ user.id }}">
+                                <img src="{{ profile_pic_base_url }}{{ user.id }}">
                             {% else %}
                                 <img src="{% static 'material-dash/assets/img/placeholder.jpg' %}">
                             {% endif %}
@@ -88,7 +88,7 @@
                                 {% for comment in comments %}
                                     <tr>
                                         <td class="col-comment">
-                                            <a href="/profile/{{ comment.author.username }}/">
+                                            <a href="/profile/{{ comment.author.id }}/">
                                                 {{ comment.author.first_name }} {{ comment.author.last_name }}
                                             </a>
                                             {{ comment.comment }}
@@ -148,7 +148,7 @@
                 $("#comment-list-" + reviewId).prepend(
                     '<tr>' +
                         '<td>' +
-                            '<a href="/profile/{{ request.user.username }}/">' +
+                            '<a href="/profile/{{ request.user.id }}/">' +
                                 '{{ request.user.first_name }} {{ request.user.last_name }}' +
                             '</a> ' +
                             comment +

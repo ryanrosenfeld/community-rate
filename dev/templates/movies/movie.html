@@ -51,7 +51,9 @@
                 <div class="col-md-12">
                     <hr>
                     <div class="text-center">
-                        <button class="btn btn-info" onclick="showUpdateReview()">Update Review</button>
+                        <button class="btn btn-info" onclick="showUpdateReview()">
+                            {% if review %}Edit Review{% else %}Add Review{% endif %}
+                        </button>
                     </div>
                 </div>
             </div>

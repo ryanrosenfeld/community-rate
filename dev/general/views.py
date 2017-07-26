@@ -15,6 +15,7 @@ from .forms import *
 from .models import *
 from .functions import collect_feed_updates
 from users.forms import profileSetupForm
+from community_rate.settings import BASE_DIR
 
 
 User = get_user_model()
@@ -277,8 +278,15 @@ def sign_s3(request):
 
     s3 = boto3.client('s3')
 
+    bucket = "communityrate-test"
+    base_url = request.get_host()
+    if base_url == 'https://communityrate-test.herokuapp.com':
+        bucket = "communityrate-staging"
+    elif base_url == "http://www.community-rate.com" or base_url == "https://communityrate.herokuapp.com":
+        bucket = "communityrate"
+
     presigned_post = s3.generate_presigned_post(
-        Bucket="communityrate",
+        Bucket=bucket,
         Key=file_name,
         Fields={"acl": "public-read", "Content-Type": file_type},
         Conditions=[

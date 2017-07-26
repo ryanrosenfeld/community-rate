@@ -47,7 +47,7 @@
             <div class="user">
                 <div class="photo">
                     {% if request.user.has_pic %}
-                        <img src="https://s3.amazonaws.com/communityrate/{{ request.user.username }}"
+                        <img src="{{ profile_pic_base_url }}{{ request.user.username }}"
                              id="sidebarProfPic">
                     {% else %}
                         <img src="{% static 'material-dash/assets/img/placeholder.jpg' %}">

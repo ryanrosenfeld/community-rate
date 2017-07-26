@@ -80,7 +80,7 @@
                                 {% for comment in comments %}
                                     <tr>
                                         <td class="col-comment">
-                                            <a href="/profile/{{ comment.author.username }}/">
+                                            <a href="/profile/{{ comment.author.id }}/">
                                                 {{ comment.author.first_name }} {{ comment.author.last_name }}
                                             </a>
                                             {{ comment.comment }}
@@ -133,7 +133,7 @@
                 $("#comment-list-" + reviewId).prepend(
                     '<tr>' +
                         '<td>' +
-                            '<a href="/profile/{{ request.user.username }}/">' +
+                            '<a href="/profile/{{ request.user.id }}/">' +
                                 '{{ request.user.first_name }} {{ request.user.last_name }}' +
                             '</a> ' +
                             comment +

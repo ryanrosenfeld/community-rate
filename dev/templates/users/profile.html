@@ -17,7 +17,7 @@
             <div class="card-avatar">
                 <div class="photo">
                     {% if user.has_pic %}
-                        <img src="https://s3.amazonaws.com/communityrate/{{ user.id }}" id="profPic">
+                        <img src="{{ profile_pic_base_url }}{{ user.id }}" id="profPic">
                     {% else %}
                         <img src="{% static 'material-dash/assets/img/placeholder.jpg' %}" id="profPic">
                     {% endif %}
@@ -48,9 +48,14 @@
                     {% else %}
                         <div id="follow-unfollow">
                             {% if not already_following %}
-                                <button class="btn btn-primary" id="followBtn" onclick="functions.follow('{{ user.username }}', '{{ user.first_name }} {{ user.last_name }}', toggleFollowBtn)">Follow</button>
+                                <button class="btn btn-primary" id="followBtn"
+                                        onclick="functions.follow('{{ user.username }}', '{{ user.first_name }} {{ user.last_name }}', toggleFollowBtn)">
+                                    Follow
+                                </button>
                             {% else %}
-                                <button onclick="functions.unfollow('{{ user.username }}', '{{ user.first_name }} {{ user.last_name }}', toggleFollowBtn)" id="unfollowBtn" class="btn btn-primary">Unfollow</button>
+                                <button onclick="functions.unfollow('{{ user.username }}', '{{ user.first_name }} {{ user.last_name }}', toggleFollowBtn)"
+                                        id="unfollowBtn" class="btn btn-primary">Unfollow
+                                </button>
                             {% endif %}
                         </div>
                     {% endif %}
@@ -61,24 +66,32 @@
         {# USER STATS #}
         {# Followers/Following #}
         {% if owner %}<a href="/relationships/">{% endif %}
-            <div class="col-sm-10 col-sm-offset-1">
-                <div class="card card-stats">
-                    <div class="card-header" data-background-color="red">
-                        <i class="material-icons">people</i>
-                    </div>
-                    <div class="card-content">
-                        <p class="category">Followers</p>
-                        <h3 class="title">{{ num_followers }}</h3>
-                        <p class="category">Following</p>
-                        <h3 class="title">{{ num_following }}</h3>
-                    </div>
+        <div class="col-sm-10 col-sm-offset-1">
+            <div class="card card-stats">
+                <div class="card-header" data-background-color="red">
+                    <i class="material-icons">people</i>
+                </div>
+                <div class="card-content">
+                    <p class="category">Followers</p>
+                    <h3 class="title">{{ num_followers }}</h3>
+                    <p class="category">Following</p>
+                    <h3 class="title">{{ num_following }}</h3>
                 </div>
             </div>
+        </div>
         {% if owner %}</a>{% endif %}
     </div>
 
     {#  LEFT COLUMN  #}
     <div class="col-md-8 col-md-pull-4">
+        {# Show error message if it exists #}
+        {% if error_message %}
+            <div class="alert alert-info alert-with-icon" data-notify="container">
+                <i class="material-icons" data-notify="icon">notifications</i>
+                <span data-notify="message">{{ error_message }}</span>
+            </div>
+        {% endif %}
+
         {# Number of Reviews #}
         <div class="col-sm-6">
             <div class="card card-stats">
@@ -365,7 +378,7 @@
                 <div class="modal-body">
                     <div class="prof-pic-container">
                         <div class="prof-pic photo">
-                            <img src="{% if request.user.has_pic %}https://s3.amazonaws.com/communityrate/{{ request.user.id }}
+                            <img src="{% if request.user.has_pic %}{{ profile_pic_base_url }}{{ request.user.id }}
                                       {% else %}{% static '/material-dash/assets/img/placeholder.jpg' %}{% endif %}"
                                  class="prof-pic-src"
                                  id="profPicPreview" title=""/>

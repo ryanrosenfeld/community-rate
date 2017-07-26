@@ -2,11 +2,11 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
+
 from .forms import *
 from general.models import SiteUser
 from movies.models import Review, List, ListEntry
 from movies.services import get_movie_by_id
-from .functions import *
 
 
 @login_required
@@ -69,29 +69,25 @@ def profile(request, user_id=""):
                                    'first_name': request.user.first_name, 'last_name': request.user.last_name,
                                    'fav_quote': request.user.fav_quote, 'about_me': request.user.about_me})
 
-    picform = UpdateProfilePicForm()
-
     # If info updated make changes to user
+    error_message = None
     if request.method == 'POST':
-        if 'email' in request.POST:
-            form = UpdateInfoForm(initial={'username': request.user.username, 'email': request.POST['email'],
-                                           'first_name': request.POST['first_name'],
-                                           'last_name': request.POST['last_name'],
-                                           'fav_quote': request.POST['fav_quote'],
-                                           'about_me': request.POST['about_me']})
-            # ADD IS_VALID CHECK?
-            request.user.email = request.POST['email']
-            request.user.first_name = request.POST['first_name']
-            request.user.last_name = request.POST['last_name']
-            request.user.about_me = request.POST.get('about_me', None)
-            request.user.fav_quote = request.POST.get('fav_quote', None)
-            request.user.save()
-        elif 'file' in request.FILES:
-            picform = UpdateProfilePicForm(request.POST, request.FILES)
-            # if picform.is_valid():
-            file = request.FILES['file']
-            print(file)
-            upload_prof_pic(file, request.user)
+        form = UpdateInfoForm(request.POST)
+        if form.is_valid():
+            if request.POST['username'] != request.user.username and \
+                    len(SiteUser.objects.filter(username=request.POST['username'])) > 0:
+                error_message = "Sorry, the username you entered is already taken."
+            elif form.cleaned_data['email'] != request.user.email and \
+                    len(SiteUser.objects.filter(email=request.POST['email'])) > 0:
+                error_message = "Sorry, the email you entered is already being used by an account."
+            else:
+                request.user.username = request.POST['username']
+                request.user.email = request.POST['email']
+                request.user.first_name = request.POST['first_name']
+                request.user.last_name = request.POST['last_name']
+                request.user.about_me = request.POST.get('about_me', None)
+                request.user.fav_quote = request.POST.get('fav_quote', None)
+                request.user.save()
 
     return render(request, 'users/profile.html', {
         'owner': owner,
@@ -104,9 +100,9 @@ def profile(request, user_id=""):
         'user': user,
         'lists': lists,
         'form': form,
-        'picform': picform,
         'num_followers': num_followers,
-        'num_following': num_following})
+        'num_following': num_following,
+        'error_message': error_message})
 
 
 @login_required
