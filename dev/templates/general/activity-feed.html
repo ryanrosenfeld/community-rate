@@ -13,7 +13,10 @@
         <div class="col-md-6 col-md-offset-3">
             <div class="alert alert-info alert-with-icon" data-notify="container">
                 <i class="material-icons" data-notify="icon">sentiment_very_dissatisfied</i>
-                <span data-notify="message">Looks like you don't have anything in your feed. Start following friends to keep track of what they're up to!</span>
+                <p data-notify="message">
+                    Looks like you don't have anything in your feed. Start following friends to keep track of what they're up to!<br>
+                    <p id="mobile-message" style="display: none">Click the hamburger menu in the top right corner to access a list of options.</p>
+                </p>
             </div>
         </div>
     {% endif %}
@@ -118,6 +121,10 @@
             var welcome = "{{ welcome }}";
             if (welcome == "True") {
                 functions.sweetAlert('welcome')
+            }
+
+            if (functions.checkHamburgerMenu()) {
+                $("#mobile-message").css("display", "block");
             }
         });
 
