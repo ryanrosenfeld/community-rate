@@ -6,7 +6,7 @@ class UpdateInfoForm(forms.Form):
     username = forms.CharField(
         label='',
         max_length=100,
-        widget=forms.TextInput(attrs={'class': 'form-control', 'disabled': True})
+        widget=forms.TextInput(attrs={'class': 'form-control'})
     )
     email = forms.EmailField(
         label='',
@@ -51,7 +51,3 @@ class profileSetupForm(forms.Form):
         choices=[(x, x) for x in pytz.common_timezones],
         widget=forms.Select(attrs={'class': 'form-control', 'name': 'timezone'})
     )
-
-
-class UpdateProfilePicForm(forms.Form):
-    file = forms.FileField()
