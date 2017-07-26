@@ -13,9 +13,9 @@ def collect_notifications(request):
 def get_profile_pic_base_url(request):
     base_url = request.get_host()
     pic_url = "https://s3.amazonaws.com/communityrate-test/"
-    if base_url == "http://www.community-rate.com" or base_url == "https://communityrate.herokuapp.com":
+    if base_url == "www.community-rate.com" or base_url == "communityrate.herokuapp.com":
         pic_url = "https://s3.amazonaws.com/communityrate/"
-    elif base_url == "https://communityrate-test.herokuapp.com":
+    elif base_url == "communityrate-test.herokuapp.com":
         pic_url = "https://s3.amazonaws.com/communityrate-staging/"
 
     context_data = dict()
