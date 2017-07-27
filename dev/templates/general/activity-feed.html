@@ -32,12 +32,14 @@
                         </div>
                     </a>
                     <a href="/profile/{{ user.id }}/">
-                        <div class="card-image-circle photo" style="display: inline-block;">
-                            {% if user.has_pic %}
-                                <img src="{{ profile_pic_base_url }}{{ user.id }}">
-                            {% else %}
-                                <img src="{% static 'material-dash/assets/img/placeholder.jpg' %}">
-                            {% endif %}
+                        <div class="card-image-circle" style="display: inline-block;">
+                            <div class="photo">
+                                {% if user.has_pic %}
+                                    <img src="{{ profile_pic_base_url }}{{ user.id }}">
+                                {% else %}
+                                    <img src="{% static 'material-dash/assets/img/placeholder.jpg' %}">
+                                {% endif %}
+                            </div>
                         </div>
                     </a>
                 </div>
