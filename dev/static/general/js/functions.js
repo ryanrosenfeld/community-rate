@@ -100,6 +100,13 @@ functions = {
         $("#numRead").html('0');
     },
 
+    checkHamburgerMenu: function() {
+        if ($(window).width() <= 991) {
+            return true;
+        }
+        return false;
+    },
+
     uploadFile: function(file) {
       var xhr = new XMLHttpRequest();
       xhr.open("GET", "/sign_s3?file_name="+file.name+"&file_type="+file.type);

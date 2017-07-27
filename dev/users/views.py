@@ -181,14 +181,29 @@ def main_view(request, response=None):
 
 
 @login_required
-def relationships(request):
+def relationships(request, user_id=""):
     """View for page that displays all of the users that a particular user is following"""
+    if user_id == "":
+        user = request.user
+    else:
+        user = SiteUser.objects.filter(id=user_id)
+        if len(user) > 0:
+            user = user[0]
+        else:
+            return HttpResponseRedirect("/users/")
+
+    owner = user == request.user
+    if owner:
+        page = "relationships"
+    else:
+        page = "users"
+
     following_users = []
     follower_users = []
 
     # Query all of the users this person is following
-    following = request.user.follower_set.all()
-    followers = request.user.following_set.all()
+    following = user.follower_set.all()
+    followers = user.following_set.all()
 
     for follower_obj in following:
         # Determine follower count of person they are FOLLOWING (this is messy)
@@ -203,7 +218,7 @@ def relationships(request):
         # Determine if this user is already following them OR
         # request user is actually this user
         query = following.filter(following=follower_obj.follower)
-        already_following = (len(query) > 0) | (follower_obj.follower == request.user)
+        already_following = (len(query) > 0) | (follower_obj.follower == user)
 
         follower_users.append((follower_obj.follower, followers_count, already_following))
 
@@ -212,4 +227,6 @@ def relationships(request):
         'num_following': len(following),
         'following_users': following_users,
         'follower_users': follower_users,
-        'page': 'relationships'})
+        'page': page,
+        'user': user,
+        'owner': owner})

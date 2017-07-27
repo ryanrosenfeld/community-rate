@@ -13,7 +13,11 @@
         <div class="col-md-6 col-md-offset-3">
             <div class="alert alert-info alert-with-icon" data-notify="container">
                 <i class="material-icons" data-notify="icon">sentiment_very_dissatisfied</i>
-                <span data-notify="message">Looks like you don't have anything in your feed. Start following friends to keep track of what they're up to!</span>
+                <p data-notify="message">
+                    Looks like you don't have anything in your feed. Start following friends to keep track of what they're up to!<br>
+                    <p id="mobile-message" style="display: none">Click the hamburger menu in the top right corner to access a list of options.</p><br>
+                    <span class="text-center"><a href="/movies/" style="color: #9c27b0">Start rating movies</a> | <a href="/users/" class="text-rose" style="color: #9c27b0">Find your friends</a></span>
+                </p>
             </div>
         </div>
     {% endif %}
@@ -40,7 +44,7 @@
                 <div class="col-md-7 text-right">
                     <div class="card-content">
                         <h3 class="card-title">{{ movie.title }}</h3>
-                        <h4 class="card-description">Reviewed by {{ user.first_name }} {{ user.last_name }}</h4>
+                        <h4 class="card-description">Reviewed by <a href="/profile/{{ user.id }}/" style="color: inherit">{{ user.first_name }} {{ user.last_name }}</a></h4>
                         <p class="card-description" style="margin-top: -8px;">{{ review.date_added }} <i
                                 class="material-icons" style="font-size: 20px;">access_time</i></p>
                     </div>
@@ -119,6 +123,19 @@
             if (welcome == "True") {
                 functions.sweetAlert('welcome')
             }
+
+            if (functions.checkHamburgerMenu()) {
+                $("#mobile-message").css("display", "block");
+            }
+
+            $(window).resize(function() {
+                if (functions.checkHamburgerMenu()) {
+                    $("#mobile-message").css("display", "block");
+                }
+                else {
+                   $("#mobile-message").css("display", "none");
+               }
+            });
         });
 
         function toggleCommentsDisplay(reviewId) {
