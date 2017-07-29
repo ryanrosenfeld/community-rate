@@ -63,5 +63,6 @@ urlpatterns = [
     # User AJAX Requests
     url(r'^ajax/follow/', user_ajax.follow),
     url(r'^ajax/unfollow/', user_ajax.unfollow),
-    url(r'^ajax/has-pic/', user_ajax.has_pic)
+    url(r'^ajax/has-pic/', user_ajax.has_pic),
+    url(r'^ajax/upload-profile-pic/', user_ajax.upload_profile_pic)
 ]

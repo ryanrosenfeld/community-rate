@@ -32,10 +32,10 @@
                         </div>
                     </a>
                     <a href="/profile/{{ user.id }}/">
-                        <div class="card-image-circle photo" style="display: inline-block;">
+                        <div class="" style="display: inline-block;">
 {#                            <div class="photo">#}
                                 {% if user.has_pic %}
-                                    <img src="{{ profile_pic_base_url }}{{ user.id }}">
+                                    <img src="{{ profile_pic_base_url }}{{ user.id }}" class="img-circle card-image-circle">
                                 {% else %}
                                     <img src="{% static 'material-dash/assets/img/placeholder.jpg' %}">
                                 {% endif %}

@@ -76,3 +76,14 @@ def has_pic(request):
     request.user.has_pic = True
     request.user.save()
     return JsonResponse({})
+
+
+@login_required
+def upload_profile_pic(request):
+    pic = request.GET.get('pic', None)
+    if pic is None:
+        return JsonResponse({})
+
+    request.user.profile_pic = pic
+    request.user.save()
+    return JsonResponse({})

@@ -27,7 +27,7 @@
     margin-left: 10px;
     margin-right: 10px;
     margin-top: -75px;
-    border-radius: 50%;
+    /*border-radius: 50%;*/
 }
 
 .card .card-image-circle img {
@@ -164,4 +164,9 @@ a:hover {
     width: 30px;
     height: 30px;
     margin-right: 8px;
+}
+
+.table-resize {
+    width: 100%;
+    margin: 0 auto;
 }

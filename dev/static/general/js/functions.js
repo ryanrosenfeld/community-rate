@@ -30,18 +30,18 @@ functions = {
         }
         else if (type == 'warning-message-and-confirmation') {
             swal({
-                    title: 'Are you sure?',
-                    text: message,
-                    type: 'warning',
-                    showCancelButton: true,
-                    confirmButtonClass: 'btn btn-success',
-                    cancelButtonClass: 'btn btn-danger',
-                    confirmButtonText: 'Yes, delete it!',
-                    buttonsStyling: false
-                }).then(function() {
-                        onConfirmFunction();
-                    });
-    	}
+                title: 'Are you sure?',
+                text: message,
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonClass: 'btn btn-success',
+                cancelButtonClass: 'btn btn-danger',
+                confirmButtonText: 'Yes, delete it!',
+                buttonsStyling: false
+            }).then(function () {
+                onConfirmFunction();
+            });
+        }
     },
 
     follow: function (username, name, onSuccess, user_id) {
@@ -93,116 +93,126 @@ functions = {
         });
     },
 
-    markNotificationsRead: function() {
+    markNotificationsRead: function () {
         $.ajax({
             url: '/ajax/mark-notifications-read/'
         });
         $("#numRead").html('0');
     },
 
-    checkHamburgerMenu: function() {
+    checkHamburgerMenu: function () {
         if ($(window).width() <= 991) {
             return true;
         }
         return false;
     },
 
-    uploadFile: function(file) {
-      var xhr = new XMLHttpRequest();
-      xhr.open("GET", "/sign_s3?file_name="+file.name+"&file_type="+file.type);
-      xhr.onreadystatechange = function(){
-        if(xhr.readyState === 4){
-          if(xhr.status === 200){
-            var response = JSON.parse(xhr.responseText);
-            upload(file, response.data, response.url);
-          }
-          else{
-            functions.sweetAlert("warning", "There was a problem with upload");
-          }
-        }
-      };
-      xhr.send();
-
-      function upload(file, s3Data, url) {
-          var xhr = new XMLHttpRequest();
-          xhr.open("POST", s3Data.url);
-
-          var postData = new FormData();
-          for(key in s3Data.fields){
-            postData.append(key, s3Data.fields[key]);
-          }
-          postData.append('file', file);
-
-          xhr.onreadystatechange = function() {
-            if(xhr.readyState === 4){
-              if(xhr.status === 200 || xhr.status === 204){
-                // success
-                  alert("Success");
-              }
-              else{
-                // failure (but this seems to always be the case and it still works ??)
-              }
-           }
-          };
-          xhr.send(postData);
-
-          // Send ajax request to reflect the user now has a picture
-          $.ajax({
-            url: '/ajax/has-pic/'
-          });
-      }
+    saveProfilePic: function (base64String) {
+        $.ajax({
+            url: "/ajax/upload-profile-pic/",
+            data: {
+                pic: base64String
+            },
+            dataType: 'json'
+        })
     },
 
-    initMaterialWizard: function(){
+    uploadFile: function (file) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "/sign_s3?file_name=" + file.name + "&file_type=" + file.type);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    upload(file, response.data, response.url);
+                }
+                else {
+                    functions.sweetAlert("warning", "There was a problem with upload");
+                }
+            }
+        };
+        xhr.send();
+
+        function upload(file, s3Data, url) {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", s3Data.url);
+
+            var postData = new FormData();
+            for (key in s3Data.fields) {
+                postData.append(key, s3Data.fields[key]);
+            }
+            postData.append('file', file);
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200 || xhr.status === 204) {
+                        // success
+                        alert("Success");
+                    }
+                    else {
+                        // failure (but this seems to always be the case and it still works ??)
+                    }
+                }
+            };
+            xhr.send(postData);
+
+            // Send ajax request to reflect the user now has a picture
+            $.ajax({
+                url: '/ajax/has-pic/'
+            });
+        }
+    },
+
+    initMaterialWizard: function () {
         // Code for the Validator
         var $validator = $('.wizard-card form').validate({
-    		  rules: {
-    		    timezone: {
-    		      required: true
-    		    }
+            rules: {
+                timezone: {
+                    required: true
+                }
             },
 
-            errorPlacement: function(error, element) {
+            errorPlacement: function (error, element) {
                 $(element).parent('div').addClass('has-error');
-             }
-    	});
+            }
+        });
 
         // Wizard Initialization
-      	$('.wizard-card').bootstrapWizard({
+        $('.wizard-card').bootstrapWizard({
             'tabClass': 'nav nav-pills',
             'nextSelector': '.btn-next',
             'previousSelector': '.btn-previous',
 
-            onNext: function(tab, navigation, index) {
-            	var $valid = $('.wizard-card form').valid();
-            	if(!$valid) {
-            		$validator.focusInvalid();
-            		return false;
-            	}
+            onNext: function (tab, navigation, index) {
+                var $valid = $('.wizard-card form').valid();
+                if (!$valid) {
+                    $validator.focusInvalid();
+                    return false;
+                }
             },
 
-            onInit : function(tab, navigation, index){
+            onInit: function (tab, navigation, index) {
 
-              //check number of tabs and fill the entire row
-              var $total = navigation.find('li').length;
-              $width = 100/$total;
-              var $wizard = navigation.closest('.wizard-card');
+                //check number of tabs and fill the entire row
+                var $total = navigation.find('li').length;
+                $width = 100 / $total;
+                var $wizard = navigation.closest('.wizard-card');
 
-              $display_width = $(document).width();
+                $display_width = $(document).width();
 
-              if($display_width < 600 && $total > 3){
-                  $width = 50;
-              }
+                if ($display_width < 600 && $total > 3) {
+                    $width = 50;
+                }
 
-               navigation.find('li').css('width',$width + '%');
-               $first_li = navigation.find('li:first-child a').html();
-               $moving_div = $('<div class="moving-tab">' + $first_li + '</div>');
-               $('.wizard-card .wizard-navigation').append($moving_div);
-               refreshAnimation($wizard, index);
-               $('.moving-tab').css('transition','transform 0s');
-           },
+                navigation.find('li').css('width', $width + '%');
+                $first_li = navigation.find('li:first-child a').html();
+                $moving_div = $('<div class="moving-tab">' + $first_li + '</div>');
+                $('.wizard-card .wizard-navigation').append($moving_div);
+                refreshAnimation($wizard, index);
+                $('.moving-tab').css('transition', 'transform 0s');
+            },
 
-            onTabClick : function(tab, navigation, index){
+            onTabClick: function (tab, navigation, index) {
                 var $valid = $('.wizard-card form').valid();
 
                 // if(!$valid){
@@ -213,14 +223,14 @@ functions = {
                 // return true;
             },
 
-            onTabShow: function(tab, navigation, index) {
+            onTabShow: function (tab, navigation, index) {
                 var $total = navigation.find('li').length;
-                var $current = index+1;
+                var $current = index + 1;
 
                 var $wizard = navigation.closest('.wizard-card');
 
                 // If it's the last tab then hide the last button and show the finish instead
-                if($current >= $total) {
+                if ($current >= $total) {
                     $($wizard).find('.btn-next').hide();
                     $($wizard).find('.btn-finish').show();
                 } else {
@@ -230,35 +240,35 @@ functions = {
 
                 button_text = navigation.find('li:nth-child(' + $current + ') a').html();
 
-                setTimeout(function(){
+                setTimeout(function () {
                     $('.moving-tab').text(button_text);
                 }, 150);
 
                 var checkbox = $('.footer-checkbox');
 
-                if( !index == 0 ){
+                if (!index == 0) {
                     $(checkbox).css({
-                        'opacity':'0',
-                        'visibility':'hidden',
-                        'position':'absolute'
+                        'opacity': '0',
+                        'visibility': 'hidden',
+                        'position': 'absolute'
                     });
                 } else {
                     $(checkbox).css({
-                        'opacity':'1',
-                        'visibility':'visible'
+                        'opacity': '1',
+                        'visibility': 'visible'
                     });
                 }
 
                 refreshAnimation($wizard, index);
             }
-      	});
+        });
 
 
         // Prepare the preview for profile picture
-        $("#wizard-picture").change(function(){
+        $("#wizard-picture").change(function () {
             var files = document.getElementById("wizard-picture").files;
             var file = files[0];
-            if(!file){
+            if (!file) {
                 functions.sweetAlert("warning", "No image selected");
                 return null;
             }
@@ -270,27 +280,27 @@ functions = {
             readURL(this);
         });
 
-        $('[data-toggle="wizard-radio"]').click(function(){
+        $('[data-toggle="wizard-radio"]').click(function () {
             wizard = $(this).closest('.wizard-card');
             wizard.find('[data-toggle="wizard-radio"]').removeClass('active');
             $(this).addClass('active');
             $(wizard).find('[type="radio"]').removeAttr('checked');
-            $(this).find('[type="radio"]').attr('checked','true');
+            $(this).find('[type="radio"]').attr('checked', 'true');
         });
 
-        $('[data-toggle="wizard-checkbox"]').click(function(){
-            if( $(this).hasClass('active')){
+        $('[data-toggle="wizard-checkbox"]').click(function () {
+            if ($(this).hasClass('active')) {
                 $(this).removeClass('active');
                 $(this).find('[type="checkbox"]').removeAttr('checked');
             } else {
                 $(this).addClass('active');
-                $(this).find('[type="checkbox"]').attr('checked','true');
+                $(this).find('[type="checkbox"]').attr('checked', 'true');
             }
         });
 
         $('.set-full-height').css('height', 'auto');
 
-         //Function to show image before upload
+        //Function to show image before upload
 
         function readURL(input) {
             if (input.files && input.files[0]) {
@@ -303,8 +313,8 @@ functions = {
             }
         }
 
-        $(window).resize(function(){
-            $('.wizard-card').each(function(){
+        $(window).resize(function () {
+            $('.wizard-card').each(function () {
                 $wizard = $(this);
                 index = $wizard.bootstrapWizard('currentIndex');
                 refreshAnimation($wizard, index);
@@ -315,7 +325,7 @@ functions = {
             });
         });
 
-        function refreshAnimation($wizard, index){
+        function refreshAnimation($wizard, index) {
             total_steps = $wizard.find('li').length;
             move_distance = $wizard.width() / total_steps;
             step_width = move_distance;
@@ -323,15 +333,15 @@ functions = {
 
             $current = index + 1;
 
-            if($current == 1){
+            if ($current == 1) {
                 move_distance -= 8;
-            } else if($current == total_steps){
+            } else if ($current == total_steps) {
                 move_distance += 8;
             }
 
             $wizard.find('.moving-tab').css('width', step_width);
             $('.moving-tab').css({
-                'transform':'translate3d(' + move_distance + 'px, 0, 0)',
+                'transform': 'translate3d(' + move_distance + 'px, 0, 0)',
                 'transition': 'all 0.5s cubic-bezier(0.29, 1.42, 0.79, 1)'
 
             });
