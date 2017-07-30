@@ -20,9 +20,9 @@
             </div>
             <div class="col-xs-3">
                 <div class="text-right">
-                    <a class="btn btn-simple btn-warning" href="/hide-welcome/">
+                    <button class="btn btn-simple btn-warning" onclick="hideWelcome()">
                         Hide <i class="material-icons">visibility</i>
-                    </a>
+                    </button>
                 </div>
             </div>
             <div class="card-content table-responsive">
@@ -137,12 +137,6 @@
                 <p data-notify="message">
                     Looks like you don't have anything in your feed. Start following friends to keep track of what
                     they're up to!<br>
-                <p class="mobile-message" style="display: none">Click the hamburger menu in the top right corner to
-                    access
-                    a list of options.</p><br>
-                <span class="text-center"><a href="/movies/" style="color: #9c27b0">Start rating movies</a> | <a
-                        href="/users/" class="text-rose" style="color: #9c27b0">Find your friends</a></span>
-                </p>
             </div>
         </div>
     {% endif %}
@@ -285,13 +279,15 @@
             }
         }
 
-        function hideWelcome() {
-            $("#welcome-menu").css("display", "none");
-            functions.sweetAlert("info", "Remember, you can display this menu at any point in the future using the help button.");
+        function hideWelcomeRedirect() {
+            window.location.href = "/hide-welcome/"
+        }
 
-            $.ajax({
-                url: "/ajax/hide-welcome/"
-            });
+        function hideWelcome() {
+            functions.sweetAlert(
+                "info",
+                "Remember, you can display this menu at any point in the future using the help button.",
+                hideWelcomeRedirect);
         }
 
         function submitComment(reviewId) {

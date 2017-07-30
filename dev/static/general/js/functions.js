@@ -18,12 +18,25 @@ functions = {
             })
         }
         else if (type == 'info') {
-            swal({
-                html: message,
-                buttonStyling: false,
-                confirmButtonClass: 'btn btn-info',
-                type: "info"
-            })
+            if (onConfirmFunction != null) {
+                swal({
+                    html: message,
+                    buttonStyling: false,
+                    confirmButtonClass: 'btn btn-info',
+                    type: "info"
+                }).then(function() {
+                    onConfirmFunction();
+                })
+            }
+            else {
+                swal({
+                    html: message,
+                    buttonStyling: false,
+                    confirmButtonClass: 'btn btn-info',
+                    type: "info"
+                })
+            }
+
         }
         else if (type == 'welcome') {
             swal({
