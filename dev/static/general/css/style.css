@@ -196,12 +196,12 @@ a:hover {
 }
 
 #notifications-mobile ul {
-    width: 300px;
+    width: 250px;
 }
 
 #notifications-mobile li a {
     display: inline-block;
-    width: 300px;
+    width: 250px;
     white-space: normal;
 }
 
