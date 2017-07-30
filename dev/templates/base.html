@@ -174,12 +174,41 @@
         <nav class="navbar navbar-transparent navbar-absolute">
             <div class="container-fluid">
                 <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse">
+                    <button type="button" class="navbar-toggle show-navbar" data-toggle="collapse">
                         <span class="sr-only">Toggle navigation</span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
+                    <div class="right-nav">
+                        <li class="dropdown navbar-toggle" id="help-mobile">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="help-dropdown">
+                                <i class="material-icons">help</i>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/help/">Instructions/Tips</a></li>
+                                <li><a href="/contact/">Contact</a></li>
+                                <li><a class="toggle-welcome" href="{% if request.user.show_welcome %}/hide-welcome/{% else %}/show-welcome/{% endif %}">
+                                    {% if request.user.show_welcome %}Hide{% else %}Show{% endif %} Welcome Menu</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown navbar-toggle" id="notifications-mobile">
+                            <a onclick="functions.markNotificationsRead()" class="dropdown-toggle"
+                               data-toggle="dropdown">
+                                <span class="notification" id="numRead">{{ num_unread }}</span>
+                                <i class="material-icons">notifications</i>
+                            </a>
+                            <ul class="dropdown-menu" id="notification-dropdown">
+                                {% for note in notifications %}
+                                    {% if note.is_read %}
+                                        <li><a href="{{ note.url }}">{{ note.message }}</a></li>
+                                    {% else %}
+                                        <li class="unread-notification"><a href="{{ note.url }}">{{ note.message }}</a></li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    </div>
                     <a class="navbar-brand" href="#">
                         {% if page == 'activity_feed' %}Activity Feed
                         {% elif page == 'profile' %}Profile
@@ -190,10 +219,29 @@
                         {% elif page == 'help' %}Help
                         {% endif %}
                     </a>
+{#                    <ul class="nav navbar-nav navbar-right text-right">#}
+{#                        <li class="dropdown" id="notifications-nav">#}
+{#                            <a onclick="functions.markNotificationsRead()" class="dropdown-toggle"#}
+{#                               data-toggle="dropdown">#}
+{#                                <i class="material-icons">notifications</i>#}
+{#                                <span class="notification" id="numRead">{{ num_unread }}</span>#}
+{#                                <p class="hidden-lg hidden-md">Notifications</p>#}
+{#                            </a>#}
+{#                            <ul class="dropdown-menu" id="notification-dropdown">#}
+{#                                {% for note in notifications %}#}
+{#                                    {% if note.is_read %}#}
+{#                                        <li><a href="{{ note.url }}">{{ note.message }}</a></li>#}
+{#                                    {% else %}#}
+{#                                        <li class="unread-notification"><a href="{{ note.url }}">{{ note.message }}</a></li>#}
+{#                                    {% endif %}#}
+{#                                {% endfor %}#}
+{#                            </ul>#}
+{#                        </li>#}
+{#                    </ul>#}
                 </div>
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav navbar-right">
-                        <li class="dropdown">
+                        <li class="dropdown" id="notifications-nav">
                             <a onclick="functions.markNotificationsRead()" class="dropdown-toggle"
                                data-toggle="dropdown">
                                 <i class="material-icons">notifications</i>
@@ -221,14 +269,15 @@
                                 <li><a onclick="logout()">Log out</a></li>
                             </ul>
                         </li>
-                        <li class="dropdown">
+                        <li class="dropdown" id="help-nav">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="help-dropdown">
                                 <i class="material-icons">help</i>
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a href="/help/">Instructions/Tips</a></li>
                                 <li><a href="/contact/">Contact</a></li>
-                                <li><a href="/activity-feed/?show_welcome=true">Show Welcome Menu</a></li>
+                                <li><a class="toggle-welcome" href="{% if request.user.show_welcome %}/hide-welcome/{% else %}/show-welcome/{% endif %}">
+                                    {% if request.user.show_welcome %}Hide{% else %}Show{% endif %} Welcome Menu</a></li>
                             </ul>
                         </li>
                     </ul>

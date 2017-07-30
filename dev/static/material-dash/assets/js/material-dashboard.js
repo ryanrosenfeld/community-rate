@@ -315,7 +315,7 @@ md = {
         }
 
         if(!toggle_initialized){
-            $toggle = $('.navbar-toggle');
+            $toggle = $('.show-navbar');
 
             $toggle.click(function (){
 

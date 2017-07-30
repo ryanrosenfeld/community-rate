@@ -19,6 +19,8 @@ urlpatterns = [
     url(r'^help/', general_views.help_page),
     url(r'^contact/', general_views.contact),
     url(r'^read/(?P<notification_id>\w{0,50})/$', general_views.mark_read),
+    url(r'^show-welcome/', general_views.show_welcome),
+    url(r'^hide-welcome/', general_views.hide_welcome),
 
     # Movie views
     url(r'^movie/(.*)/', movie_views.movie_page),

@@ -115,6 +115,15 @@
                                 <strong>tips and common questions</strong> or visit a <strong>Contact</strong> page.
                                 You can also toggle the display of this getting started menu.</li>
                         </ul>
+                        <p class="mobile-message">
+                            Next to the navigation menu button on the top of the screen, additional functionality is available:
+                        </p>
+                        <ul class="mobile-message">
+                            <li>Any <strong>Notifications</strong>, such as when a friend follows you, are accessible.</li>
+                            <li>Go to the <strong>Help</strong> section to either see some
+                                <strong>tips and common questions</strong> or visit a <strong>Contact</strong> page.
+                                You can also toggle the display of this getting started menu.</li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -246,7 +255,6 @@
                 functions.sweetAlert('welcome')
             }
 
-            checkShowWelcome();
             handleDisplayMobileVsDesktop();
 
             $(window).resize(function () {
@@ -284,18 +292,6 @@
             $.ajax({
                 url: "/ajax/hide-welcome/"
             });
-        }
-
-        function checkShowWelcome() {
-            var url = window.location.href;
-
-            if (url.indexOf("?show_welcome=true") != -1) {
-                $("#welcome-menu").css("display", "block");
-
-                $.ajax({
-                    url: "/ajax/show-welcome/"
-                })
-            }
         }
 
         function submitComment(reviewId) {
