@@ -5,17 +5,14 @@ from threading import Timer
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
-import boto3
 import re
 
 from general.services import send_email
 from .forms import *
 from .models import *
 from .functions import collect_feed_updates
-from users.forms import profileSetupForm
-from community_rate.settings import BASE_DIR
 
 
 User = get_user_model()

@@ -25,6 +25,53 @@
     <!-- Custom styling -->
     <link href="{% static 'general/css/style.css' %}" rel="stylesheet">
 
+    <!--   Core JS Files   -->
+    <script src="{% static 'material-dash/assets/js/jquery-3.1.1.min.js' %}" type="text/javascript"></script>
+    <script src="{% static 'material-dash/assets/js/jquery-ui.min.js' %}" type="text/javascript"></script>
+    <script src="{% static 'material-dash/assets/js/bootstrap.min.js' %}" type="text/javascript"></script>
+    <script src="{% static 'material-dash/assets/js/material.min.js' %}" type="text/javascript"></script>
+    <script src="{% static 'material-dash/assets/js/perfect-scrollbar.jquery.min.js' %}"
+            type="text/javascript"></script>
+
+    <!-- Forms Validations Plugin -->
+    <script src="{% static 'material-dash/assets/js/jquery.validate.min.js' %}"></script>
+    <!--  Plugin for Date Time Picker and Full Calendar Plugin-->
+    <script src="{% static 'material-dash/assets/js/moment.min.js' %}"></script>
+    <!--  Charts Plugin -->
+    <script src="{% static 'material-dash/assets/js/chartist.min.js' %}"></script>
+    <!--  Plugin for the Wizard -->
+    <script src="{% static 'material-dash/assets/js/jquery.bootstrap-wizard.js' %}"></script>
+    <!--  Notifications Plugin    -->
+    <script src="{% static 'material-dash/assets/js/bootstrap-notify.js' %}"></script>
+    <!-- DateTimePicker Plugin -->
+    <script src="{% static 'material-dash/assets/js/bootstrap-datetimepicker.js' %}"></script>
+    <!-- Vector Map plugin -->
+    <script src="{% static 'material-dash/assets/js/jquery-jvectormap.js' %}"></script>
+    <!-- Sliders Plugin -->
+    <script src="{% static 'material-dash/assets/js/nouislider.min.js' %}"></script>
+    <!--  Google Maps Plugin    -->
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js"></script>
+    <!-- Select Plugin -->
+    <script src="{% static 'material-dash/assets/js/jquery.select-bootstrap.js' %}"></script>
+    <!--  DataTables.net Plugin    -->
+    <script src="{% static 'material-dash/assets/js/jquery.datatables.js' %}"></script>
+    <!-- Sweet Alert 2 plugin -->
+    <script src="{% static 'material-dash/assets/js/sweetalert2.js' %}"></script>
+    <!--	Plugin for Fileupload, full documentation here: http://www.jasny.net/bootstrap/javascript/#fileinput -->
+    <script src="{% static 'material-dash/assets/js/jasny-bootstrap.min.js' %}"></script>
+    <!--  Full Calendar Plugin    -->
+    <script src="{% static 'material-dash/assets/js/fullcalendar.min.js' %}"></script>
+    <!-- TagsInput Plugin -->
+    <script src="{% static 'material-dash/assets/js/jquery.tagsinput.js' %}"></script>
+    <!-- Font Awesome Icons -->
+    <script src="https://use.fontawesome.com/90b4d1fbb5.js"></script>
+
+    <!-- Material Dashboard javascript methods -->
+    <script src="{% static 'material-dash/assets/js/material-dashboard.js' %}"></script>
+
+    <!-- General Functions -->
+    <script src="{% static 'general/js/functions.js' %}"></script>
+
     {% block header %}
     {% endblock %}
 </head>
@@ -55,7 +102,8 @@
 
 
     function logout() {
-        FB.logout(function(response) {});
+        FB.logout(function (response) {
+        });
         window.location.replace("/logout/")
     }
 </script>
@@ -91,9 +139,9 @@
                             <li>
                                 <a href="/profile/{{ request.user.id }}/">My Profile</a>
                             </li>
-{#                            <li>#}
-{#                                <a href="/settings/">Settings</a>#}
-{#                            </li>#}
+                            {#                            <li>#}
+                            {#                                <a href="/settings/">Settings</a>#}
+                            {#                            </li>#}
                             <li>
                                 <a onclick="logout()">Logout</a>
                             </li>
@@ -188,8 +236,10 @@
                             <ul class="dropdown-menu">
                                 <li><a href="/help/">Instructions/Tips</a></li>
                                 <li><a href="/contact/">Contact</a></li>
-                                <li><a class="toggle-welcome" href="{% if request.user.show_welcome %}/hide-welcome/{% else %}/show-welcome/{% endif %}">
-                                    {% if request.user.show_welcome %}Hide{% else %}Show{% endif %} Welcome Menu</a></li>
+                                <li><a class="toggle-welcome"
+                                       href="{% if request.user.show_welcome %}/hide-welcome/{% else %}/show-welcome/{% endif %}">
+                                    {% if request.user.show_welcome %}Hide{% else %}Show{% endif %} Welcome Menu</a>
+                                </li>
                             </ul>
                         </li>
                         <li class="dropdown navbar-toggle" id="notifications-mobile">
@@ -203,7 +253,8 @@
                                     {% if note.is_read %}
                                         <li><a href="{{ note.url }}">{{ note.message }}</a></li>
                                     {% else %}
-                                        <li class="unread-notification"><a href="{{ note.url }}">{{ note.message }}</a></li>
+                                        <li class="unread-notification"><a href="{{ note.url }}">{{ note.message }}</a>
+                                        </li>
                                     {% endif %}
                                 {% endfor %}
                             </ul>
@@ -213,31 +264,32 @@
                         {% if page == 'activity_feed' %}Activity Feed
                         {% elif page == 'profile' %}Profile
                         {% elif page == 'users' or page == 'all_users' or page == 'relationships' %}Users
-                        {% elif page == 'movies' or page == 'movie_db' or page == 'top_movies' or page == 'my_reviews' %}Movies
+                        {% elif page == 'movies' or page == 'movie_db' or page == 'top_movies' or page == 'my_reviews' %}
+                            Movies
                         {% elif page == 'lists' %}Lists
                         {% elif page == 'contact' %}Contact
                         {% elif page == 'help' %}Help
                         {% endif %}
                     </a>
-{#                    <ul class="nav navbar-nav navbar-right text-right">#}
-{#                        <li class="dropdown" id="notifications-nav">#}
-{#                            <a onclick="functions.markNotificationsRead()" class="dropdown-toggle"#}
-{#                               data-toggle="dropdown">#}
-{#                                <i class="material-icons">notifications</i>#}
-{#                                <span class="notification" id="numRead">{{ num_unread }}</span>#}
-{#                                <p class="hidden-lg hidden-md">Notifications</p>#}
-{#                            </a>#}
-{#                            <ul class="dropdown-menu" id="notification-dropdown">#}
-{#                                {% for note in notifications %}#}
-{#                                    {% if note.is_read %}#}
-{#                                        <li><a href="{{ note.url }}">{{ note.message }}</a></li>#}
-{#                                    {% else %}#}
-{#                                        <li class="unread-notification"><a href="{{ note.url }}">{{ note.message }}</a></li>#}
-{#                                    {% endif %}#}
-{#                                {% endfor %}#}
-{#                            </ul>#}
-{#                        </li>#}
-{#                    </ul>#}
+                    {#                    <ul class="nav navbar-nav navbar-right text-right">#}
+                    {#                        <li class="dropdown" id="notifications-nav">#}
+                    {#                            <a onclick="functions.markNotificationsRead()" class="dropdown-toggle"#}
+                    {#                               data-toggle="dropdown">#}
+                    {#                                <i class="material-icons">notifications</i>#}
+                    {#                                <span class="notification" id="numRead">{{ num_unread }}</span>#}
+                    {#                                <p class="hidden-lg hidden-md">Notifications</p>#}
+                    {#                            </a>#}
+                    {#                            <ul class="dropdown-menu" id="notification-dropdown">#}
+                    {#                                {% for note in notifications %}#}
+                    {#                                    {% if note.is_read %}#}
+                    {#                                        <li><a href="{{ note.url }}">{{ note.message }}</a></li>#}
+                    {#                                    {% else %}#}
+                    {#                                        <li class="unread-notification"><a href="{{ note.url }}">{{ note.message }}</a></li>#}
+                    {#                                    {% endif %}#}
+                    {#                                {% endfor %}#}
+                    {#                            </ul>#}
+                    {#                        </li>#}
+                    {#                    </ul>#}
                 </div>
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav navbar-right">
@@ -253,7 +305,8 @@
                                     {% if note.is_read %}
                                         <li><a href="{{ note.url }}">{{ note.message }}</a></li>
                                     {% else %}
-                                        <li class="unread-notification"><a href="{{ note.url }}">{{ note.message }}</a></li>
+                                        <li class="unread-notification"><a href="{{ note.url }}">{{ note.message }}</a>
+                                        </li>
                                     {% endif %}
                                 {% endfor %}
                             </ul>
@@ -265,7 +318,7 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a href="/profile/{{ request.user.id }}/">Profile</a></li>
-{#                                <li><a href="/settings/">Settings</a></li>#}
+                                {#                                <li><a href="/settings/">Settings</a></li>#}
                                 <li><a onclick="logout()">Log out</a></li>
                             </ul>
                         </li>
@@ -276,8 +329,10 @@
                             <ul class="dropdown-menu">
                                 <li><a href="/help/">Instructions/Tips</a></li>
                                 <li><a href="/contact/">Contact</a></li>
-                                <li><a class="toggle-welcome" href="{% if request.user.show_welcome %}/hide-welcome/{% else %}/show-welcome/{% endif %}">
-                                    {% if request.user.show_welcome %}Hide{% else %}Show{% endif %} Welcome Menu</a></li>
+                                <li><a class="toggle-welcome"
+                                       href="{% if request.user.show_welcome %}/hide-welcome/{% else %}/show-welcome/{% endif %}">
+                                    {% if request.user.show_welcome %}Hide{% else %}Show{% endif %} Welcome Menu</a>
+                                </li>
                             </ul>
                         </li>
                     </ul>
@@ -307,13 +362,18 @@
             <div class="container-fluid">
                 <div class="col-xs-6 col-xs-push-6 text-right">
                     <p>Created by Ryan Rosenfeld</p>
-                    <a class="btn btn-simple btn-just-icon btn-linkedin el-footer" href="https://www.linkedin.com/in/ryan-rosenfeld-a4380a10b/"><i class="fa fa-linkedin-square"></i></a>
-                    <a class="btn btn-simple btn-just-icon btn-github el-footer" href="https://github.com/ryanrosenfeld"><i class="fa fa-github-square"></i></a>
-                    <a class="btn btn-simple btn-just-icon el-footer" href="mailto:ryro003@gmail.com"><i class="material-icons">email</i></a>
+                    <a class="btn btn-simple btn-just-icon btn-linkedin el-footer"
+                       href="https://www.linkedin.com/in/ryan-rosenfeld-a4380a10b/"><i
+                            class="fa fa-linkedin-square"></i></a>
+                    <a class="btn btn-simple btn-just-icon btn-github el-footer"
+                       href="https://github.com/ryanrosenfeld"><i class="fa fa-github-square"></i></a>
+                    <a class="btn btn-simple btn-just-icon el-footer" href="mailto:ryro003@gmail.com"><i
+                            class="material-icons">email</i></a>
                 </div>
                 <div class="col-xs-6 col-xs-pull-6" style="margin-top: 7px;">
                     <p>
-                        Movie information and images provided by <a href="https://www.themoviedb.org"><img src="{% static 'general/img/tmdb.png' %}" style="width: 20px;"></a><br>
+                        Movie information and images provided by <a href="https://www.themoviedb.org"><img
+                            src="{% static 'general/img/tmdb.png' %}" style="width: 20px;"></a><br>
                         <i>This product uses the TMDb API but is not endorsed or certified by TMDb.</i><br>
                         Site icon made by <a href="www.freepik.com">Freepik</a> from <a href="www.flaticon.com">www.flaticon.com</a>
                     </p>
@@ -325,61 +385,22 @@
 
 </body>
 
-<!--   Core JS Files   -->
-<script src="{% static 'material-dash/assets/js/jquery-3.1.1.min.js' %}" type="text/javascript"></script>
-<script src="{% static 'material-dash/assets/js/jquery-ui.min.js' %}" type="text/javascript"></script>
-<script src="{% static 'material-dash/assets/js/bootstrap.min.js' %}" type="text/javascript"></script>
-<script src="{% static 'material-dash/assets/js/material.min.js' %}" type="text/javascript"></script>
-<script src="{% static 'material-dash/assets/js/perfect-scrollbar.jquery.min.js' %}" type="text/javascript"></script>
-
-<!-- Forms Validations Plugin -->
-<script src="{% static 'material-dash/assets/js/jquery.validate.min.js' %}"></script>
-<!--  Plugin for Date Time Picker and Full Calendar Plugin-->
-<script src="{% static 'material-dash/assets/js/moment.min.js' %}"></script>
-<!--  Charts Plugin -->
-<script src="{% static 'material-dash/assets/js/chartist.min.js' %}"></script>
-<!--  Plugin for the Wizard -->
-<script src="{% static 'material-dash/assets/js/jquery.bootstrap-wizard.js' %}"></script>
-<!--  Notifications Plugin    -->
-<script src="{% static 'material-dash/assets/js/bootstrap-notify.js' %}"></script>
-<!-- DateTimePicker Plugin -->
-<script src="{% static 'material-dash/assets/js/bootstrap-datetimepicker.js' %}"></script>
-<!-- Vector Map plugin -->
-<script src="{% static 'material-dash/assets/js/jquery-jvectormap.js' %}"></script>
-<!-- Sliders Plugin -->
-<script src="{% static 'material-dash/assets/js/nouislider.min.js' %}"></script>
-<!--  Google Maps Plugin    -->
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js"></script>
-<!-- Select Plugin -->
-<script src="{% static 'material-dash/assets/js/jquery.select-bootstrap.js' %}"></script>
-<!--  DataTables.net Plugin    -->
-<script src="{% static 'material-dash/assets/js/jquery.datatables.js' %}"></script>
-<!-- Sweet Alert 2 plugin -->
-<script src="{% static 'material-dash/assets/js/sweetalert2.js' %}"></script>
-<!--	Plugin for Fileupload, full documentation here: http://www.jasny.net/bootstrap/javascript/#fileinput -->
-<script src="{% static 'material-dash/assets/js/jasny-bootstrap.min.js' %}"></script>
-<!--  Full Calendar Plugin    -->
-<script src="{% static 'material-dash/assets/js/fullcalendar.min.js' %}"></script>
-<!-- TagsInput Plugin -->
-<script src="{% static 'material-dash/assets/js/jquery.tagsinput.js' %}"></script>
-<!-- Font Awesome Icons -->
-<script src="https://use.fontawesome.com/90b4d1fbb5.js"></script>
-
-<!-- Material Dashboard javascript methods -->
-<script src="{% static 'material-dash/assets/js/material-dashboard.js' %}"></script>
-
-<!-- General Functions -->
-<script src="{% static 'general/js/functions.js' %}"></script>
-
 <!-- Google analytics -->
 <script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 
-  ga('create', 'UA-102562575-1', 'auto');
-  ga('send', 'pageview');
+    ga('create', 'UA-102562575-1', 'auto');
+    ga('send', 'pageview');
 </script>
 
 {% block scripts %}{% endblock %}

@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     'general',
     'movies',
     'users',
-    'boto3',
     'widget_tweaks',
 ]
 

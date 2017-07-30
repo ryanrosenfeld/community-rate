@@ -9,16 +9,26 @@
 {% endblock %}
 
 {% block content %}
+    <script>
+        function positionProfilePics() {
+            if (functions.checkBrowser() == "chrome") {
+                $(".card .card-image-circle img").css("margin-top", "-110px");
+            }
+        }
+
+        positionProfilePics();
+    </script>
+
     {# Welcome to the site section #}
     <div class="col-md-8 col-md-offset-2" id="welcome-menu" {% if not request.user.show_welcome %}style="display: none"{% endif %}>
         <div class="card" id="card-welcome">
-            <div class="col-xs-9">
+            <div class="col-xs-8">
                 <div class="card-header card-header-text" data-background-color="rose">
                     <h4 class="card-title">Welcome to CommunityRate!</h4>
                     <p class="category">Here's how to get started</p>
                 </div>
             </div>
-            <div class="col-xs-3">
+            <div class="col-xs-4">
                 <div class="text-right">
                     <button class="btn btn-simple btn-warning" onclick="hideWelcome()">
                         Hide <i class="material-icons">visibility</i>
