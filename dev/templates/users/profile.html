@@ -15,13 +15,11 @@
         {# Profile summary #}
         <div class="card card-profile">
             <div class="card-avatar">
-                <div class="photo">
-                    {% if user.profile_pic != "" %}
-                        <img src="{{ user.profile_pic }}" id="profPic">
-                    {% else %}
-                        <img src="{% static 'material-dash/assets/img/placeholder.jpg' %}" id="profPic">
-                    {% endif %}
-                </div>
+                {% if user.profile_pic != "" %}
+                    <img src="{{ user.profile_pic }}" id="profPic">
+                {% else %}
+                    <img src="{% static 'material-dash/assets/img/placeholder.jpg' %}" id="profPic">
+                {% endif %}
             </div>
 
             <div class="content">
@@ -367,27 +365,29 @@
     <!-- Edit Picture Modal -->
     <div class="modal fade" id="updatePicModal" tabindex="-1" role="dialog" aria-labelledby="updatePic"
          aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                        <i class="material-icons">clear</i>
-                    </button>
-                    <h4 class="modal-title">Update your profile picture</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="col-md-12">
-                        <div class="fileinput fileinput-new" data-provides="fileinput">
-                            <span class="btn btn-primary btn-file"><span class="fileinput-new">Select file</span>
-                                <span class="fileinput-exists">Select file</span>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <i class="material-icons">clear</i>
+                </button>
+                <h4 class="modal-title">Update your profile picture</h4>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-12 text-center">
+                    <div class="fileinput fileinput-new" data-provides="fileinput">
+                            <span class="btn btn-primary btn-file"><span class="fileinput-new"><i
+                                    class="material-icons">file_upload</i> Upload file</span>
+                                <span class="fileinput-exists"><i
+                                        class="material-icons">file_upload</i> Upload file</span>
                                 <input type="file" id="profile-pic-upload" accept="image/*"></span>
-                        </div>
-                        {% if user.has_pic %}
-                            <img src="{{ profile_pic_base_url }}{{ user.id }}" id="edit-profile-pic">
-                        {% else %}
-                            <img src="{% static 'material-dash/assets/img/placeholder.jpg' %}" id="edit-profile-pic">
-                        {% endif %}
                     </div>
+                    {% if user.profile_pic != "" %}
+                        <img src="{{ user.profile_pic }}" id="edit-profile-pic">
+                    {% else %}
+                        <img src="{% static 'material-dash/assets/img/placeholder.jpg' %}" id="edit-profile-pic">
+                    {% endif %}
+                </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
                     <button type="button" class="btn btn-success" onclick="updatePic()">Update</button>
@@ -401,15 +401,28 @@
 {% block scripts %}
     <script src="{% static 'general/js/profile.js' %}"></script>
     <script src="{% static 'images/croppie.js' %}"></script>
-    {#    <script src="{% static 'images/demo.js' %}"></script>#}
-    <script src="{% static 'images/exif.js' %}"></script>
+    <script src="{% static 'general/js/jquery.cookie.js' %}"></script>
     <script>
-        var imgUrl = "";
-        {#        {% if user.has_pic %}#}
-        {#            imgUrl = "{{ profile_pic_base_url }}{{ user.id }}";#}
-        {#        {% else %}#}
-        imgUrl = "{% static 'material-dash/assets/img/placeholder.jpg' %}";
-        {#        {% endif %}#}
+        var currentPic = "";
+        var newPic = '';
+
+        {% if user.profile_pic != "" %}
+            currentPic = "{{ user.profile_pic }}";
+        {% else %}
+            currentPic = "{% static 'material-dash/assets/img/placeholder.jpg' %}";
+        {% endif %}
+
+        var profileInput = $("#edit-profile-pic").croppie({
+            viewport: {
+                width: 250,
+                height: 250,
+                type: 'circle'
+            },
+            boundary: {
+                width: 300,
+                height: 300
+            }
+        });
 
         function toggleFollowBtn() {
             var div = $("#follow-unfollow");
@@ -422,128 +435,5 @@
                     ' \'{{ user.first_name }} {{ user.last_name }}\', toggleFollowBtn)">Follow</button>');
             }
         }
-
-        var profileInput = $("#edit-profile-pic").croppie({
-            viewport: {
-                width: 200,
-                height: 200,
-                type: 'circle'
-            },
-            boundary: {
-                width: 250,
-                height: 250
-            }
-        });
-
-        var newPic = '';
-
-        $("#updatePicModal").on("shown.bs.modal", function () {
-            $("#edit-profile-pic").croppie('bind', {
-                url: imgUrl
-            });
-        });
-
-        $("#profile-pic-upload").change(function () {
-            var fr = new FileReader();
-
-            fr.onload = function (e) {
-                newPic = e.target.result;
-
-                $("#edit-profile-pic").croppie('bind', {
-                    url: e.target.result
-                });
-            };
-            fr.readAsDataURL(this.files[0]);
-        });
-
-        function updatePic() {
-            profileInput.croppie('result', {
-                type: 'canvas',
-                format: 'jpeg'
-            }).then(function(img) {
-                functions.saveProfilePic(img);
-                $("#updatePicModal").modal('toggle');
-                newPic = img;
-                tempUpdateProfPic();
-            })
-        }
-
-        {#        initCroppie();#}
-        {##}
-        {#        $uploadCrop = $('#profPic').croppie({#}
-        {#            viewport: {#}
-        {#                width: 150,#}
-        {#                height: 150,#}
-        {#                type: 'circle'#}
-        {#            },#}
-        {#            enableExif: true#}
-        {#        });#}
-        {##}
-        {#        // Prepare the preview for profile picture#}
-        {#        $("#upload-image").change(function () {#}
-        {#            var files = document.getElementById("upload-image").files;#}
-        {#            var file = files[0];#}
-        {#            if (!file) {#}
-        {#                functions.sweetAlert("warning", "No image selected");#}
-        {#                return null;#}
-        {#            }#}
-        {#            if (!(file.type == "image/jpeg" || file.type == "image/png")) {#}
-        {#                functions.sweetAlert("warning", "Please choose a .jpeg or .png file");#}
-        {#                return null;#}
-        {#            }#}
-        {#            readURL(this);#}
-        {#        });#}
-        {##}
-        {#        function readURL(input) {#}
-        {#            if (input.files && input.files[0]) {#}
-        {#                var $uploadCrop = $('#profPic').croppie({#}
-        {#                    viewport: {#}
-        {#                        width: 150,#}
-        {#                        height: 150,#}
-        {#                        type: 'circle'#}
-        {#                    },#}
-        {#                    enableExif: true#}
-        {#                });#}
-        {##}
-        {#                var reader = new FileReader();#}
-        {##}
-        {#                reader.onload = function (e) {#}
-        {#                    $('#profPicPreview').attr('src', e.target.result).fadeIn('slow');#}
-        {#                    newPic = e.target.result;#}
-        {##}
-        {#                    $uploadCrop.croppie('bind', {#}
-        {#                        url: e.target.result#}
-        {#                    }).then(function () {#}
-        {#                        console.log('jQuery bind complete');#}
-        {#                    });#}
-        {#                };#}
-        {#                reader.readAsDataURL(input.files[0]);#}
-        {##}
-        {#            }#}
-        {#        }#}
-
-        {#        $("#croppieImg").croppie('bind', {#}
-        {#            url: "{{ profile_pic_base_url }}{{ request.user.id }}"#}
-        {#        });#}
-
-        {#        $(document).ready(function() {#}
-        {#            $("#demo").croppie({#}
-        {#                viewport: {#}
-        {#                    width: 100,#}
-        {#                    height: 100,#}
-        {#                    type: 'circle'#}
-        {#                },#}
-        {#                boundary: {#}
-        {#                    width: 300,#}
-        {#                    height: 300#}
-        {#                },#}
-        {#                mouseWheelZoom: true#}
-        {#            });#}
-        {##}
-        {#            $("#demo").croppie('bind', {#}
-        {#                url: "{{ profile_pic_base_url }}{{ request.user.id }}"#}
-        {#            });#}
-        {#        }#}
-
     </script>
 {% endblock %}

@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 from .forms import *
 from general.models import SiteUser
@@ -10,6 +11,7 @@ from movies.services import get_movie_by_id
 
 
 @login_required
+@ensure_csrf_cookie
 def profile(request, user_id=""):
     """Public or private view of a person's profile"""
     if user_id == "":

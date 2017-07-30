@@ -20,6 +20,11 @@
     border: 2px dashed #00bcd4;
 }
 
-a {
+.card-review a {
     color: #e91e63;
+}
+
+#card-welcome .tab-pane a {
+    color: #9c27b0;
+    text-decoration: underline;
 }

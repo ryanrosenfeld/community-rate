@@ -25,7 +25,7 @@
         </div>
 
         {# List of users #}
-        <div class="table-responsive">
+        <div class="col-md-12">
             <div class="card">
                 <div class="card-header" data-background-color="blue">
                     <h4 class="title card-header-title">All Users</h4>
@@ -47,8 +47,8 @@
                                     <td class="text-center">
                                         <div class="img-container">
                                             <a href="/profile/{{ u.id }}/">
-                                                {% if u.has_pic %}
-                                                    <img src="{{ profile_pic_base_url }}{{ u.id }}">
+                                                {% if u.profile_pic != "" %}
+                                                    <img src="{{ u.profile_pic }}">
                                                 {% else %}
                                                     <img src="{% static '/material-dash/assets/img/placeholder.jpg' %}">
                                                 {% endif %}

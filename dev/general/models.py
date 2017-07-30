@@ -6,10 +6,10 @@ class SiteUser(AbstractUser):
     fb_id = models.CharField(max_length=100, blank=True)
     fav_quote = models.TextField(blank=True)
     about_me = models.TextField(blank=True)
-    has_pic = models.BooleanField(default=False)
     timezone = models.CharField(max_length=100, default="US/Eastern")
-    reset_key = models.TextField(default='1'),
     profile_pic = models.TextField(blank=True)
+    reset_key = models.TextField(default='1')
+    show_welcome = models.BooleanField(default=True)
 
 
 class Notification(models.Model):

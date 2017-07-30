@@ -84,7 +84,7 @@ def fb_login(request):
     )
     user.save()
     login(request, user)
-    return HttpResponseRedirect('/tutorial/')
+    return HttpResponseRedirect('/activity-feed/')
 
 
 def logout_view(request):
@@ -132,7 +132,7 @@ def new_user(request):
             login(request, user)
 
             request.session['new-user'] = True
-            return HttpResponseRedirect('/tutorial/')
+            return HttpResponseRedirect('/activity-feed/')
     else:
         form = SignupForm()
     return render(request, 'general/register.html', {'form': form, 'page': 'register'})
@@ -234,35 +234,6 @@ def activity_feed(request):
 
 
 @login_required
-def tutorial(request):
-    form = profileSetupForm(initial={'timezone': 'US/Eastern'})
-    new = request.session.get('new-user', False)
-    if new:
-        request.session['new-user'] = False
-    if request.method == 'POST':
-        form = profileSetupForm(request.POST)
-        if form.is_valid():
-            # Save profile changes
-            about_me = form.cleaned_data['about_me']
-            fav_quote = form.cleaned_data['fav_quote']
-            timezone = form.cleaned_data['timezone']
-            request.user.about_me = about_me
-            request.user.fav_quote = fav_quote
-            request.user.timezone = timezone
-            request.user.save()
-
-            request.session['welcome'] = True
-            return HttpResponseRedirect('/activity-feed/')
-    return render(request, 'general/tutorial.html', {'new_user': new,
-                                                     'form': form})
-
-
-@login_required
-def welcome(request):
-    return HttpResponseRedirect('/activity-feed/')
-
-
-@login_required
 def help_page(request):
     return render(request, 'help.html', {'page': 'help'})
 
@@ -270,34 +241,3 @@ def help_page(request):
 @login_required
 def contact(request):
     return render(request, 'contact.html', {'page': 'contact'})
-
-
-@login_required
-def sign_s3(request):
-    file_name = str(request.user.id)
-    file_type = request.GET.get('file_type', None)
-
-    s3 = boto3.client('s3')
-
-    bucket = "communityrate-test"
-    base_url = request.get_host()
-    if base_url == "communityrate-test.herokuapp.com":
-        bucket = "communityrate-staging"
-    elif base_url == "www.community-rate.com" or base_url == "communityrate.herokuapp.com":
-        bucket = "communityrate"
-
-    presigned_post = s3.generate_presigned_post(
-        Bucket=bucket,
-        Key=file_name,
-        Fields={"acl": "public-read", "Content-Type": file_type},
-        Conditions=[
-            {"acl": "public-read"},
-            {"Content-Type": file_type}
-        ],
-        ExpiresIn=3600
-    )
-
-    return JsonResponse({
-        'data': presigned_post,
-        'url': 'https://communityrate.s3.amazonaws.com/' + file_name
-    })

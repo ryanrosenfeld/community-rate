@@ -36,3 +36,17 @@ def add_comment(request):
     n = Notification.objects.create(message=msg, url=url, user=review.creator)
     n.save()
     return JsonResponse({})
+
+
+@login_required
+def hide_welcome(request):
+    request.user.show_welcome = False
+    request.user.save()
+    return JsonResponse({})
+
+
+@login_required
+def show_welcome(request):
+    request.user.show_welcome = True
+    request.user.save()
+    return JsonResponse({})

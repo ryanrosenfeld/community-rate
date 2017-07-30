@@ -9,21 +9,137 @@
 {% endblock %}
 
 {% block content %}
+    {# Welcome to the site section #}
+    <div class="col-md-8 col-md-offset-2" id="welcome-menu" {% if not request.user.show_welcome %}style="display: none"{% endif %}>
+        <div class="card" id="card-welcome">
+            <div class="col-xs-9">
+                <div class="card-header card-header-text" data-background-color="rose">
+                    <h4 class="card-title">Welcome to CommunityRate!</h4>
+                    <p class="category">Here's how to get started</p>
+                </div>
+            </div>
+            <div class="col-xs-3">
+                <div class="text-right">
+                    <button class="btn btn-simple btn-warning" onclick="hideWelcome()">
+                        Hide <i class="material-icons">visibility</i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-content table-responsive">
+                <ul class="nav nav-pills nav-pills-info">
+                    <li class="active">
+                        <a href="#ratings" data-toggle="tab">Rate movies</a>
+                    </li>
+                    <li>
+                        <a href="#friends" data-toggle="tab">Find friends</a>
+                    </li>
+                    <li>
+                        <a href="#profile" data-toggle="tab">Add to your profile</a>
+                    </li>
+                    <li>
+                        <a href="#navigation" data-toggle="tab">Site navigation</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="ratings">
+                        <p>
+                            You can search for movies in the <a href="/movies/">Movie Database</a>,
+                            or by using the search bar available from every page.
+                            <br><br>
+                            Follow these steps:
+                        </p>
+                        <ol>
+                            <li>Search for a movie.</li>
+                            <li>Select the movie. This will bring you the movie page for the movie.</li>
+                            <li>Click <strong>Update Review</strong> to rate your first movie!</li>
+                        </ol>
+                    </div>
+                    <div class="tab-pane" id="friends">
+                        <p>
+                            The <a href="/users/">All Users</a> page contains all the users for the site.
+                            Search for your friends and start following them to see their ratings!
+                            <br><br>
+                            Keep in mind that <strong>the site is powered by your friends' ratings.</strong> That means
+                            there won't be a ton of content until you
+                            follow your friends or get them to sign up!
+                        </p>
+                    </div>
+                    <div class="tab-pane" id="profile">
+                        Your <a href="/profile/{{ request.user.id }}/">Profile</a> shows a bunch of things, including
+                        your movie ratings, movie lists, and information about you and your rating habits.
+                        <br><br>
+                        Let's get your profile fully set up!
+                        <ol>
+                            <li><a href="/profile/{{ request.user.id }}/?modal=edit">Edit your info</a>
+                                to add some more information about you.
+                            </li>
+                            <li><a href="/profile/{{ request.user.id }}/?modal=picture">Add a profile picture</a> so
+                                your friends can recognize you.
+                            </li>
+                        </ol>
+                    </div>
+                    <div class="tab-pane" id="navigation">
+                        <p class="mobile-message">
+                            Use the navigation menu by clicking the button with 3 stacked lines in the top right
+                            corner.
+                            <br>
+                            The navigation menu is how you navigate through the site. You have these options:
+                        </p>
+                        <p class="desktop-message">
+                            Use the navigation menu on the left side of the screen to navigate through the site.
+                            You have these options:
+                        </p>
+                        <ul>
+                            <li>Click on your name to either <strong>access your profile</strong> or
+                                <strong>logout</strong>. Your profile is also available via another link below.</li>
+                            <li class="mobile-message-li">Search for movies at any point using the <strong>search bar</strong>.</li>
+                            <li>Go to the <strong>activity feed</strong> (the page your currently on)
+                                to see a feed of your friends' ratings.</li>
+                            <li>Click the <strong>Movies</strong> tab to see the best movies based on your
+                                friends' ratings in <strong>Top Movies</strong>, search for new movies in
+                                the <strong>Movie Database</strong>, or see a list of your reviews in
+                                <strong>My Reviews</strong>.</li>
+                            <li>Under the <strong>Users</strong> tab, you can search for new people to follow in <strong>All Users</strong>
+                                or see your current relationships in <strong>My Relationships</strong></li>
+                            <li>In the <strong>Lists</strong> section, you can see your current lists, your friends'
+                                public lists, and the lists your friends have given you permission to edit.</li>
+                        </ul>
+                        <p class="desktop-message">
+                            On the top of the screen, additional functionality is available:
+                        </p>
+                        <ul class="desktop-message">
+                            <li>Search for movies at any point using the <strong>search bar</strong>.</li>
+                            <li>Any <strong>Notifications</strong>, such as when a friend follows you, are accessible.</li>
+                            <li>Another link to your user options are displayed</li>
+                            <li>Go to the <strong>Help</strong> section to either see some
+                                <strong>tips and common questions</strong> or visit a <strong>Contact</strong> page.
+                                You can also toggle the display of this getting started menu.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     {% if updates|length == 0 %}
         <div class="col-md-6 col-md-offset-3">
             <div class="alert alert-info alert-with-icon" data-notify="container">
                 <i class="material-icons" data-notify="icon">sentiment_very_dissatisfied</i>
                 <p data-notify="message">
-                    Looks like you don't have anything in your feed. Start following friends to keep track of what they're up to!<br>
-                    <p id="mobile-message" style="display: none">Click the hamburger menu in the top right corner to access a list of options.</p><br>
-                    <span class="text-center"><a href="/movies/" style="color: #9c27b0">Start rating movies</a> | <a href="/users/" class="text-rose" style="color: #9c27b0">Find your friends</a></span>
+                    Looks like you don't have anything in your feed. Start following friends to keep track of what
+                    they're up to!<br>
+                <p class="mobile-message" style="display: none">Click the hamburger menu in the top right corner to
+                    access
+                    a list of options.</p><br>
+                <span class="text-center"><a href="/movies/" style="color: #9c27b0">Start rating movies</a> | <a
+                        href="/users/" class="text-rose" style="color: #9c27b0">Find your friends</a></span>
                 </p>
             </div>
         </div>
     {% endif %}
     <div class="col-md-10 col-md-offset-1">
         {% for user, movie, review, comments in updates %}
-            <div class="card">
+            <div class="card card-review">
                 <div class="col-md-5">
                     <a href="/movie/{{ movie.movie_id }}">
                         <div class="card-image-custom" style="display: inline-block">
@@ -32,21 +148,21 @@
                         </div>
                     </a>
                     <a href="/profile/{{ user.id }}/">
-                        <div class="" style="display: inline-block;">
-{#                            <div class="photo">#}
-                                {% if user.has_pic %}
-                                    <img src="{{ profile_pic_base_url }}{{ user.id }}" class="img-circle card-image-circle">
-                                {% else %}
-                                    <img src="{% static 'material-dash/assets/img/placeholder.jpg' %}">
-                                {% endif %}
-{#                            </div>#}
+                        <div class="card-image-circle" style="display: inline-block;">
+                            {% if user.profile_pic != "" %}
+                                <img src="{{ user.profile_pic }}" class="img-circle">
+                            {% else %}
+                                <img src="{% static 'material-dash/assets/img/placeholder.jpg' %}">
+                            {% endif %}
                         </div>
                     </a>
                 </div>
                 <div class="col-md-7 text-right">
                     <div class="card-content">
                         <h3 class="card-title">{{ movie.title }}</h3>
-                        <h4 class="card-description">Reviewed by <a href="/profile/{{ user.id }}/" style="color: inherit">{{ user.first_name }} {{ user.last_name }}</a></h4>
+                        <h4 class="card-description">Reviewed by <a href="/profile/{{ user.id }}/"
+                                                                    style="color: inherit">{{ user.first_name }} {{ user.last_name }}</a>
+                        </h4>
                         <p class="card-description" style="margin-top: -8px;">{{ review.date_added }} <i
                                 class="material-icons" style="font-size: 20px;">access_time</i></p>
                     </div>
@@ -54,23 +170,24 @@
                 <div class="col-md-12">
                     <table class="table">
                         <thead>
-                            <tr>
-                                <th class="text-center rating-col">Rating</th>
-                                <th class="text-center react-col">Reaction</th>
-                                <th class="text-center thoughts-col">Thoughts</th>
-                            </tr>
+                        <tr>
+                            <th class="text-center rating-col">Rating</th>
+                            <th class="text-center react-col">Reaction</th>
+                            <th class="text-center thoughts-col">Thoughts</th>
+                        </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td class="text-center rating-col"><h2>{{ review.rating }}</h2></td>
-                                <td class="text-center react-col"><h2><i class="{{ review.reaction }}"></i></h2></td>
-                                <td class="text-center thoughts-col">{{ review.thoughts }}</td>
-                            </tr>
+                        <tr>
+                            <td class="text-center rating-col"><h2>{{ review.rating }}</h2></td>
+                            <td class="text-center react-col"><h2><i class="{{ review.reaction }}"></i></h2></td>
+                            <td class="text-center thoughts-col">{{ review.thoughts }}</td>
+                        </tr>
                         </tbody>
                     </table>
                 </div>
                 <div class="col-md-5 col-md-offset-6 text-right" style="margin-top: -30px;">
-                    <button class="btn btn-simple" onclick="toggleCommentsDisplay({{ review.id }})">Comments (<span id="comment-num-{{ review.id }}">{{ comments|length }}</span>) <i class="material-icons">chat</i>
+                    <button class="btn btn-simple" onclick="toggleCommentsDisplay({{ review.id }})">Comments (<span
+                            id="comment-num-{{ review.id }}">{{ comments|length }}</span>) <i class="material-icons">chat</i>
                     </button>
                 </div>
                 <div class="col-md-10 col-md-offset-1 text-center comments" id="comments-{{ review.id }}">
@@ -78,10 +195,12 @@
                         <form class="form-horizontal">
                             <div class="form-group">
                                 <div class="col-xs-10">
-                                    <input class="form-control comment" placeholder="Enter a new comment" id="comment-{{ review.id }}">
+                                    <input class="form-control comment" placeholder="Enter a new comment"
+                                           id="comment-{{ review.id }}">
                                 </div>
                                 <div class="col-xs-2">
-                                    <button type="button" class="btn btn-primary btn-just-icon" onclick="submitComment({{ review.id }})">
+                                    <button type="button" class="btn btn-primary btn-just-icon"
+                                            onclick="submitComment({{ review.id }})">
                                         <i class="material-icons">check</i>
                                     </button>
                                 </div>
@@ -89,25 +208,26 @@
                         </form>
                     </div>
                     <div class="col-md-10 col-md-offset-1">
-                        <table class="table table-striped text-left table-comments" id="comment-list-{{ review.id }}" style="margin-bottom: 10px;">
+                        <table class="table table-striped text-left table-comments" id="comment-list-{{ review.id }}"
+                               style="margin-bottom: 10px;">
                             <tbody>
-                                {% for comment in comments %}
-                                    <tr>
-                                        <td class="col-comment">
-                                            <a href="/profile/{{ comment.author.id }}/">
-                                                {{ comment.author.first_name }} {{ comment.author.last_name }}
-                                            </a>
-                                            {{ comment.comment }}
-                                        </td>
-{#                                        {% if comment.author.id == request.user.id %}#}
-{#                                            <td class="text-center col-delete">#}
-{#                                                <button type="button" class="btn btn-danger btn-simple" onclick="deleteComment({{ comment.id }})">#}
-{#                                                    <i class="material-icons">clear</i>#}
-{#                                                </button>#}
-{#                                            </td>#}
-{#                                        {% endif %}#}
-                                    </tr>
-                                {% endfor %}
+                            {% for comment in comments %}
+                                <tr>
+                                    <td class="col-comment">
+                                        <a href="/profile/{{ comment.author.id }}/">
+                                            {{ comment.author.first_name }} {{ comment.author.last_name }}
+                                        </a>
+                                        {{ comment.comment }}
+                                    </td>
+                                    {#                                        {% if comment.author.id == request.user.id %}#}
+                                    {#                                            <td class="text-center col-delete">#}
+                                    {#                                                <button type="button" class="btn btn-danger btn-simple" onclick="deleteComment({{ comment.id }})">#}
+                                    {#                                                    <i class="material-icons">clear</i>#}
+                                    {#                                                </button>#}
+                                    {#                                            </td>#}
+                                    {#                                        {% endif %}#}
+                                </tr>
+                            {% endfor %}
                             </tbody>
                         </table>
                     </div>
@@ -126,19 +246,26 @@
                 functions.sweetAlert('welcome')
             }
 
-            if (functions.checkHamburgerMenu()) {
-                $("#mobile-message").css("display", "block");
-            }
+            checkShowWelcome();
+            handleDisplayMobileVsDesktop();
 
-            $(window).resize(function() {
-                if (functions.checkHamburgerMenu()) {
-                    $("#mobile-message").css("display", "block");
-                }
-                else {
-                   $("#mobile-message").css("display", "none");
-               }
+            $(window).resize(function () {
+                handleDisplayMobileVsDesktop()
             });
         });
+
+        function handleDisplayMobileVsDesktop() {
+            if (functions.checkHamburgerMenu()) {
+                $(".mobile-message").css("display", "block");
+                $(".mobile-message-li").css("display", "list-item");
+                $(".desktop-message").css("display", "none");
+            }
+            else {
+                $(".mobile-message").css("display", "none");
+                $(".mobile-message-li").css("display", "none");
+                $(".desktop-message").css("display", "block");
+            }
+        }
 
         function toggleCommentsDisplay(reviewId) {
             var commentBlock = $("#comments-" + reviewId);
@@ -147,6 +274,27 @@
             }
             else {
                 commentBlock.css("display", "none");
+            }
+        }
+
+        function hideWelcome() {
+            $("#welcome-menu").css("display", "none");
+            functions.sweetAlert("info", "Remember, you can display this menu at any point in the future using the help button.");
+
+            $.ajax({
+                url: "/ajax/hide-welcome/"
+            });
+        }
+
+        function checkShowWelcome() {
+            var url = window.location.href;
+
+            if (url.indexOf("?show_welcome=true") != -1) {
+                $("#welcome-menu").css("display", "block");
+
+                $.ajax({
+                    url: "/ajax/show-welcome/"
+                })
             }
         }
 
@@ -166,12 +314,12 @@
 
                 $("#comment-list-" + reviewId).prepend(
                     '<tr>' +
-                        '<td>' +
-                            '<a href="/profile/{{ request.user.id }}/">' +
-                                '{{ request.user.first_name }} {{ request.user.last_name }}' +
-                            '</a> ' +
-                            comment +
-                        '</td>' +
+                    '<td>' +
+                    '<a href="/profile/{{ request.user.id }}/">' +
+                    '{{ request.user.first_name }} {{ request.user.last_name }}' +
+                    '</a> ' +
+                    comment +
+                    '</td>' +
                     '</tr>'
                 );
 

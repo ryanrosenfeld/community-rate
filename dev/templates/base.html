@@ -74,8 +74,8 @@
         <div class="sidebar-wrapper">
             <div class="user">
                 <div class="photo">
-                    {% if request.user.has_pic %}
-                        <img src="{{ profile_pic_base_url }}{{ request.user.id }}"
+                    {% if request.user.profile_pic != "" %}
+                        <img src="{{ request.user.profile_pic }}"
                              id="sidebarProfPic">
                     {% else %}
                         <img src="{% static 'material-dash/assets/img/placeholder.jpg' %}" id="sidebarProfPic">
@@ -228,6 +228,7 @@
                             <ul class="dropdown-menu">
                                 <li><a href="/help/">Instructions/Tips</a></li>
                                 <li><a href="/contact/">Contact</a></li>
+                                <li><a href="/activity-feed/?show_welcome=true">Show Welcome Menu</a></li>
                             </ul>
                         </li>
                     </ul>

@@ -20,19 +20,14 @@
     pointer-events: none;
 }
 
-.card .card-image-circle {
+.card .card-image-circle  img{
     height: 110px;
     width: 110px;
     position: relative;
     margin-left: 10px;
     margin-right: 10px;
-    margin-top: -75px;
-    /*border-radius: 50%;*/
-}
-
-.card .card-image-circle img {
+    margin-top: -110px;
     border-radius: 50%;
-    pointer-events: none;
 }
 
 .card .card-image-custom .card-title {

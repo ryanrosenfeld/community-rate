@@ -80,7 +80,7 @@ def has_pic(request):
 
 @login_required
 def upload_profile_pic(request):
-    pic = request.GET.get('pic', None)
+    pic = request.POST.get('pic', None)
     if pic is None:
         return JsonResponse({})
 

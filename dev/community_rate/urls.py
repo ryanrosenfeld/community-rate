@@ -18,10 +18,7 @@ urlpatterns = [
     url(r'^activity-feed/', general_views.activity_feed),
     url(r'^help/', general_views.help_page),
     url(r'^contact/', general_views.contact),
-    url(r'^tutorial/', general_views.tutorial),
-    url(r'^welcome/', general_views.welcome),
     url(r'^read/(?P<notification_id>\w{0,50})/$', general_views.mark_read),
-    url(r'^sign_s3/', general_views.sign_s3),
 
     # Movie views
     url(r'^movie/(.*)/', movie_views.movie_page),
@@ -47,6 +44,8 @@ urlpatterns = [
     # General AJAX Requests
     url(r'^ajax/mark-notifications-read/', general_ajax.mark_notifications_read),
     url(r'^ajax/add-comment/', general_ajax.add_comment),
+    url(r'^ajax/hide-welcome/', general_ajax.hide_welcome),
+    url(r'^ajax/show-welcome/', general_ajax.show_welcome),
 
     # Movie AJAX Requests
     url(r'^ajax/filter-movies/', movie_ajax.filter_movies),
