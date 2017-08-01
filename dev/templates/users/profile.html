@@ -401,6 +401,7 @@
 {% block scripts %}
     <script src="{% static 'general/js/profile.js' %}"></script>
     <script src="{% static 'images/croppie.js' %}"></script>
+    <script src="{% static 'images/exif.js' %}"></script>
     <script src="{% static 'general/js/jquery.cookie.js' %}"></script>
     <script>
         var currentPic = "";
@@ -421,7 +422,8 @@
             boundary: {
                 width: 300,
                 height: 300
-            }
+            },
+            enableExif: true
         });
 
         function toggleFollowBtn() {
