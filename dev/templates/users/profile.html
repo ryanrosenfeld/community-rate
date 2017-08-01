@@ -181,7 +181,7 @@
                                 </thead>
                                 <tbody>
                                 {% for m in recents %}
-                                    <tr class="pointer" onclick=window.location.href="/movie/{{ m.movie.id }}/">
+                                    <tr class="pointer" onclick=window.location.href="/movie/{{ m.movie.movie_id }}/">
                                         <td>
                                             <h4><img src="http://image.tmdb.org/t/p/w92{{ m.movie.poster_path }}"
                                                      alt=''> {{ m.movie.title }}</h4>
