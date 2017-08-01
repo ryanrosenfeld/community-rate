@@ -84,7 +84,6 @@ def upload_profile_pic(request):
     if pic is None:
         return JsonResponse({})
 
-    print(pic)
     request.user.profile_pic = pic
     request.user.save()
     return JsonResponse({})

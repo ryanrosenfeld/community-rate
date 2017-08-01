@@ -20,7 +20,8 @@
     </script>
 
     {# Welcome to the site section #}
-    <div class="col-md-8 col-md-offset-2" id="welcome-menu" {% if not request.user.show_welcome %}style="display: none"{% endif %}>
+    <div class="col-md-8 col-md-offset-2" id="welcome-menu"
+         {% if not request.user.show_welcome %}style="display: none"{% endif %}>
         <div class="card" id="card-welcome">
             <div class="col-xs-8">
                 <div class="card-header card-header-text" data-background-color="rose">
@@ -36,104 +37,122 @@
                 </div>
             </div>
             <div class="card-content table-responsive">
-                <ul class="nav nav-pills nav-pills-info">
-                    <li class="active">
-                        <a href="#ratings" data-toggle="tab">Rate movies</a>
-                    </li>
-                    <li>
-                        <a href="#friends" data-toggle="tab">Find friends</a>
-                    </li>
-                    <li>
-                        <a href="#profile" data-toggle="tab">Add to your profile</a>
-                    </li>
-                    <li>
-                        <a href="#navigation" data-toggle="tab">Site navigation</a>
-                    </li>
-                </ul>
-                <div class="tab-content">
-                    <div class="tab-pane active" id="ratings">
-                        <p>
-                            You can search for movies in the <a href="/movies/">Movie Database</a>,
-                            or by using the search bar available from every page.
+                <div class="col-xs-12">
+                    <ul class="nav nav-pills nav-pills-info">
+                        <li class="active">
+                            <a href="#ratings" data-toggle="tab">Rate movies</a>
+                        </li>
+                        <li>
+                            <a href="#friends" data-toggle="tab">Find friends</a>
+                        </li>
+                        <li>
+                            <a href="#profile" data-toggle="tab">Add to your profile</a>
+                        </li>
+                        <li>
+                            <a href="#navigation" data-toggle="tab">Site navigation</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="ratings">
+                            <p>
+                                You can search for movies in the <a href="/movies/">Movie Database</a>,
+                                or by using the search bar available from every page.
+                                <br><br>
+                                Follow these steps:
+                            </p>
+                            <ol>
+                                <li>Search for a movie.</li>
+                                <li>Select the movie. This will bring you the movie page for the movie.</li>
+                                <li>Click <strong>Update Review</strong> to rate your first movie!</li>
+                            </ol>
+                        </div>
+                        <div class="tab-pane" id="friends">
+                            <p>
+                                The <a href="/users/">All Users</a> page contains all the users for the site.
+                                Search for your friends and start following them to see their ratings!
+                                <br><br>
+                                Keep in mind that <strong>the site is powered by your friends' ratings.</strong> That
+                                means
+                                there won't be a ton of content until you
+                                follow your friends or get them to sign up!
+                            </p>
+                        </div>
+                        <div class="tab-pane" id="profile">
+                            Your <a href="/profile/{{ request.user.id }}/">Profile</a> shows a bunch of things,
+                            including
+                            your movie ratings, movie lists, and information about you and your rating habits.
                             <br><br>
-                            Follow these steps:
-                        </p>
-                        <ol>
-                            <li>Search for a movie.</li>
-                            <li>Select the movie. This will bring you the movie page for the movie.</li>
-                            <li>Click <strong>Update Review</strong> to rate your first movie!</li>
-                        </ol>
-                    </div>
-                    <div class="tab-pane" id="friends">
-                        <p>
-                            The <a href="/users/">All Users</a> page contains all the users for the site.
-                            Search for your friends and start following them to see their ratings!
-                            <br><br>
-                            Keep in mind that <strong>the site is powered by your friends' ratings.</strong> That means
-                            there won't be a ton of content until you
-                            follow your friends or get them to sign up!
-                        </p>
-                    </div>
-                    <div class="tab-pane" id="profile">
-                        Your <a href="/profile/{{ request.user.id }}/">Profile</a> shows a bunch of things, including
-                        your movie ratings, movie lists, and information about you and your rating habits.
-                        <br><br>
-                        Let's get your profile fully set up!
-                        <ol>
-                            <li><a href="/profile/{{ request.user.id }}/?modal=edit">Edit your info</a>
-                                to add some more information about you.
-                            </li>
-                            <li><a href="/profile/{{ request.user.id }}/?modal=picture">Add a profile picture</a> so
-                                your friends can recognize you.
-                            </li>
-                        </ol>
-                    </div>
-                    <div class="tab-pane" id="navigation">
-                        <p class="mobile-message">
-                            Use the navigation menu by clicking the button with 3 stacked lines in the top right
-                            corner.
-                            <br>
-                            The navigation menu is how you navigate through the site. You have these options:
-                        </p>
-                        <p class="desktop-message">
-                            Use the navigation menu on the left side of the screen to navigate through the site.
-                            You have these options:
-                        </p>
-                        <ul>
-                            <li>Click on your name to either <strong>access your profile</strong> or
-                                <strong>logout</strong>. Your profile is also available via another link below.</li>
-                            <li class="mobile-message-li">Search for movies at any point using the <strong>search bar</strong>.</li>
-                            <li>Go to the <strong>activity feed</strong> (the page your currently on)
-                                to see a feed of your friends' ratings.</li>
-                            <li>Click the <strong>Movies</strong> tab to see the best movies based on your
-                                friends' ratings in <strong>Top Movies</strong>, search for new movies in
-                                the <strong>Movie Database</strong>, or see a list of your reviews in
-                                <strong>My Reviews</strong>.</li>
-                            <li>Under the <strong>Users</strong> tab, you can search for new people to follow in <strong>All Users</strong>
-                                or see your current relationships in <strong>My Relationships</strong></li>
-                            <li>In the <strong>Lists</strong> section, you can see your current lists, your friends'
-                                public lists, and the lists your friends have given you permission to edit.</li>
-                        </ul>
-                        <p class="desktop-message">
-                            On the top of the screen, additional functionality is available:
-                        </p>
-                        <ul class="desktop-message">
-                            <li>Search for movies at any point using the <strong>search bar</strong>.</li>
-                            <li>Any <strong>Notifications</strong>, such as when a friend follows you, are accessible.</li>
-                            <li>Another link to your user options are displayed</li>
-                            <li>Go to the <strong>Help</strong> section to either see some
-                                <strong>tips and common questions</strong> or visit a <strong>Contact</strong> page.
-                                You can also toggle the display of this getting started menu.</li>
-                        </ul>
-                        <p class="mobile-message">
-                            Next to the navigation menu button on the top of the screen, additional functionality is available:
-                        </p>
-                        <ul class="mobile-message">
-                            <li>Any <strong>Notifications</strong>, such as when a friend follows you, are accessible.</li>
-                            <li>Go to the <strong>Help</strong> section to either see some
-                                <strong>tips and common questions</strong> or visit a <strong>Contact</strong> page.
-                                You can also toggle the display of this getting started menu.</li>
-                        </ul>
+                            Let's get your profile fully set up!
+                            <ol>
+                                <li><a href="/profile/{{ request.user.id }}/?modal=edit">Edit your info</a>
+                                    to add some more information about you.
+                                </li>
+                                <li><a href="/profile/{{ request.user.id }}/?modal=picture">Add a profile picture</a> so
+                                    your friends can recognize you.
+                                </li>
+                            </ol>
+                        </div>
+                        <div class="tab-pane" id="navigation">
+                            <p class="mobile-message">
+                                Use the navigation menu by clicking the button with 3 stacked lines in the top right
+                                corner.
+                                <br>
+                                The navigation menu is how you navigate through the site. You have these options:
+                            </p>
+                            <p class="desktop-message">
+                                Use the navigation menu on the left side of the screen to navigate through the site.
+                                You have these options:
+                            </p>
+                            <ul>
+                                <li>Click on your name to either <strong>access your profile</strong> or
+                                    <strong>logout</strong>. Your profile is also available via another link below.
+                                </li>
+                                <li class="mobile-message-li">Search for movies at any point using the <strong>search
+                                    bar</strong>.
+                                </li>
+                                <li>Go to the <strong>activity feed</strong> (the page your currently on)
+                                    to see a feed of your friends' ratings.
+                                </li>
+                                <li>Click the <strong>Movies</strong> tab to see the best movies based on your
+                                    friends' ratings in <strong>Top Movies</strong>, search for new movies in
+                                    the <strong>Movie Database</strong>, or see a list of your reviews in
+                                    <strong>My Reviews</strong>.
+                                </li>
+                                <li>Under the <strong>Users</strong> tab, you can search for new people to follow in
+                                    <strong>All Users</strong>
+                                    or see your current relationships in <strong>My Relationships</strong></li>
+                                <li>In the <strong>Lists</strong> section, you can see your current lists, your friends'
+                                    public lists, and the lists your friends have given you permission to edit.
+                                </li>
+                            </ul>
+                            <p class="desktop-message">
+                                On the top of the screen, additional functionality is available:
+                            </p>
+                            <ul class="desktop-message">
+                                <li>Search for movies at any point using the <strong>search bar</strong>.</li>
+                                <li>Any <strong>Notifications</strong>, such as when a friend follows you, are
+                                    accessible.
+                                </li>
+                                <li>Another link to your user options are displayed</li>
+                                <li>Go to the <strong>Help</strong> section to either see some
+                                    <strong>tips and common questions</strong> or visit a <strong>Contact</strong> page.
+                                    You can also toggle the display of this getting started menu.
+                                </li>
+                            </ul>
+                            <p class="mobile-message">
+                                Next to the navigation menu button on the top of the screen, additional functionality is
+                                available:
+                            </p>
+                            <ul class="mobile-message">
+                                <li>Any <strong>Notifications</strong>, such as when a friend follows you, are
+                                    accessible.
+                                </li>
+                                <li>Go to the <strong>Help</strong> section to either see some
+                                    <strong>tips and common questions</strong> or visit a <strong>Contact</strong> page.
+                                    You can also toggle the display of this getting started menu.
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
