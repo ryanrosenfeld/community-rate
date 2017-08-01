@@ -150,7 +150,7 @@ STATICFILES_DIRS = (
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
 
-STATICFILES_STORAGE = 'whitenoise.django.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 
 MEDIA_ROOT = os.path.join(os.path.dirname(__file__), 'media')
