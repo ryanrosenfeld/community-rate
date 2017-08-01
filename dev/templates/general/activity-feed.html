@@ -174,7 +174,7 @@
     <div class="col-md-10 col-md-offset-1">
         {% for user, movie, review, comments in updates %}
             <div class="card card-review">
-                <div class="col-md-5">
+                <div class="col-md-6">
                     <a href="/movie/{{ movie.movie_id }}">
                         <div class="card-image-custom" style="display: inline-block">
                             <img src="http://image.tmdb.org/t/p/w92{{ movie.poster_path }}"
@@ -191,7 +191,7 @@
                         </div>
                     </a>
                 </div>
-                <div class="col-md-7 text-right">
+                <div class="col-md-6 text-right">
                     <div class="card-content">
                         <h3 class="card-title">{{ movie.title }}</h3>
                         <h4 class="card-description">Reviewed by <a href="/profile/{{ user.id }}/"
