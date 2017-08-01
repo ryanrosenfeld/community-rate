@@ -108,32 +108,6 @@ def profile(request, user_id=""):
 
 
 @login_required
-def settings(request):
-    if request.method == "POST":
-        form = EditProfileForm(request.POST)
-        if form.is_valid():
-
-            # Iterate through form's fields
-            for element in form.cleaned_data:
-                val = form.cleaned_data[element]
-
-                # Only update user's fields if it was set in form
-                if val:
-                    setattr(request.user, element, val)
-
-            request.user.save()
-
-            return HttpResponseRedirect('/profile/')
-
-    form = EditProfileForm()
-    return render(request, 'users/edit-profile.html', {
-        'user': request.user,
-        'settings': True,
-        'form': form,
-    })
-
-
-@login_required
 def main_view(request, response=None):
     """Main view for users page"""
 

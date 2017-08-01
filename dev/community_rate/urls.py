@@ -37,7 +37,6 @@ urlpatterns = [
     url(r'^follow/(?P<user_id>\w{0,50})/$', user_ajax.follow),
     url(r'^profile/(?P<user_id>\w{0,50})/$', user_views.profile),
     url(r'^profile/$', user_views.profile),
-    url(r'^settings/$', user_views.settings),
     url(r'^relationships/(?P<user_id>\w{0,50})/$', user_views.relationships),
 
 
