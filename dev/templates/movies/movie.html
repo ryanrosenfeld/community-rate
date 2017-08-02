@@ -13,20 +13,35 @@
     <div class="col-md-5">
         {# Movie info #}
         <div class="card card-stats">
-            <div class="card-image-custom">
-                <img src="http://image.tmdb.org/t/p/w92{{ movie.poster_path }}"
-                     alt="{% static 'general/img/no_poster.jpg' %}" style="height: 130px; width: 100px;">
+            <div class="col-lg-4">
+                <div class="card-image-custom pull-left">
+                    <img src="http://image.tmdb.org/t/p/w92{{ movie.poster_path }}"
+                         alt="{% static 'general/img/no_poster.jpg' %}" style="height: 130px; width: 100px;">
+                </div>
             </div>
-            <div class="card-content">
-                <h3 class="card-title">{{ movie.title }}</h3>
-                <p class="card-description">
-                    Genre(s): {% for g in movie.genres %}{{ g.name }}{% if not forloop.last %}, {% endif %}{% endfor %}
-                </p>
-                <p class="card-description">Release year: {{ movie.release_date|slice:"0:4" }}</p>
-                <p class="card-description">
-                    <a id="imdb-link" target="_blank" href="http://www.imdb.com/title/{{ movie.imdb_id }}/">iMDB page <i class="material-icons">launch</i></a>
-                </p>
-                <p class="card-description"><i>{{ movie.overview }}</i></p>
+            <div class="col-lg-8 col-md-12">
+                <div class="card-content">
+                    <div class="movie-header">
+                        <h3 class="card-title">{{ movie.title }}</h3>
+                        <p class="card-description">Release year: {{ movie.release_date|slice:"0:4" }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="col-md-10 col-md-offset-1">
+                    <hr>
+                </div>
+                <div class="card-content">
+                    <p class="card-description">
+                        <a id="imdb-link" target="_blank" href="http://www.imdb.com/title/{{ movie.imdb_id }}/">iMDB
+                            page <i class="material-icons">launch</i></a>
+                    </p>
+                    <p class="card-description">
+                        Genre(s):
+                        {% for g in movie.genres %}{{ g.name }}{% if not forloop.last %}, {% endif %}{% endfor %}
+                    </p>
+                    <p class="card-description"><i>{{ movie.overview }}</i></p>
+                </div>
             </div>
         </div>
     </div>
@@ -79,10 +94,10 @@
                 <div class="col-md-12">
                     <table class="table" id="friend-reviews">
                         <thead class="text-rose">
-                            <th>Friend</th>
-                            <th class="text-center">Rating</th>
-                            <th class="text-center">Reaction</th>
-                            <th>Thoughts</th>
+                        <th>Friend</th>
+                        <th class="text-center">Rating</th>
+                        <th class="text-center">Reaction</th>
+                        <th>Thoughts</th>
                         </thead>
                         <tbody>
                         {% for user, review in following_users %}
@@ -183,8 +198,8 @@
         var reaction = "{{ review.reaction }}";
 
         function showUpdateReview() {
-            $("#updateReviewModal").modal().on("shown", function() {
-               setReaction(reaction);
+            $("#updateReviewModal").modal().on("shown", function () {
+                setReaction(reaction);
             });
         }
     </script>
