@@ -245,7 +245,7 @@
                         <li class="dropdown navbar-toggle" id="notifications-mobile">
                             <a onclick="functions.markNotificationsRead()" class="dropdown-toggle"
                                data-toggle="dropdown">
-                                <span class="notification" id="numRead">{{ num_unread }}</span>
+                                {% if num_unread|length > 0 %}<span class="notification" id="numRead">{{ num_unread }}</span>{% endif %}
                                 <i class="material-icons">notifications</i>
                             </a>
                             <ul class="dropdown-menu" id="notification-dropdown">
