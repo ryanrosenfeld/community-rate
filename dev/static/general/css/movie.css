@@ -77,3 +77,16 @@
     margin-top: 20px;
     font-size: 30px;
 }
+
+#imdb-link {
+    text-decoration: underline;
+    color: inherit;
+}
+
+#imdb-link:hover {
+    color: #9c27b0;
+}
+
+#imdb-link i {
+    font-size: 15px;
+}

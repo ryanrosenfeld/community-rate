@@ -23,6 +23,9 @@
                     Genre(s): {% for g in movie.genres %}{{ g.name }}{% if not forloop.last %}, {% endif %}{% endfor %}
                 </p>
                 <p class="card-description">Release year: {{ movie.release_date|slice:"0:4" }}</p>
+                <p class="card-description">
+                    <a id="imdb-link" target="_blank" href="http://www.imdb.com/title/{{ movie.imdb_id }}/">iMDB page <i class="material-icons">launch</i></a>
+                </p>
                 <p class="card-description"><i>{{ movie.overview }}</i></p>
             </div>
         </div>

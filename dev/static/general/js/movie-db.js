@@ -1,5 +1,5 @@
-$(document).ready(function() {
-    $("#filter-movies").keyup(function() {
+$(document).ready(function () {
+    $("#filter-movies").keyup(function () {
         $("#movie-table-body").html('');
         var query = $("#filter-movies").val();
         if (query.length > 2) {
@@ -16,12 +16,12 @@ function addMovieRow(index, movie) {
     }
     $("#movie-table-body").append(
         "<tr class='pointer' onclick=window.location.href='/movie/" + movie.id + "/'>" +
-            "<td>" +
-                "<h4><img src='" + img_path +  "' alt=''>     " + movie.title + "</h4>" +
-            "<td class='text-center' id='rating" + index + "'></td>" +
-            "<td class='text-center'>" +
-                "<h4>" + movie.release_date.substring(0, 4) + "</h4>" +
-            "</td>" +
+        "<td>" +
+        "<h4><img src='" + img_path + "' alt=''>     " + movie.title + "</h4>" +
+        "<td class='text-center' id='rating" + index + "'></td>" +
+        "<td class='text-center'>" +
+        "<h4>" + movie.release_date.substring(0, 4) + "</h4>" +
+        "</td>" +
         "</tr>"
     );
 }
@@ -44,18 +44,20 @@ function filterMovies(query) {
             dataType: 'json',
             success: function (data) {
                 for (var i = 0; i < data.results.length; i++) {
-                    addMovieRow(i, data.results[i]);
-                    $.ajax({
-                        url: '/ajax/get-movie-rating/',
-                        data: {
-                            'movie': data.results[i].id
-                        },
-                        dataType: 'json',
-                        success: function(rating) {
-                            addRatingToRow(index, rating.average_rating);
-                            index++;
-                        }
-                    })
+                    if (data.results[i].poster_path != null) {
+                        addMovieRow(i, data.results[i]);
+                        $.ajax({
+                            url: '/ajax/get-movie-rating/',
+                            data: {
+                                'movie': data.results[i].id
+                            },
+                            dataType: 'json',
+                            success: function (rating) {
+                                addRatingToRow(index, rating.average_rating);
+                                index++;
+                            }
+                        })
+                    }
                 }
             }
         })
