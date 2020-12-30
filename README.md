@@ -1,5 +1,3 @@
-Now available at http://www.community-rate.com!
-
 The intersection of social media and movie ratings. 
 
 In this web application, instead of seeing the world's ratings on movies you only see your friends'. Increase collaboration with friends, find out what movies they're seeing and what they thought of them, find out what movie to watch next, and so much more!
