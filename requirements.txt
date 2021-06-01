@@ -25,5 +25,5 @@ rsa==3.4.2
 s3transfer==0.1.10
 six==1.10.0
 social-auth-core==1.4.0
-urllib3==1.21.1
+urllib3==1.26.5
 whitenoise==3.3.0
